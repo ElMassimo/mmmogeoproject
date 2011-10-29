@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SIGTest", "SIGTest\SIGTest.csproj", "{B59FD3CD-D0D5-43C9-99B2-5AA3D848A039}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C1793CA9-1B54-4B7D-B570-694C67985AAB} = {C1793CA9-1B54-4B7D-B570-694C67985AAB}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SIGTest.Web", "SIGTest.Web\SIGTest.Web.csproj", "{C1793CA9-1B54-4B7D-B570-694C67985AAB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B59FD3CD-D0D5-43C9-99B2-5AA3D848A039}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B59FD3CD-D0D5-43C9-99B2-5AA3D848A039}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B59FD3CD-D0D5-43C9-99B2-5AA3D848A039}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B59FD3CD-D0D5-43C9-99B2-5AA3D848A039}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1793CA9-1B54-4B7D-B570-694C67985AAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1793CA9-1B54-4B7D-B570-694C67985AAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1793CA9-1B54-4B7D-B570-694C67985AAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1793CA9-1B54-4B7D-B570-694C67985AAB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
