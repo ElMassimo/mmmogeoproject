@@ -1,0 +1,24 @@
+﻿<navigation:Page x:Class="SIGTest.Views.WelcomePage" 
+           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+           xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+           xmlns:esri="http://schemas.esri.com/arcgis/client/2009" 
+           mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
+           xmlns:navigation="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Navigation"
+           Title="Welcome to Road Trip Buddy">
+    <Grid x:Name="LayoutRoot">
+    	<Grid.RenderTransform>
+    		<CompositeTransform/>
+    	</Grid.RenderTransform>
+    	<Grid.Background>
+    		<RadialGradientBrush>
+    			<RadialGradientBrush.RelativeTransform>
+    				<CompositeTransform CenterY="0.5" CenterX="0.5" TranslateX="-0.388" TranslateY="-0.498" ScaleY="2.879" ScaleX="2.543"/>
+    			</RadialGradientBrush.RelativeTransform>
+    			<GradientStop Color="#FF00BE0D"/>
+    			<GradientStop Color="#FF001F03" Offset="1"/>
+    		</RadialGradientBrush>
+    	</Grid.Background>
+    </Grid>
+</navigation:Page>

@@ -53,8 +53,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ClientBin\SIGTest.xap" />
-    <Content Include="SIGTestTestPage.aspx" />
-    <Content Include="SIGTestTestPage.html" />
+    <Content Include="index.aspx" />
+    <Content Include="index.html" />
     <Content Include="Silverlight.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -77,9 +77,8 @@
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>1836</DevelopmentServerPort>
-          <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>
-          </IISUrl>
+          <DevelopmentServerVPath>/RoadTrip</DevelopmentServerVPath>
+          <IISUrl>http://localhost/RoadTrip</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

@@ -111,7 +111,7 @@
 								<Rectangle x:Name="headerDragRectangle" Fill="#00FFFFFF" Grid.Column="0" 
                                            Cursor="Hand" Margin="0" Grid.ColumnSpan="1" Grid.Row="0" />
 								<Image x:Name="imgClose" Width="20" Height="20" HorizontalAlignment="Right" Margin="0,2,5,0" 
-                                       Source="Images/dismiss.png" Cursor="Hand" Grid.Column="0" Grid.Row="0" />
+                                       Source="Assets/Imagesdismiss.png" Cursor="Hand" Grid.Column="0" Grid.Row="0" />
                             </Grid>
                         </Grid>
                     </Grid>

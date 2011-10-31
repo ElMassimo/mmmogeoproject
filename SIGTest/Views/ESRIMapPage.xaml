@@ -1,11 +1,11 @@
-<UserControl x:Class="SIGTest.MainPage"
+<UserControl x:Class="SIGTest.Views.ESRIMapPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:esri="http://schemas.esri.com/arcgis/client/2009" 
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
-	xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+    xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
     xmlns:ei="clr-namespace:Microsoft.Expression.Interactivity.Core;assembly=Microsoft.Expression.Interactions"
     xmlns:userControls="clr-namespace:ESRI.ArcGIS.SilverlightMapApp"
     xmlns:actions="clr-namespace:ESRI.ArcGIS.SilverlightMapApp.Actions">
@@ -21,8 +21,8 @@
                     </ei:ChangePropertyAction>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
-        	<esri:ArcGISTiledMapServiceLayer ID="BaseLayer" 
-        		Url="http://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer" />
+            <esri:ArcGISTiledMapServiceLayer ID="BaseLayer" 
+                Url="http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer" />
         </esri:Map>
         
         <!-- Main Menu -->
@@ -54,7 +54,7 @@
                                 <Button x:Name="myMenu" Style="{StaticResource MenuButton}" 
                                         ToolTipService.ToolTip="Menu">
                                     <Button.Content>
-                                        <Image Source="Images/i_globe.png" Stretch="Fill" />
+                                        <Image Source="Assets/Imagesi_globe.png" Stretch="Fill" />
                                     </Button.Content>
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="MouseEnter">
@@ -68,10 +68,10 @@
                                 </Button>
 
                                 <ToggleButton x:Name="btnAbout" Style="{StaticResource ToolbarToggleButton}" 
-										Width="40" Height="35" IsChecked="False"
+                                        Width="40" Height="35" IsChecked="False"
                                         ToolTipService.ToolTip="About ESRI ArcGIS Mapping Application">
                                     <ToggleButton.Content>
-                                        <Image Source="Images/i_about.png" Stretch="Fill" />
+                                        <Image Source="Assets/Imagesi_about.png" Stretch="Fill" />
                                     </ToggleButton.Content>
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="MouseEnter">
@@ -88,7 +88,7 @@
                     </StackPanel>
                 </Border>
             </userControls:CollapsiblePanel>
-            <Image Source="Images/logo.png" HorizontalAlignment="Left" VerticalAlignment="Top" 
+            <Image Source="Assets/Imageslogo.png" HorizontalAlignment="Left" VerticalAlignment="Top" 
                    Stretch="Fill" Height="40" Width="40" Margin="-10" 
                    ToolTipService.ToolTip="Expand/Collapse Menu Bar">
                 <i:Interaction.Triggers>
@@ -127,17 +127,17 @@
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseLeave">
                     <ei:ChangePropertyAction TargetName="myMenuItems" PropertyName="Visibility">
-                    	<ei:ChangePropertyAction.Value>
-                    		<Visibility>Collapsed</Visibility>
-                    	</ei:ChangePropertyAction.Value>
+                        <ei:ChangePropertyAction.Value>
+                            <Visibility>Collapsed</Visibility>
+                        </ei:ChangePropertyAction.Value>
                     </ei:ChangePropertyAction>
                 </i:EventTrigger>
                 <i:EventTrigger EventName="Loaded">
-                	<ei:ChangePropertyAction TargetName="myMenuItems" PropertyName="Visibility">
-                		<ei:ChangePropertyAction.Value>
-                			<Visibility>Collapsed</Visibility>
-                		</ei:ChangePropertyAction.Value>
-                	</ei:ChangePropertyAction>
+                    <ei:ChangePropertyAction TargetName="myMenuItems" PropertyName="Visibility">
+                        <ei:ChangePropertyAction.Value>
+                            <Visibility>Collapsed</Visibility>
+                        </ei:ChangePropertyAction.Value>
+                    </ei:ChangePropertyAction>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </Grid>
@@ -146,40 +146,40 @@
         <StackPanel Orientation="Horizontal" 
                     HorizontalAlignment="Right" Margin="0,5,5,0" VerticalAlignment="Top" >
             <!-- Base Map Switcher -->
-			<Border x:Name="BaseMapSwitcher"  Style="{StaticResource CommonBorder}"  VerticalAlignment="Top" HorizontalAlignment="Right" Margin="5">
-				<StackPanel Orientation="Horizontal" Margin="5">
-					<RadioButton Content="Streets" IsChecked="True"
-							ToolTipService.ToolTip="Worldwide Street Map"
-							GroupName="BaseLayer"
-							Margin="5,0,0,0" Foreground="White" FontSize="11" >
-						<i:Interaction.Triggers>
-							<i:EventTrigger EventName="Checked">
-								<actions:SetLayerUrlAction TargetName="Map" LayerID="BaseLayer" Url="http://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer"/>
-							</i:EventTrigger>
-						</i:Interaction.Triggers>
-					</RadioButton>
-					<RadioButton Content="Topo"
-							GroupName="BaseLayer"
-							ToolTipService.ToolTip="United States Topographic Map"
-							Margin="5,0,0,0" Foreground="White" FontSize="11" >
-						<i:Interaction.Triggers>
-							<i:EventTrigger EventName="Checked">
-								<actions:SetLayerUrlAction TargetName="Map" LayerID="BaseLayer" Url="http://services.arcgisonline.com/ArcGIS/rest/services/USA_Topo_Maps/MapServer"/>
-							</i:EventTrigger>
-						</i:Interaction.Triggers>
-					</RadioButton>
-					<RadioButton Content="Imagery"
-							ToolTipService.ToolTip="Worldwide Satellite Imagery Map"
-							GroupName="BaseLayer"
-							Margin="5,0,0,0" Foreground="White" FontSize="11" >
-						<i:Interaction.Triggers>
-							<i:EventTrigger EventName="Checked">
-								<actions:SetLayerUrlAction TargetName="Map" LayerID="BaseLayer" Url="http://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer"/>
-							</i:EventTrigger>
-						</i:Interaction.Triggers>
-					</RadioButton>
-				</StackPanel>
-			</Border>
+            <Border x:Name="BaseMapSwitcher"  Style="{StaticResource CommonBorder}"  VerticalAlignment="Top" HorizontalAlignment="Right" Margin="5">
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <RadioButton Content="Streets" IsChecked="True"
+                            ToolTipService.ToolTip="Worldwide Street Map"
+                            GroupName="BaseLayer"
+                            Margin="5,0,0,0" Foreground="White" FontSize="11" >
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Checked">
+                                <actions:SetLayerUrlAction TargetName="Map" LayerID="BaseLayer" Url="http://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </RadioButton>
+                    <RadioButton Content="Topo"
+                            GroupName="BaseLayer"
+                            ToolTipService.ToolTip="United States Topographic Map"
+                            Margin="5,0,0,0" Foreground="White" FontSize="11" >
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Checked">
+                                <actions:SetLayerUrlAction TargetName="Map" LayerID="BaseLayer" Url="http://services.arcgisonline.com/ArcGIS/rest/services/USA_Topo_Maps/MapServer"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </RadioButton>
+                    <RadioButton Content="Imagery"
+                            ToolTipService.ToolTip="Worldwide Satellite Imagery Map"
+                            GroupName="BaseLayer"
+                            Margin="5,0,0,0" Foreground="White" FontSize="11" >
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Checked">
+                                <actions:SetLayerUrlAction TargetName="Map" LayerID="BaseLayer" Url="http://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </RadioButton>
+                </StackPanel>
+            </Border>
            
             <!-- Toolbar -->
             <Grid Margin="5">
@@ -193,7 +193,7 @@
                                 <Button x:Name="btnToggleBaseMapSwitcher" Style="{StaticResource ToolbarButton}" 
                                         ToolTipService.ToolTip="Toggle visibility of the base map switcher">
                                     <Button.Content>
-                                        <Image Source="Images/i_clickglobe.png" Stretch="Fill" />
+                                        <Image Source="Assets/Imagesi_clickglobe.png" Stretch="Fill" />
                                     </Button.Content>
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="Click">
@@ -202,25 +202,25 @@
                                     </i:Interaction.Triggers>
                                 </Button>
 
-								<ToggleButton x:Name="btnToggleMapLegend" Style="{StaticResource ToolbarToggleButton}" IsChecked="False"
-											  ToolTipService.ToolTip="Toggle visibility of the map legend">
-									<ToggleButton.Content>
-										<Image Source="Images/i_legend.png" Stretch="Fill" />
-									</ToggleButton.Content>
-									
-								</ToggleButton>
+                                <ToggleButton x:Name="btnToggleMapLegend" Style="{StaticResource ToolbarToggleButton}" IsChecked="False"
+                                              ToolTipService.ToolTip="Toggle visibility of the map legend">
+                                    <ToggleButton.Content>
+                                        <Image Source="Assets/Imagesi_legend.png" Stretch="Fill" />
+                                    </ToggleButton.Content>
+                                    
+                                </ToggleButton>
 
-							<ToggleButton x:Name="btnToggleOverviewMap" Style="{StaticResource ToolbarToggleButton}"  IsChecked="False"
-										  ToolTipService.ToolTip="Toggle visibility of the overview map">
-									<ToggleButton.Content>
-                                        <Image Source="Images/i_overview.png" Stretch="Fill" />
-									</ToggleButton.Content>
-								</ToggleButton>
+                            <ToggleButton x:Name="btnToggleOverviewMap" Style="{StaticResource ToolbarToggleButton}"  IsChecked="False"
+                                          ToolTipService.ToolTip="Toggle visibility of the overview map">
+                                    <ToggleButton.Content>
+                                        <Image Source="Assets/Imagesi_overview.png" Stretch="Fill" />
+                                    </ToggleButton.Content>
+                                </ToggleButton>
 
-								<Button x:Name="btnToggleMagnifyingGlass" Style="{StaticResource ToolbarButton}" 
-										ToolTipService.ToolTip="Toggle visibility of the magnifying glass">
-									<Button.Content>
-                                        <Image Source="Images/i_magnifyglass.png" Stretch="Fill" />
+                                <Button x:Name="btnToggleMagnifyingGlass" Style="{StaticResource ToolbarButton}" 
+                                        ToolTipService.ToolTip="Toggle visibility of the magnifying glass">
+                                    <Button.Content>
+                                        <Image Source="Assets/Imagesi_magnifyglass.png" Stretch="Fill" />
                                     </Button.Content>
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="Click">
@@ -231,7 +231,7 @@
                             </StackPanel>
                         </Grid>
                 </userControls:CollapsiblePanel>
-                <Image Source="Images/i_tools.png" HorizontalAlignment="Right" 
+                <Image Source="Assets/Imagesi_tools.png" HorizontalAlignment="Right" 
                    VerticalAlignment="Top" Stretch="Fill" Height="30" Width="30" Margin="-5" 
                    ToolTipService.ToolTip="Expand/Collapse Toolbar">
                     <i:Interaction.Triggers>
@@ -246,24 +246,24 @@
         <!-- Navigator -->
         <esri:Navigation  x:Name="Navigator" HorizontalAlignment="Left" VerticalAlignment="Bottom" 
                                  Margin="40,0,0,30"
-								 Map="{Binding ElementName=Map}" />
+                                 Map="{Binding ElementName=Map}" />
 
         <!-- Scale Bar -->
         <esri:ScaleLine x:Name="ScaleBar" Map="{Binding ElementName=Map}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="20,0,0,10" IsHitTestVisible="False" />
 
         <!-- Overview Map Window -->
         <userControls:WindowPanel x:Name="OverviewMapPanel" Width="212" Height="231" 
-								  IsOpen="{Binding ElementName=btnToggleOverviewMap, Path=IsChecked, Mode=TwoWay}"
-								  HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,66,10,0">
+                                  IsOpen="{Binding ElementName=btnToggleOverviewMap, Path=IsChecked, Mode=TwoWay}"
+                                  HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,66,10,0">
             <esri:OverviewMap x:Name="OVMap" Margin="0" 
-									Map="{Binding ElementName=Map}">
+                                    Map="{Binding ElementName=Map}">
                 <esri:OverviewMap.Layer>
                     <esri:ArcGISTiledMapServiceLayer Url="http://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer" />
                 </esri:OverviewMap.Layer>
             </esri:OverviewMap>
             <userControls:WindowPanel.ContentTitle>
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="Images/i_overview.png" 
+                    <Image Source="Assets/Imagesi_overview.png" 
                            HorizontalAlignment="Left" VerticalAlignment="Top" Stretch="Fill" 
                            Width="20" Height="20" Margin="5,2,0,0" />
                     <TextBlock Foreground="White" FontSize="12" 
@@ -274,32 +274,32 @@
         </userControls:WindowPanel>
 
         <!-- Magnifying Glass -->
-		<esri:MagnifyingGlass x:Name="MagnifyingGlass" HorizontalAlignment="Left" VerticalAlignment="Top"
-        			Map="{Binding ElementName=Map}" Margin="50,150,0,0" Visibility="Collapsed">
-			<esri:MagnifyingGlass.Layer>
-				<esri:ArcGISTiledMapServiceLayer Url="http://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer" />
-			</esri:MagnifyingGlass.Layer>
-		</esri:MagnifyingGlass>
+        <esri:MagnifyingGlass x:Name="MagnifyingGlass" HorizontalAlignment="Left" VerticalAlignment="Top"
+                    Map="{Binding ElementName=Map}" Margin="50,150,0,0" Visibility="Collapsed">
+            <esri:MagnifyingGlass.Layer>
+                <esri:ArcGISTiledMapServiceLayer Url="http://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer" />
+            </esri:MagnifyingGlass.Layer>
+        </esri:MagnifyingGlass>
 
-		<!-- Map Legend -->
-		<userControls:WindowPanel x:Name="MapLegendPanel"
-			IsOpen="{Binding ElementName=btnToggleMapLegend, Path=IsChecked, Mode=TwoWay}"
-		 HorizontalAlignment="Right" VerticalAlignment="Top" Width="212" Height="231" 
-			Margin="0,305,10,-610">
-			<esri:Legend x:Name="Legend" Map="{Binding ElementName=Map}" />
-			<userControls:WindowPanel.ContentTitle>
-				<StackPanel Orientation="Horizontal">
-					<Image Source="Images/i_legend.png" 
+        <!-- Map Legend -->
+        <userControls:WindowPanel x:Name="MapLegendPanel"
+            IsOpen="{Binding ElementName=btnToggleMapLegend, Path=IsChecked, Mode=TwoWay}"
+         HorizontalAlignment="Right" VerticalAlignment="Top" Width="212" Height="231" 
+            Margin="0,305,10,-610">
+            <esri:Legend x:Name="Legend" Map="{Binding ElementName=Map}" />
+            <userControls:WindowPanel.ContentTitle>
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="Assets/Imagesi_legend.png" 
                            HorizontalAlignment="Left" VerticalAlignment="Top" Stretch="Fill" 
                            Width="20" Height="20" Margin="5,2,0,0" />
-					<TextBlock Foreground="White" FontSize="12" 
+                    <TextBlock Foreground="White" FontSize="12" 
                                Text="Map Legend" Width="100" TextWrapping="NoWrap" Height="Auto" 
                                HorizontalAlignment="Left" Margin="5,3,0,0" />
-				</StackPanel>
-			</userControls:WindowPanel.ContentTitle>
-		</userControls:WindowPanel>
+                </StackPanel>
+            </userControls:WindowPanel.ContentTitle>
+        </userControls:WindowPanel>
 
-		<!-- About Window -->
+        <!-- About Window -->
         <userControls:WindowPanel x:Name="AboutWindow" Width="375" Height="150" IsOpen="{Binding ElementName=btnAbout, Path=IsChecked, Mode=TwoWay}">
             <StackPanel Orientation="Vertical">
                 <TextBlock Style="{StaticResource Title}" TextWrapping="NoWrap" 
@@ -315,7 +315,7 @@
             </StackPanel>
             <userControls:WindowPanel.ContentTitle>
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="Images/logo.png" 
+                    <Image Source="Assets/Imageslogo.png" 
                            HorizontalAlignment="Left" VerticalAlignment="Top" Stretch="Fill" 
                            Width="20" Height="20" Margin="5,2,0,0" />
                     <TextBlock Foreground="White" FontSize="12" 

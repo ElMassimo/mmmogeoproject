@@ -25,11 +25,12 @@
     <TestPageFileName>SIGTestTestPage.html</TestPageFileName>
     <CreateTestPage>true</CreateTestPage>
     <ValidateXaml>true</ValidateXaml>
-    <EnableOutOfBrowser>false</EnableOutOfBrowser>
+    <EnableOutOfBrowser>true</EnableOutOfBrowser>
     <OutOfBrowserSettingsFile>Properties\OutOfBrowserSettings.xml</OutOfBrowserSettingsFile>
     <UsePlatformExtensions>false</UsePlatformExtensions>
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
-    <LinkedServerProject>..\SIGTest.Web\SIGTest.Web.csproj</LinkedServerProject>
+    <LinkedServerProject>
+    </LinkedServerProject>
   </PropertyGroup>
   <!-- This property group is only here to support building this project using the 
        MSBuild 3.5 toolset. In order to work correctly with this older toolset, it needs 
@@ -76,6 +77,7 @@
     <Reference Include="System.Windows.Controls, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Windows.Controls.Data, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Windows.Controls.Data.Input, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Windows.Controls.Navigation, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Windows.Interactivity, Version=4.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Windows.Browser" />
@@ -86,8 +88,16 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MainPage.xaml.cs">
+    <Compile Include="Services\RoadTripServices.cs" />
+    <Compile Include="ViewModels\AddressViewModel.cs" />
+    <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MapPage.xaml.cs">
+      <DependentUpon>MapPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ESRIMapPage.xaml.cs">
+      <DependentUpon>ESRIMapPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Actions\ToggleVisibilityAction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -97,21 +107,32 @@
     <Compile Include="UserControls\WindowPanel.xaml.cs">
       <DependentUpon>WindowPanel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\WelcomePage.xaml.cs">
+      <DependentUpon>WelcomePage.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
-    <Page Include="MainPage.xaml">
+    <Page Include="Views\MainPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Styles\NavigationStyle.xaml">
+    <Page Include="Views\MapPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Themes\generic.xaml">
+    <Page Include="Views\ESRIMapPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Assets\Styles\NavigationStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\Themes\generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -123,28 +144,38 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\WelcomePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AppManifest.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\blue_globe.png" />
-    <Resource Include="Images\collapse.png" />
-    <Resource Include="Images\dismiss.png" />
-    <Resource Include="Images\expand.png" />
-    <Resource Include="Images\i_about.png" />
-    <Resource Include="Images\i_clickglobe.png" />
-    <Resource Include="Images\i_globe.png" />
-    <Resource Include="Images\i_legend.png" />
-    <Resource Include="Images\i_magnifyglass.png" />
-    <Resource Include="Images\i_nav.png" />
-    <Resource Include="Images\i_options.png" />
-    <Resource Include="Images\i_overview.png" />
-    <Resource Include="Images\i_tools.png" />
-    <Resource Include="Images\i_widget.png" />
-    <Resource Include="Images\i_zoomin.png" />
-    <Resource Include="Images\i_zoomout.png" />
-    <Resource Include="Images\logo.png" />
+    <Resource Include="Assets\Images\blue_globe.png" />
+    <Resource Include="Assets\Images\collapse.png" />
+    <Resource Include="Assets\Images\dismiss.png" />
+    <Resource Include="Assets\Images\expand.png" />
+    <Resource Include="Assets\Images\i_about.png" />
+    <Resource Include="Assets\Images\i_clickglobe.png" />
+    <Resource Include="Assets\Images\i_globe.png" />
+    <Resource Include="Assets\Images\i_legend.png" />
+    <Resource Include="Assets\Images\i_magnifyglass.png" />
+    <Resource Include="Assets\Images\i_nav.png" />
+    <Resource Include="Assets\Images\i_options.png" />
+    <Resource Include="Assets\Images\i_overview.png" />
+    <Resource Include="Assets\Images\i_tools.png" />
+    <Resource Include="Assets\Images\i_widget.png" />
+    <Resource Include="Assets\Images\i_zoomin.png" />
+    <Resource Include="Assets\Images\i_zoomout.png" />
+    <Resource Include="Assets\Images\logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\OutOfBrowserSettings.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\pushpin.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
