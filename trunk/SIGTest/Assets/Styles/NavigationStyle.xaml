@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:esri="http://schemas.esri.com/arcgis/client/2009" 
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:esri="http://schemas.esri.com/arcgis/client/2009" 
 	xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
 	xmlns:im="clr-namespace:Microsoft.Expression.Interactivity.Media;assembly=Microsoft.Expression.Interactions">
 
@@ -321,35 +321,35 @@
 								<Rectangle Margin="0" RadiusX="8" RadiusY="8" Fill="{StaticResource CommonBackgroundBrush}" Stroke="{StaticResource NavBorderGradient}" />
 								<StackPanel x:Name="PopupStack" Orientation="Vertical">
 									<Grid x:Name="PopupClick1"  >
-										<Image x:Name="PopupClickImage1" Source="Images/collapse.png" Stretch="None" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+										<Image x:Name="PopupClickImage1" Source="Assets/Imagescollapse.png" Stretch="None" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 									</Grid>
 									<StackPanel x:Name="ZoomStack" Orientation="Horizontal" >
 										<Slider x:Name="ZoomSlider" Orientation="Vertical" Height="100" Width="25" Minimum="0" SmallChange="1" LargeChange="1" Style="{StaticResource SliderStyle}" ToolTipService.ToolTip="Move bar up to zoom in, down to zoom out" />
 										<StackPanel x:Name="PopupButtonStack" Orientation="Vertical" >
 											<Button x:Name="ZoomInButton" Height="25" FontSize="8" Width="25" ToolTipService.ToolTip="Zoom In" Margin="2,2,2,0" Style="{StaticResource NavButtonStyle}">
 												<Button.Content>
-													<Image Source="Images/i_zoomin.png" Stretch="Fill" />
+													<Image Source="Assets/Imagesi_zoomin.png" Stretch="Fill" />
 												</Button.Content>
 											</Button>
 											<Button x:Name="ZoomFullExtent" Height="25" FontSize="8" Width="25" ToolTipService.ToolTip="Full Extent" Margin="2,2,2,0" Style="{StaticResource NavButtonStyle}">
 												<Button.Content>
-													<Image Source="Images/i_globe.png" Stretch="Fill" />
+													<Image Source="Assets/Imagesi_globe.png" Stretch="Fill" />
 												</Button.Content>
 											</Button>
 											<Button x:Name="ResetRotation" Height="25" FontSize="8" Width="25" ToolTipService.ToolTip="Reset Map Rotation" Margin="2,2,2,0" Style="{StaticResource NavButtonStyle}">
 												<Button.Content>
-													<Image Source="Images/i_nav.png" Stretch="Fill" />
+													<Image Source="Assets/Imagesi_nav.png" Stretch="Fill" />
 												</Button.Content>
 											</Button>
 											<Button x:Name="ZoomOutButton" Height="25" FontSize="8" Width="25" ToolTipService.ToolTip="Zoom Out" Margin="2,2,2,0" Style="{StaticResource NavButtonStyle}">
 												<Button.Content>
-													<Image Source="Images/i_zoomout.png" Stretch="Fill" />
+													<Image Source="Assets/Imagesi_zoomout.png" Stretch="Fill" />
 												</Button.Content>
 											</Button>
 										</StackPanel>
 									</StackPanel>
 									<Grid x:Name="PopupClick2" >
-										<Image x:Name="PopupClickImage2" Source="Images/expand.png" Stretch="Fill" HorizontalAlignment="Center" VerticalAlignment="Center" Width="10" Height="10"/>
+										<Image x:Name="PopupClickImage2" Source="Assets/Imagesexpand.png" Stretch="Fill" HorizontalAlignment="Center" VerticalAlignment="Center" Width="10" Height="10"/>
 									</Grid>
 								</StackPanel>
 							</Grid>
@@ -374,7 +374,7 @@
 							<Grid x:Name="PanDown" Width="75" Height="30" Background="#00FFFFFF" HorizontalAlignment="Center" VerticalAlignment="Bottom" ToolTipService.ToolTip="Click to move south" Cursor="Hand" >
 								<TextBlock Text="S" TextAlignment="Center" VerticalAlignment="Center" FontSize="16" Foreground="#FFFFFFFF" FontWeight="Bold"  />
 							</Grid>
-							<Image Source="Images/blue_globe.png" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Fill" Width="60" Height="60" Opacity="0.5" />
+							<Image Source="Assets/Imagesblue_globe.png" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Fill" Width="60" Height="60" Opacity="0.5" />
 							<Grid x:Name="compassSpinner" Width="60" Height="60" RenderTransformOrigin="0.5,0.5">
 								<Canvas Width="60" Height="60" HorizontalAlignment="Left" VerticalAlignment="Top" >
 									<Polygon  Stroke="Black" StrokeThickness="0.5" Points="25,30 30,6 35,30" >

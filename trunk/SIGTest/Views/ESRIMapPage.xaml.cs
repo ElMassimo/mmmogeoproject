@@ -15,11 +15,11 @@ using System.ComponentModel;
 using ESRI.ArcGIS.Client;
 using System.Windows.Controls.Primitives;
 
-namespace SIGTest
+namespace SIGTest.Views
 {
-    public partial class MainPage : UserControl
+    public partial class ESRIMapPage : UserControl
     {
-        public MainPage()
+        public ESRIMapPage()
         {
             InitializeComponent();
         }
