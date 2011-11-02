@@ -10,7 +10,7 @@
            Title="Road Map">
     <Grid x:Name="LayoutRoot">
         <Grid.Resources>
-            <esri:PictureMarkerSymbol x:Key="DefaultMarkerSymbol" OffsetX="11" OffsetY="39" Source="/Assets/Images/pushpin.png" />
+            <esri:PictureMarkerSymbol x:Key="DefaultMarkerSymbol" OffsetX="11" OffsetY="39" Source="../Assets/Images/pushpin.png" />
             <esri:SimpleFillSymbol x:Key="BufferSymbol" Fill="#66BB0000" BorderBrush="#88CC0000" BorderThickness="2"  />
             <esri:SimpleFillSymbol x:Key="ParcelSymbol" Fill="#440000FF" BorderBrush="Blue" BorderThickness="2" />
             <esri:SimpleMarkerSymbol x:Key="StopSymbol" Size="20" Style="Circle" Color="Salmon" >
@@ -25,8 +25,6 @@
                     </ControlTemplate>
                 </esri:SimpleMarkerSymbol.ControlTemplate>
             </esri:SimpleMarkerSymbol>
-            <esri:SimpleLineSymbol x:Key="RouteSymbol" Color="#990000FF" Width="5"/>
-
             <esri:SimpleRenderer x:Key="RoadRenderer">
                 <esri:SimpleRenderer.Symbol>
                     <esri:SimpleLineSymbol Color="#990000FF" Width="5"/>
@@ -35,11 +33,11 @@
         </Grid.Resources>
         
         <!-- Mapa -->
-        <esri:Map x:Name="MyMap" MouseClick="MyMap_MouseClick" >
+        <esri:Map x:Name="MyMap" MouseClick="MyMap_MouseClick">
             <esri:ArcGISTiledMapServiceLayer ID="BaseLayer" 
                 Url="http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer" />
             <esri:ArcGISTiledMapServiceLayer ID="StatesLayer" 
-                Url="http://server.arcgisonline.com/ArcGIS/rest/services/Demographics/USA_1990-2000_Population_Change/MapServer" />
+                Url="http://server.arcgisonline.com/ArcGIS/rest/services/Demographics/USA_1990-2000_Population_Change/MapServer/" />
             <esri:GraphicsLayer ID="CountiesLayer">
                 <esri:GraphicsLayer.MapTip>
                     <Border BorderBrush="DarkGray" Background="Azure" CornerRadius="3" BorderThickness="1" Padding="3">
@@ -85,7 +83,7 @@
             </ListBox>
         </Border>
 
-        <Grid HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,187,20,0">
+        <Grid HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,210,20,0">
             <Rectangle Fill="#DDFFFFFF" Stroke="DarkGray" RadiusX="5" RadiusY="5" Margin="10,10,10,15" />
             <StackPanel Name="AddressPanel" Orientation="Vertical" HorizontalAlignment="Center" Margin="30,20,30,30">
             	<StackPanel.DataContext>
@@ -108,11 +106,17 @@
                     <TextBlock Text="Zip: " Width="80" TextAlignment="Right"/>
                     <TextBox x:Name="Zip" Text="{Binding Mode=TwoWay, Path=Zip}" Width="125"/>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal">                                                
-                    <Button x:Name="AddAddressButton" Content="Add" Width="48" HorizontalAlignment="Center" Margin="5,5,5,5" Click="AddAddressButton_Click" />
-                    <Button x:Name="FindRouteButton" Content="Find route" Width="81" HorizontalAlignment="Center" Margin="5,5,5,5" Click="FindRouteButton_Click" />
-                    <Button x:Name="AddMockAddressesButton" Content="Mock" Width="61" HorizontalAlignment="Center" Margin="5,5,5,5" Click="AddMockAddresses_Click" />
+                <StackPanel Orientation="Horizontal">
+                    <Button x:Name="AddAddressButton" Content="Add" Width="81" HorizontalAlignment="Center" Margin="5,5,5,5" Click="AddAddressButton_Click" />
+                    <Button x:Name="AddMockAddressesButton" Content="Mock" Width="81" HorizontalAlignment="Center" Margin="5,5,5,5" Click="AddMockAddresses_Click" />
+                    <Button x:Name="ClearAddressesButton" Content="Clear" Width="81" HorizontalAlignment="Center" Margin="5,5,5,5" Click="ClearAddresses_Click" />
                 </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Button x:Name="FindRouteButton" Content="Find route" Width="81" HorizontalAlignment="Center" Margin="5,5,5,5" Click="FindRouteButton_Click" />
+                    <Button x:Name="BeginTravelButton" Content="Begin travel" Width="81" HorizontalAlignment="Center" Margin="5,5,5,5" Click="BeginTravel_Click" />
+                    <Button x:Name="StopTravelButton" Content="Stop travel" Width="81" HorizontalAlignment="Center" Margin="5,5,5,5" Click="StopTravel_Click" />
+                </StackPanel>
+                <Slider x:Name="SpeedSlider" Height="23" Width="261" />
                 <Rectangle Stroke="Gray" RadiusX="10" RadiusY="10" Fill="#77919191">
                     <Rectangle.Effect>
                         <DropShadowEffect />

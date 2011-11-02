@@ -36,6 +36,14 @@ namespace SIGTest.Services
             return queryTask;
         }
 
+        public static QueryTask GetStatesQueryTask(EventHandler<QueryEventArgs> successHandler, EventHandler<TaskFailedEventArgs> failureHandler)
+        {
+            QueryTask queryTask = new QueryTask(DEMOGRAPHICS_MAP_SERVER_URL + "/4");
+            queryTask.ExecuteCompleted += successHandler;
+            queryTask.Failed += failureHandler;
+            return queryTask;
+        }
+
          public static Locator GetUsaStreetsLocator(EventHandler<AddressToLocationsEventArgs> successHandler, EventHandler<TaskFailedEventArgs> failureHandler)
          {
              Locator locatorTask = new Locator(US_STREETS_GEOCODE_SERVER_URL);
