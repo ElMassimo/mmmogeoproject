@@ -17,16 +17,33 @@ using SIGTest.ViewModels;
 using SIGTest.Services;
 using ESRI.ArcGIS.Client.Symbols;
 using SIGTest.Mock;
+using SIGTest.Models;
+using Polygon = ESRI.ArcGIS.Client.Geometry.Polygon;
+using Polyline = ESRI.ArcGIS.Client.Geometry.Polyline;
+using System.Threading;
+using System.ComponentModel;
+using System.Windows.Threading;
+using SIGTest.Utility;
 
 namespace SIGTest.Views
 {
     public partial class MapPage : Page
     {
+        #region Services
         private Locator _usaStreetsLocatorTask;
         private GeometryService _geometryService;
         private QueryTask _countiesQueryTask;
+        private QueryTask _statesQueryTask;
         private RouteTask _routingTask;
-
+        #endregion
+        
+        private const double MAP_TO_KM_RATIO = 5000;
+        private const int TIMER_MILLISECONDS = 3000;
+        private DispatcherTimer _travelTimer;
+        private MapPoint _lastPoint;
+        private Car _car;
+        private Road _road;
+        private State _currentState = new State();
         List<Graphic> _stops = new List<Graphic>();
 
         #region Constructor / Properties
@@ -37,7 +54,11 @@ namespace SIGTest.Views
             _usaStreetsLocatorTask = RoadTripServices.GetUsaStreetsLocator(UsaStreetsLocatorTask_AddressToLocationsCompleted, LocatorTask_Failed);
             _geometryService = RoadTripServices.GetGeometryService(GeometryService_BufferCompleted, GeometryService_Failed);
             _countiesQueryTask = RoadTripServices.GetCountiesQueryTask(CountiesQueryTask_ExecuteCompleted, QueryTask_Failed);
+            _statesQueryTask = RoadTripServices.GetStatesQueryTask(StatesQueryTask_ExecuteCompleted, QueryTask_Failed);
             _routingTask = RoadTripServices.GetRoutingTask(RoutingTask_SolveCompleted, RoutingTask_Failed);
+            
+            _travelTimer = new DispatcherTimer();
+            _travelTimer.Tick += new EventHandler(DrivingLoop);
         }
 
         private GraphicsLayer BufferLayer
@@ -72,46 +93,134 @@ namespace SIGTest.Views
         {
             return LayoutRoot.Resources[symbolName] as Symbol;
         }
-
-        private void AddStop(MapPoint mapPoint)
-        {
-            Graphic stop = new Graphic() { Geometry = mapPoint, Symbol = GetSymbol("StopSymbol") };
-            stop.Attributes.Add("StopNumber", StopsLayer.Graphics.Count + 1);
-            StopsLayer.Graphics.Add(stop);
-            _stops.Add(stop);
-        }
         #endregion
         
+        private void ShowCar()
+        {
+            CarLayer.ClearGraphics();
+
+            Graphic carMarker = new Graphic();
+            carMarker.Symbol = _car.GetSymbol();
+            carMarker.Geometry = _car.CurrentLocation;
+            carMarker.Geometry.SpatialReference = MyMap.SpatialReference;
+
+            CarLayer.Graphics.Add(carMarker);
+        }
+
+        private void ShowCounties()
+        {
+            CountiesLayer.ClearGraphics();
+            if(_currentState.Counties != null)
+                foreach (Graphic selectedGraphic in _currentState.Counties)
+                {
+                    selectedGraphic.Symbol = GetSymbol("ParcelSymbol");
+                    CountiesLayer.Graphics.Add(selectedGraphic);
+                }
+        }
+
+        private void PrepareTrip(Polyline route)
+        {
+            _road = new Road(route);
+            _car = new Car(_currentState.Name, _road.StartLocation);
+            ShowCar();
+        }
+
+        private void DrivingLoop(object sender, EventArgs e)
+        {
+            if(_statesQueryTask.IsBusy || _countiesQueryTask.IsBusy)
+                return;
+            
+
+            for (double d = 0; d < MAP_TO_KM_RATIO * (SpeedSlider.Value + 1) * 50; )
+            {
+                MapPoint tempPoint = _road.NextLocation();
+                if(tempPoint == null)
+                    break;
+                d += RoadUtils.CalculateDistance(_lastPoint, tempPoint);
+                _lastPoint = tempPoint;
+            }
+
+            _car.NextLocation = _lastPoint;
+
+            ShowCar();
+            ShowCounties();
+
+            if (_lastPoint == null)
+                _travelTimer.Stop();
+            else
+            {
+                ExecuteStateQuery(_car.NextLocation);
+                ExecuteCountiesQuery(_car.NextLocation);
+            }
+        }
+
+        private void BeginTravel_Click(object sender, RoutedEventArgs e)
+        {
+            _road.GoToStart();
+            _lastPoint = _road.StartLocation;
+            _car.CurrentLocation = _road.StartLocation;
+            _travelTimer.Interval = TimeSpan.FromMilliseconds(TIMER_MILLISECONDS);
+            _travelTimer.Start();
+        }
+
+        private void StopTravel_Click(object sender, RoutedEventArgs e)
+        {
+            _travelTimer.Stop();
+        }
+
         private void MyMap_MouseClick(object sender, ESRI.ArcGIS.Client.Map.MouseEventArgs e)
         {
-            _geometryService.CancelAsync();
-            _countiesQueryTask.CancelAsync();
-
-            BufferLayer.ClearGraphics();
-            CountiesLayer.ClearGraphics();
-
             Graphic marker = new Graphic();
             marker.Symbol = GetSymbol("DefaultMarkerSymbol");
             marker.Geometry = e.MapPoint;
-            // Input spatial reference for buffer operation defined by first feature of input geometry array
             marker.Geometry.SpatialReference = MyMap.SpatialReference;
-
             marker.SetZIndex(2);
             BufferLayer.Graphics.Add(marker);
 
-            // If buffer spatial reference is GCS and unit is linear, geometry service will do geodesic buffering
+            QueryTask _statesQueryTask2 = RoadTripServices.GetStatesQueryTask(StatesQueryTask_ExecuteCompleted2, QueryTask_Failed);
+             Query query = new ESRI.ArcGIS.Client.Tasks.Query();
+            query.OutFields.Add("NAME_12");
+            query.OutSpatialReference = MyMap.SpatialReference;
+            query.Geometry = e.MapPoint;
+            _statesQueryTask2.ExecuteAsync(query);
+        }
+        private void StatesQueryTask_ExecuteCompleted2(object sender, QueryEventArgs args)
+        {
+            FeatureSet featureSet = args.FeatureSet;
+
+            if (featureSet != null && featureSet.Features.Count > 0)
+            {
+                string stateName = featureSet.Features[0].Attributes["NAME_12"] as String;
+                 MessageBox.Show(stateName);
+            }
+            else
+            {
+                MessageBox.Show("The selected location does not belong to USA");
+            }
+        }
+        private void ExecuteCountiesQuery(MapPoint mapPoint)
+        {            
+            _geometryService.CancelAsync();
+            _countiesQueryTask.CancelAsync();
+            BufferLayer.ClearGraphics();
+
+            Graphic marker = new Graphic();
+            marker.Symbol = GetSymbol("DefaultMarkerSymbol");
+            marker.Geometry = mapPoint;
+            marker.Geometry.SpatialReference = MyMap.SpatialReference;
+
             BufferParameters bufferParams = new BufferParameters()
             {
-                Unit = LinearUnit.StatuteMile,
+                Unit = LinearUnit.Kilometer,
+                Distances = { 20 },
                 BufferSpatialReference = new SpatialReference(4326),
-                OutSpatialReference = MyMap.SpatialReference
+                OutSpatialReference = MyMap.SpatialReference,
+                Features = { marker }
             };
-            bufferParams.Features.Add(marker);
-            bufferParams.Distances.Add(100);
 
             _geometryService.BufferAsync(bufferParams);
         }
-        
+
         void GeometryService_BufferCompleted(object sender, GraphicsEventArgs args)
         {
             Graphic bufferGraphic = new Graphic();
@@ -133,20 +242,38 @@ namespace SIGTest.Views
         {
             MessageBox.Show("Geometry Service error: " + e.Error);
         }
-        
+
         private void CountiesQueryTask_ExecuteCompleted(object sender, QueryEventArgs args)
         {
-            if (args.FeatureSet.Features.Count < 1)
-            {
+            if (args.FeatureSet.Features.Count > 0)
+                _currentState.Counties = args.FeatureSet.Features;
+            else
                 MessageBox.Show("No counties found");
-                return;
-            }
+        }
 
-            foreach (Graphic selectedGraphic in args.FeatureSet.Features)
+        private void ExecuteStateQuery(MapPoint mapPoint)
+        {
+            _statesQueryTask.CancelAsync();
+            Query query = new ESRI.ArcGIS.Client.Tasks.Query();
+            query.OutFields.Add("NAME_12");
+            query.OutSpatialReference = MyMap.SpatialReference;
+            query.Geometry = mapPoint;
+            _statesQueryTask.ExecuteAsync(query);
+        }
+        
+        private void StatesQueryTask_ExecuteCompleted(object sender, QueryEventArgs args)
+        {
+            FeatureSet featureSet = args.FeatureSet;
+
+            if (featureSet != null && featureSet.Features.Count > 0)
             {
-                selectedGraphic.Symbol = GetSymbol("ParcelSymbol");
-                CountiesLayer.Graphics.Add(selectedGraphic);
+                string stateName = featureSet.Features[0].Attributes["NAME_12"] as String;
+                _currentState.Name = stateName;
+                if(_car != null)
+                    _car.UpdateState(stateName);
             }
+            else
+                MessageBox.Show("The selected location does not belong to USA");
         }
 
         private void QueryTask_Failed(object sender, TaskFailedEventArgs args)
@@ -156,6 +283,20 @@ namespace SIGTest.Views
 
 
         #region Geocoding
+        private void AddStop(MapPoint mapPoint)
+        {
+            Graphic stop = new Graphic() { Geometry = mapPoint, Symbol = GetSymbol("StopSymbol") };
+            stop.Attributes.Add("StopNumber", _stops.Count + 1);
+            StopsLayer.Graphics.Add(stop);
+            _stops.Add(stop);
+
+            if (_stops.Count == 1)
+            {
+                ExecuteStateQuery(mapPoint);
+                ExecuteCountiesQuery(mapPoint);
+            }
+        }
+
         private void AddAddressButton_Click(object sender, RoutedEventArgs e)
         {
             AddressToLocationsParameters addressParams = new AddressToLocationsParameters();
@@ -165,13 +306,22 @@ namespace SIGTest.Views
 
             if (address.ToKeyValue(addressParams.Address).Count > 0)
             {
+                AddAddressButton.IsEnabled = false;
                 _usaStreetsLocatorTask.AddressToLocationsAsync(addressParams);
-                MessageBox.Show("Query sent");
             }
             else
-                MessageBox.Show("Please enter an address");
+                MessageBox.Show("Please enter a valid address");            
+        }
 
-            address.Clear();
+        private void AddMockAddresses_Click(object sender, RoutedEventArgs e)
+        {
+            AddressPanel.DataContext = MockGenerator.GetMockAddress();
+        }
+
+        private void ClearAddresses_Click(object sender, RoutedEventArgs e)
+        {
+            StopsLayer.ClearGraphics();
+            _stops.Clear();
         }
 
         private void UsaStreetsLocatorTask_AddressToLocationsCompleted(object sender, ESRI.ArcGIS.Client.Tasks.AddressToLocationsEventArgs args)
@@ -197,10 +347,13 @@ namespace SIGTest.Views
                 AddStop(bestCandidate.Location);
             else
                 MessageBox.Show("There are no locations that match the specified address.");
+
+            AddAddressButton.IsEnabled = true;
         }
 
         private void LocatorTask_Failed(object sender, TaskFailedEventArgs e)
         {
+            AddAddressButton.IsEnabled = true;
             MessageBox.Show("Locator service failed: " + e.Error);
         }
         #endregion
@@ -208,6 +361,7 @@ namespace SIGTest.Views
         #region Routing
         private void FindRouteButton_Click(object sender, RoutedEventArgs e)
         {
+            FindRouteButton.IsEnabled = false;
             _routingTask.SolveAsync(new RouteParameters() { Stops = StopsLayer, UseTimeWindows = false, OutSpatialReference = MyMap.SpatialReference });
         }
 
@@ -216,7 +370,6 @@ namespace SIGTest.Views
             RoadLayer.Graphics.Clear();
 
             RouteResult routeResult = e.RouteResults[0];
-
             Graphic lastRoute = routeResult.Route;
 
             decimal totalTime = (decimal)lastRoute.Attributes["Total_Time"];
@@ -225,18 +378,17 @@ namespace SIGTest.Views
 
             RoadLayer.Graphics.Add(lastRoute);
 
+            PrepareTrip(lastRoute.Geometry as Polyline);
+
             MessageBox.Show("Routing completed: travel safely!");
+            FindRouteButton.IsEnabled = true;
         }
 
         private void RoutingTask_Failed(object sender, TaskFailedEventArgs e)
         {
+            FindRouteButton.IsEnabled = true;
             MessageBox.Show("Routing task failed: " + e.Error);
         }
         #endregion
-
-        private void AddMockAddresses_Click(object sender, RoutedEventArgs e)
-        {
-            AddressPanel.DataContext = MockGenerator.GetMockAddress();
-        }
     }
 }

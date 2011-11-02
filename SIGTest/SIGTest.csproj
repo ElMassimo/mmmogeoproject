@@ -89,7 +89,11 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Mock\MockGenerator.cs" />
+    <Compile Include="Models\Car.cs" />
+    <Compile Include="Models\Road.cs" />
+    <Compile Include="Models\State.cs" />
     <Compile Include="Services\RoadTripServices.cs" />
+    <Compile Include="Utility\RoadUtils.cs" />
     <Compile Include="ViewModels\AddressViewModel.cs" />
     <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
@@ -178,7 +182,17 @@
   <ItemGroup>
     <Resource Include="Assets\Images\pushpin.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Assets\Images\Cars\car_0.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\Cars\car_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\Cars\car_2.png" />
+    <Resource Include="Assets\Images\Cars\car_3.png" />
+    <Resource Include="Assets\Images\Cars\car_4.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
