@@ -16,14 +16,16 @@ using ESRI.ArcGIS.Client.Geometry;
 using SIGTest.ViewModels;
 using SIGTest.Services;
 using ESRI.ArcGIS.Client.Symbols;
+using SIGTest.Mock;
 
 namespace SIGTest.Views
 {
     public partial class MapPage : Page
     {
-        private Locator _locatorTask;
+        private Locator _usaStreetsLocatorTask;
         private GeometryService _geometryService;
-        private QueryTask _queryTask;
+        private QueryTask _countiesQueryTask;
+        private RouteTask _routingTask;
 
         List<Graphic> _stops = new List<Graphic>();
 
@@ -32,9 +34,10 @@ namespace SIGTest.Views
         {
             InitializeComponent();
 
-            _locatorTask = RoadTripServices.GetLocator(LocatorTask_AddressToLocationsCompleted, LocatorTask_Failed);
+            _usaStreetsLocatorTask = RoadTripServices.GetUsaStreetsLocator(UsaStreetsLocatorTask_AddressToLocationsCompleted, LocatorTask_Failed);
             _geometryService = RoadTripServices.GetGeometryService(GeometryService_BufferCompleted, GeometryService_Failed);
-            _queryTask = RoadTripServices.GetQueryTask(QueryTask_ExecuteCompleted, QueryTask_Failed);
+            _countiesQueryTask = RoadTripServices.GetCountiesQueryTask(CountiesQueryTask_ExecuteCompleted, QueryTask_Failed);
+            _routingTask = RoadTripServices.GetRoutingTask(RoutingTask_SolveCompleted, RoutingTask_Failed);
         }
 
         private GraphicsLayer BufferLayer
@@ -82,7 +85,7 @@ namespace SIGTest.Views
         private void MyMap_MouseClick(object sender, ESRI.ArcGIS.Client.Map.MouseEventArgs e)
         {
             _geometryService.CancelAsync();
-            _queryTask.CancelAsync();
+            _countiesQueryTask.CancelAsync();
 
             BufferLayer.ClearGraphics();
             CountiesLayer.ClearGraphics();
@@ -123,7 +126,7 @@ namespace SIGTest.Views
             query.OutSpatialReference = MyMap.SpatialReference;
             query.Geometry = bufferGraphic.Geometry;
             query.OutFields.Add("NAME");
-            _queryTask.ExecuteAsync(query);
+            _countiesQueryTask.ExecuteAsync(query);
         }
         
         private void GeometryService_Failed(object sender, TaskFailedEventArgs e)
@@ -131,11 +134,11 @@ namespace SIGTest.Views
             MessageBox.Show("Geometry Service error: " + e.Error);
         }
         
-        private void QueryTask_ExecuteCompleted(object sender, QueryEventArgs args)
+        private void CountiesQueryTask_ExecuteCompleted(object sender, QueryEventArgs args)
         {
             if (args.FeatureSet.Features.Count < 1)
             {
-                MessageBox.Show("No features found");
+                MessageBox.Show("No counties found");
                 return;
             }
 
@@ -155,7 +158,6 @@ namespace SIGTest.Views
         #region Geocoding
         private void AddAddressButton_Click(object sender, RoutedEventArgs e)
         {
-
             AddressToLocationsParameters addressParams = new AddressToLocationsParameters();
             addressParams.OutSpatialReference = MyMap.SpatialReference;
 
@@ -163,7 +165,7 @@ namespace SIGTest.Views
 
             if (address.ToKeyValue(addressParams.Address).Count > 0)
             {
-                _locatorTask.AddressToLocationsAsync(addressParams);
+                _usaStreetsLocatorTask.AddressToLocationsAsync(addressParams);
                 MessageBox.Show("Query sent");
             }
             else
@@ -172,10 +174,10 @@ namespace SIGTest.Views
             address.Clear();
         }
 
-        private void LocatorTask_AddressToLocationsCompleted(object sender, ESRI.ArcGIS.Client.Tasks.AddressToLocationsEventArgs args)
+        private void UsaStreetsLocatorTask_AddressToLocationsCompleted(object sender, ESRI.ArcGIS.Client.Tasks.AddressToLocationsEventArgs args)
         {
             List<AddressCandidate> returnedCandidates = args.Results;
-            List<AddressCandidate> goodCandidates = returnedCandidates;
+            AddressCandidate bestCandidate = null;
 
             foreach (AddressCandidate candidate in returnedCandidates)
             {
@@ -186,17 +188,15 @@ namespace SIGTest.Views
 
                     if (!candidate.Location.SpatialReference.Equals(MyMap.SpatialReference))
                         MessageBox.Show("TODO: Translate the Spatial Reference");
-                    else
-                        AddStop(candidate.Location);
-
-                    goodCandidates.Add(candidate);
+                    else if (bestCandidate == null || candidate.Score > bestCandidate.Score)
+                        bestCandidate = candidate;
                 }
             }
 
-            if (goodCandidates.Count > 0)
-                MessageBox.Show("TODO: Let the user choose the location from a list");
+            if (bestCandidate != null)
+                AddStop(bestCandidate.Location);
             else
-                MessageBox.Show("TODO: Arreglar los parámetros que se le pasan al geocoder");
+                MessageBox.Show("There are no locations that match the specified address.");
         }
 
         private void LocatorTask_Failed(object sender, TaskFailedEventArgs e)
@@ -204,5 +204,39 @@ namespace SIGTest.Views
             MessageBox.Show("Locator service failed: " + e.Error);
         }
         #endregion
+
+        #region Routing
+        private void FindRouteButton_Click(object sender, RoutedEventArgs e)
+        {
+            _routingTask.SolveAsync(new RouteParameters() { Stops = StopsLayer, UseTimeWindows = false, OutSpatialReference = MyMap.SpatialReference });
+        }
+
+        private void RoutingTask_SolveCompleted(object sender, RouteEventArgs e)
+        {
+            RoadLayer.Graphics.Clear();
+
+            RouteResult routeResult = e.RouteResults[0];
+
+            Graphic lastRoute = routeResult.Route;
+
+            decimal totalTime = (decimal)lastRoute.Attributes["Total_Time"];
+            string tip = string.Format("{0} minutes", totalTime.ToString("#0.000"));
+            lastRoute.Attributes.Add("TIP", tip);
+
+            RoadLayer.Graphics.Add(lastRoute);
+
+            MessageBox.Show("Routing completed: travel safely!");
+        }
+
+        private void RoutingTask_Failed(object sender, TaskFailedEventArgs e)
+        {
+            MessageBox.Show("Routing task failed: " + e.Error);
+        }
+        #endregion
+
+        private void AddMockAddresses_Click(object sender, RoutedEventArgs e)
+        {
+            AddressPanel.DataContext = MockGenerator.GetMockAddress();
+        }
     }
 }

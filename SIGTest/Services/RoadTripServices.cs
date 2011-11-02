@@ -14,10 +14,12 @@ namespace SIGTest.Services
 {
     public class RoadTripServices
     {
-        public const string LOCATOR_GEOCODE_SERVER_URL = "http://tasks.arcgisonline.com/ArcGIS/rest/services/Locators/ESRI_Places_World/GeocodeServer";
+        public const string WORLD_MAP_GEOCODE_SERVER_URL = "http://tasks.arcgisonline.com/ArcGIS/rest/services/Locators/ESRI_Places_World/GeocodeServer";
+        public const string US_STREETS_GEOCODE_SERVER_URL = "http://tasks.arcgisonline.com/ArcGIS/rest/services/Locators/TA_Streets_US_10/GeocodeServer";
         public const string GEOMETRY_SERVER_URL = "http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer";
         public const string DEMOGRAPHICS_MAP_SERVER_URL = "http://server.arcgisonline.com/ArcGIS/rest/services/Demographics/USA_1990-2000_Population_Change/MapServer";
-        
+        public const string ROUTE_TASK_SERVER_URL = "http://tasks.arcgisonline.com/ArcGIS/rest/services/NetworkAnalysis/ESRI_Route_NA/NAServer/Long_Route";
+
             public static GeometryService GetGeometryService(EventHandler<GraphicsEventArgs> successHandler, EventHandler<TaskFailedEventArgs> failureHandler)
         {
             GeometryService geometryService = new GeometryService(GEOMETRY_SERVER_URL);
@@ -26,7 +28,7 @@ namespace SIGTest.Services
             return geometryService;
         }
 
-        public static QueryTask GetQueryTask(EventHandler<QueryEventArgs> successHandler, EventHandler<TaskFailedEventArgs> failureHandler)
+        public static QueryTask GetCountiesQueryTask(EventHandler<QueryEventArgs> successHandler, EventHandler<TaskFailedEventArgs> failureHandler)
         {
             QueryTask queryTask = new QueryTask(DEMOGRAPHICS_MAP_SERVER_URL+"/3");
             queryTask.ExecuteCompleted += successHandler;
@@ -34,12 +36,20 @@ namespace SIGTest.Services
             return queryTask;
         }
 
-         public static Locator GetLocator(EventHandler<AddressToLocationsEventArgs> successHandler, EventHandler<TaskFailedEventArgs> failureHandler)
+         public static Locator GetUsaStreetsLocator(EventHandler<AddressToLocationsEventArgs> successHandler, EventHandler<TaskFailedEventArgs> failureHandler)
          {
-             Locator locatorTask = new Locator(LOCATOR_GEOCODE_SERVER_URL);
+             Locator locatorTask = new Locator(US_STREETS_GEOCODE_SERVER_URL);
              locatorTask.AddressToLocationsCompleted += successHandler;
              locatorTask.Failed += failureHandler;
              return locatorTask;
+         }
+
+         public static RouteTask GetRoutingTask(EventHandler<RouteEventArgs> successHandler, EventHandler<TaskFailedEventArgs> failureHandler)
+         {
+             RouteTask routeTask = new RouteTask(ROUTE_TASK_SERVER_URL);
+             routeTask.SolveCompleted += successHandler;
+             routeTask.Failed += failureHandler;
+             return routeTask;
          }
     }
 }

@@ -88,6 +88,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Mock\MockGenerator.cs" />
     <Compile Include="Services\RoadTripServices.cs" />
     <Compile Include="ViewModels\AddressViewModel.cs" />
     <Compile Include="Views\MainPage.xaml.cs">
@@ -177,6 +178,7 @@
   <ItemGroup>
     <Resource Include="Assets\Images\pushpin.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
