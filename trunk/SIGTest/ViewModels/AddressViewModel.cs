@@ -37,7 +37,7 @@ namespace SIGTest.ViewModels
 
         public void Clear()
         {
-            Zip = State = City = Address = null;
+            // Zip = State = City = Address = null;
         }
     }
 }

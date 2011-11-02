@@ -26,6 +26,12 @@
                 </esri:SimpleMarkerSymbol.ControlTemplate>
             </esri:SimpleMarkerSymbol>
             <esri:SimpleLineSymbol x:Key="RouteSymbol" Color="#990000FF" Width="5"/>
+
+            <esri:SimpleRenderer x:Key="RoadRenderer">
+                <esri:SimpleRenderer.Symbol>
+                    <esri:SimpleLineSymbol Color="#990000FF" Width="5"/>
+                </esri:SimpleRenderer.Symbol>
+            </esri:SimpleRenderer>
         </Grid.Resources>
         
         <!-- Mapa -->
@@ -44,7 +50,7 @@
                     </Border>
                 </esri:GraphicsLayer.MapTip>
             </esri:GraphicsLayer>
-            <esri:GraphicsLayer ID="RoadLayer" />
+            <esri:GraphicsLayer ID="RoadLayer" Renderer="{StaticResource RoadRenderer}"/>
             <esri:GraphicsLayer ID="BufferLayer" />
             <esri:GraphicsLayer ID="StopsLayer" />
             <esri:GraphicsLayer ID="CarLayer" />
@@ -102,7 +108,11 @@
                     <TextBlock Text="Zip: " Width="80" TextAlignment="Right"/>
                     <TextBox x:Name="Zip" Text="{Binding Mode=TwoWay, Path=Zip}" Width="125"/>
                 </StackPanel>
-                <Button x:Name="AddAddressButton" Content="Add" Width="100" HorizontalAlignment="Center" Margin="0,5,0,0" Click="AddAddressButton_Click" />
+                <StackPanel Orientation="Horizontal">                                                
+                    <Button x:Name="AddAddressButton" Content="Add" Width="48" HorizontalAlignment="Center" Margin="5,5,5,5" Click="AddAddressButton_Click" />
+                    <Button x:Name="FindRouteButton" Content="Find route" Width="81" HorizontalAlignment="Center" Margin="5,5,5,5" Click="FindRouteButton_Click" />
+                    <Button x:Name="AddMockAddressesButton" Content="Mock" Width="61" HorizontalAlignment="Center" Margin="5,5,5,5" Click="AddMockAddresses_Click" />
+                </StackPanel>
                 <Rectangle Stroke="Gray" RadiusX="10" RadiusY="10" Fill="#77919191">
                     <Rectangle.Effect>
                         <DropShadowEffect />
