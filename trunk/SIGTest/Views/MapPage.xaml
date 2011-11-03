@@ -25,11 +25,21 @@
                     </ControlTemplate>
                 </esri:SimpleMarkerSymbol.ControlTemplate>
             </esri:SimpleMarkerSymbol>
+            <esri:SimpleLineSymbol x:Key="SlowSectionSymbol" Color="Green" Width="4" />
+            <esri:SimpleLineSymbol x:Key="NormalSectionSymbol" Color="Yellow" Width="4" />
+            <esri:SimpleLineSymbol x:Key="FastSectionSymbol" Color="Red" Width="4" />
             <esri:SimpleRenderer x:Key="RoadRenderer">
                 <esri:SimpleRenderer.Symbol>
-                    <esri:SimpleLineSymbol Color="#990000FF" Width="5"/>
+                    <esri:SimpleLineSymbol Color="#990000FF" Width="6"/>
                 </esri:SimpleRenderer.Symbol>
             </esri:SimpleRenderer>
+            <esri:ClassBreaksRenderer x:Key="TravelRenderer" Attribute="SPEED" >
+                <esri:ClassBreaksRenderer.Classes>
+                    <esri:ClassBreakInfo MinimumValue="60" MaximumValue="100" Symbol="{StaticResource SlowSectionSymbol}" />
+                    <esri:ClassBreakInfo MinimumValue="100" MaximumValue="120" Symbol="{StaticResource NormalSectionSymbol}" />
+                    <esri:ClassBreakInfo MinimumValue="120" MaximumValue="180" Symbol="{StaticResource FastSectionSymbol}" />
+                </esri:ClassBreaksRenderer.Classes>
+            </esri:ClassBreaksRenderer>
         </Grid.Resources>
         
         <!-- Mapa -->
@@ -48,8 +58,18 @@
                     </Border>
                 </esri:GraphicsLayer.MapTip>
             </esri:GraphicsLayer>
-            <esri:GraphicsLayer ID="RoadLayer" Renderer="{StaticResource RoadRenderer}"/>
             <esri:GraphicsLayer ID="BufferLayer" />
+            <esri:GraphicsLayer ID="RoadLayer" Renderer="{StaticResource RoadRenderer}"/>
+            <esri:GraphicsLayer ID="TravelLayer" Renderer="{StaticResource TravelRenderer}">
+                <esri:GraphicsLayer.MapTip>
+                <Border BorderBrush="DarkGray" Background="Azure" CornerRadius="3" BorderThickness="1" Padding="3">
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="Avg Speed:" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                        <TextBlock Text="{Binding [SPEED]}" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                    </StackPanel>
+                </Border>
+                </esri:GraphicsLayer.MapTip>
+            </esri:GraphicsLayer>
             <esri:GraphicsLayer ID="StopsLayer" />
             <esri:GraphicsLayer ID="CarLayer" />
         </esri:Map>
