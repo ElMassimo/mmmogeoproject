@@ -6,8 +6,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Windows.Navigation;
 using ESRI.ArcGIS.Client;
@@ -38,6 +36,8 @@ namespace SIGTest.Views
         #endregion
         
         private const double MAP_TO_KM_RATIO = 5000;
+        private const double SHORTEST_SIMULATION_TIME_IN_HOURS = 0.5;
+        private const int SLIDER_WEIGHT = 2;
         private const int TIMER_MILLISECONDS = 3000;
         private DispatcherTimer _travelTimer;
         private MapPoint _lastPoint;
@@ -77,6 +77,10 @@ namespace SIGTest.Views
         {
             get { return GetLayer("Road"); }
         }
+        private GraphicsLayer TravelLayer
+        {
+            get { return GetLayer("Travel"); }
+        }
         private GraphicsLayer CountiesLayer
         {
             get { return GetLayer("Counties"); }
@@ -107,6 +111,19 @@ namespace SIGTest.Views
             CarLayer.Graphics.Add(carMarker);
         }
 
+        private void ShowRoadSection(PointCollection roadSection, double sectionSpeed)
+        {
+            Polyline lastRouteSection = new Polyline();
+            lastRouteSection.Paths.Add(roadSection);
+
+            Graphic road = new Graphic();
+            road.Attributes["SPEED"] = sectionSpeed;
+            road.Geometry = lastRouteSection;
+            road.Geometry.SpatialReference = MyMap.SpatialReference;
+
+            TravelLayer.Graphics.Add(road);
+        }
+
         private void ShowCounties()
         {
             CountiesLayer.ClearGraphics();
@@ -129,20 +146,25 @@ namespace SIGTest.Views
         {
             if(_statesQueryTask.IsBusy || _countiesQueryTask.IsBusy)
                 return;
-            
 
-            for (double d = 0; d < MAP_TO_KM_RATIO * (SpeedSlider.Value + 1) * 50; )
+            double sectionSpeed = RoadUtils.GetRandomSectionSpeed();
+            double sectionTime =  (SpeedSlider.Value + 1) * SHORTEST_SIMULATION_TIME_IN_HOURS;  
+
+            PointCollection routeSection = new PointCollection();
+            for (double distance = 0; distance < sectionSpeed * sectionTime * MAP_TO_KM_RATIO; )
             {
                 MapPoint tempPoint = _road.NextLocation();
                 if(tempPoint == null)
                     break;
-                d += RoadUtils.CalculateDistance(_lastPoint, tempPoint);
+                distance += RoadUtils.CalculateDistance(_lastPoint, tempPoint);
                 _lastPoint = tempPoint;
+                routeSection.Add(_lastPoint);
             }
 
             _car.NextLocation = _lastPoint;
 
             ShowCar();
+            ShowRoadSection(routeSection, sectionSpeed);
             ShowCounties();
 
             if (_lastPoint == null)
@@ -156,7 +178,8 @@ namespace SIGTest.Views
 
         private void BeginTravel_Click(object sender, RoutedEventArgs e)
         {
-            _road.GoToStart();
+            TravelLayer.ClearGraphics();
+            _road.GoToStart();            
             _lastPoint = _road.StartLocation;
             _car.CurrentLocation = _road.StartLocation;
             _travelTimer.Interval = TimeSpan.FromMilliseconds(TIMER_MILLISECONDS);
