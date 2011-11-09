@@ -1,0 +1,149 @@
+﻿<navigation:Page 
+           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+           xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+           xmlns:esri="http://schemas.esri.com/arcgis/client/2009" 
+           xmlns:navigation="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Navigation"
+           xmlns:ViewModels="clr-namespace:USARoadTrip.Silverlight.ViewModels"
+           x:Class="USARoadTrip.Silverlight.Views.MapPage"
+           mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
+           Title="Road Map">
+    <Grid x:Name="LayoutRoot">
+        <Grid.Resources>
+            <esri:PictureMarkerSymbol x:Key="DefaultMarkerSymbol" OffsetX="11" OffsetY="39" Source="../Assets/Images/pushpin.png" />
+            <esri:SimpleFillSymbol x:Key="BufferSymbol" Fill="#66BB0000" BorderBrush="#88CC0000" BorderThickness="2"  />
+            <esri:SimpleFillSymbol x:Key="ParcelSymbol" Fill="#440000FF" BorderBrush="Blue" BorderThickness="2" />
+            <esri:SimpleMarkerSymbol x:Key="StopSymbol" Size="20" Style="Circle" Color="Salmon" >
+                <esri:SimpleMarkerSymbol.ControlTemplate>
+                    <ControlTemplate>
+                        <Grid>
+                            <Ellipse Fill="{Binding Symbol.Color}" Width="{Binding Symbol.Size}" Height="{Binding Symbol.Size}" Stroke="Black" StrokeThickness="1" />
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
+                                Text="{Binding Path=Attributes[StopNumber]}"
+                                FontSize="9" Margin="0" FontWeight="Bold" Foreground="Black" />
+                        </Grid>
+                    </ControlTemplate>
+                </esri:SimpleMarkerSymbol.ControlTemplate>
+            </esri:SimpleMarkerSymbol>
+            <esri:SimpleLineSymbol x:Key="SlowSectionSymbol" Color="Green" Width="4" />
+            <esri:SimpleLineSymbol x:Key="NormalSectionSymbol" Color="Yellow" Width="4" />
+            <esri:SimpleLineSymbol x:Key="FastSectionSymbol" Color="Red" Width="4" />
+            <esri:SimpleRenderer x:Key="RoadRenderer">
+                <esri:SimpleRenderer.Symbol>
+                    <esri:SimpleLineSymbol Color="#990000FF" Width="6"/>
+                </esri:SimpleRenderer.Symbol>
+            </esri:SimpleRenderer>
+            <esri:ClassBreaksRenderer x:Key="TravelRenderer" Attribute="SPEED" >
+                <esri:ClassBreaksRenderer.Classes>
+                    <esri:ClassBreakInfo MinimumValue="60" MaximumValue="100" Symbol="{StaticResource SlowSectionSymbol}" />
+                    <esri:ClassBreakInfo MinimumValue="100" MaximumValue="120" Symbol="{StaticResource NormalSectionSymbol}" />
+                    <esri:ClassBreakInfo MinimumValue="120" MaximumValue="180" Symbol="{StaticResource FastSectionSymbol}" />
+                </esri:ClassBreaksRenderer.Classes>
+            </esri:ClassBreaksRenderer>
+        </Grid.Resources>
+        
+        <!-- Mapa -->
+        <esri:Map x:Name="MyMap" MouseClick="MyMap_MouseClick">
+            <esri:ArcGISTiledMapServiceLayer ID="BaseLayer" 
+                Url="http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer" />
+            <esri:ArcGISTiledMapServiceLayer ID="StatesLayer" 
+                Url="http://server.arcgisonline.com/ArcGIS/rest/services/Demographics/USA_1990-2000_Population_Change/MapServer/" />
+            <esri:GraphicsLayer ID="CountiesLayer">
+                <esri:GraphicsLayer.MapTip>
+                    <Border BorderBrush="DarkGray" Background="Azure" CornerRadius="3" BorderThickness="1" Padding="3">
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="Name:" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                            <TextBlock Text="{Binding [NAME]}" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Border>
+                </esri:GraphicsLayer.MapTip>
+            </esri:GraphicsLayer>
+            <esri:GraphicsLayer ID="BufferLayer" />
+            <esri:GraphicsLayer ID="RoadLayer" Renderer="{StaticResource RoadRenderer}"/>
+            <esri:GraphicsLayer ID="TravelLayer" Renderer="{StaticResource TravelRenderer}">
+                <esri:GraphicsLayer.MapTip>
+                <Border BorderBrush="DarkGray" Background="Azure" CornerRadius="3" BorderThickness="1" Padding="3">
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="Avg Speed:" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                        <TextBlock Text="{Binding [SPEED]}" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                    </StackPanel>
+                </Border>
+                </esri:GraphicsLayer.MapTip>
+            </esri:GraphicsLayer>
+            <esri:GraphicsLayer ID="StopsLayer" />
+            <esri:GraphicsLayer ID="CarLayer" />
+        </esri:Map>
+
+        <!--Panel con lista de capas-->
+        <Border Background="#77919191" BorderThickness="1" CornerRadius="5"
+            HorizontalAlignment="Right"  VerticalAlignment="Top"
+            Margin="20" Padding="5" BorderBrush="Black" >
+            <ListBox x:Name="MyList" ItemsSource="{Binding Layers, ElementName=MyMap}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <!--Layer visibility checkbox-->
+                            <CheckBox IsChecked="{Binding Visible, Mode=TwoWay}" />
+                            <!--Opacity slider-->
+                            <Slider Margin="-5,0,0,0" Minimum="0" Maximum="1" Width="30" 
+                                Value="{Binding Opacity, Mode=TwoWay}" Height="18" />
+                            <!--Layer name-->
+                            <TextBlock Text="{Binding ID, Mode=OneWay}" Margin="5,0,0,0" > 
+                            <!-- Tooltip on hover-->
+                                <ToolTipService.ToolTip>
+                                    <StackPanel MaxWidth="400">
+                                        <TextBlock FontWeight="Bold" Text="{Binding CopyrightText}" TextWrapping="Wrap" />
+                                        <TextBlock Text="{Binding Description}" TextWrapping="Wrap" />
+                                    </StackPanel>
+                                </ToolTipService.ToolTip>
+                            </TextBlock>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Border>
+
+        <Grid HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,210,20,0">
+            <Rectangle Fill="#DDFFFFFF" Stroke="DarkGray" RadiusX="5" RadiusY="5" Margin="10,10,10,15" />
+            <StackPanel Name="AddressPanel" Orientation="Vertical" HorizontalAlignment="Center" Margin="30,20,30,30">
+            	<StackPanel.DataContext>
+            		<ViewModels:AddressViewModel/>
+            	</StackPanel.DataContext>
+                <TextBlock Text="Enter Address Information" FontWeight="Bold" HorizontalAlignment="Center" />
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" >
+                    <TextBlock Text="Address: " Width="80" TextAlignment="Right" />
+                    <TextBox x:Name="InputAddress" Text="{Binding Mode=TwoWay, Path=Address}" Width="125" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" >
+                    <TextBlock Text="City: " Width="80" TextAlignment="Right" />
+                    <TextBox x:Name="City" Text="{Binding Mode=TwoWay, Path=City}" Width="125"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" >
+                    <TextBlock Text="State: " Width="80" TextAlignment="Right"/>
+                    <TextBox x:Name="State" Text="{Binding Mode=TwoWay, Path=State}" Width="125"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" >
+                    <TextBlock Text="Zip: " Width="80" TextAlignment="Right"/>
+                    <TextBox x:Name="Zip" Text="{Binding Mode=TwoWay, Path=Zip}" Width="125"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Button x:Name="AddAddressButton" Content="Add" Width="81" HorizontalAlignment="Center" Margin="5,5,5,5" Click="AddAddressButton_Click" />
+                    <Button x:Name="AddMockAddressesButton" Content="Mock" Width="81" HorizontalAlignment="Center" Margin="5,5,5,5" Click="AddMockAddresses_Click" />
+                    <Button x:Name="ClearAddressesButton" Content="Clear" Width="81" HorizontalAlignment="Center" Margin="5,5,5,5" Click="ClearAddresses_Click" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Button x:Name="FindRouteButton" Content="Find route" Width="81" HorizontalAlignment="Center" Margin="5,5,5,5" Click="FindRouteButton_Click" />
+                    <Button x:Name="BeginTravelButton" Content="Begin travel" Width="81" HorizontalAlignment="Center" Margin="5,5,5,5" Click="BeginTravel_Click" />
+                    <Button x:Name="StopTravelButton" Content="Stop travel" Width="81" HorizontalAlignment="Center" Margin="5,5,5,5" Click="StopTravel_Click" />
+                </StackPanel>
+                <Slider x:Name="SpeedSlider" Height="23" Width="261" />
+                <Rectangle Stroke="Gray" RadiusX="10" RadiusY="10" Fill="#77919191">
+                    <Rectangle.Effect>
+                        <DropShadowEffect />
+                    </Rectangle.Effect>
+                </Rectangle>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</navigation:Page>
