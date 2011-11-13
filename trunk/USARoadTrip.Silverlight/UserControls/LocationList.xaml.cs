@@ -10,23 +10,28 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 
-namespace USARoadTrip.Silverlight.Views
+namespace USARoadTrip.Silverlight.UserControls
 {
-    public partial class MainPage : UserControl
+    public partial class LocationList : UserControl
     {
-        public MainPage()
+        public LocationList()
         {
             InitializeComponent();
         }
 
-        private void ButtonGoToMap_Click(object sender, RoutedEventArgs e)
+        private void Delete_Click(object sender, RoutedEventArgs e)
         {
-            MainContent.Navigate(new Uri("/Views/MapPage.xaml", UriKind.Relative));
+
         }
 
-        private void ButtonGoBack_Click(object sender, RoutedEventArgs e)
+        private void MoveUp_Click(object sender, RoutedEventArgs e)
         {
-            MainContent.GoBack();
+
+        }
+
+        private void MoveDown_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

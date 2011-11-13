@@ -20,5 +20,19 @@ namespace USARoadTrip.Silverlight.Services
             client.LoginCompleted += completedHandler;
             return client;
         }
+
+        public static RoadTripServicesClient GetRegistrationService(EventHandler<RegisterCompletedEventArgs> completedHandler)
+        {
+            RoadTripServicesClient client = new RoadTripServicesClient();
+            client.RegisterCompleted += completedHandler;
+            return client;
+        }
+
+        public static RoadTripServicesClient GetUserTripsService(EventHandler<GetUserTripsCompletedEventArgs> completedHandler)
+        {
+            RoadTripServicesClient client = new RoadTripServicesClient();
+            client.GetUserTripsCompleted += completedHandler;
+            return client;
+        }
     }
 }

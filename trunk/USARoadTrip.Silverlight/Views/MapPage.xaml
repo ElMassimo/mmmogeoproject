@@ -48,7 +48,7 @@
             <esri:ArcGISTiledMapServiceLayer ID="BaseLayer" 
                 Url="http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer" />
             <esri:ArcGISTiledMapServiceLayer ID="StatesLayer" 
-                Url="http://server.arcgisonline.com/ArcGIS/rest/services/Demographics/USA_1990-2000_Population_Change/MapServer/" />
+                Url="http://server.arcgisonline.com/ArcGIS/rest/services/Demographics/USA_1990-2000_Population_Change/MapServer/4" />
             <esri:GraphicsLayer ID="CountiesLayer">
                 <esri:GraphicsLayer.MapTip>
                     <Border BorderBrush="DarkGray" Background="Azure" CornerRadius="3" BorderThickness="1" Padding="3">

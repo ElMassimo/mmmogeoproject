@@ -9,8 +9,8 @@
         <WebProjectProperties>
           <StartPageUrl>index.aspx</StartPageUrl>
           <StartAction>SpecificPage</StartAction>
-          <AspNetDebugging>True</AspNetDebugging>
-          <SilverlightDebugging>True</SilverlightDebugging>
+          <AspNetDebugging>False</AspNetDebugging>
+          <SilverlightDebugging>False</SilverlightDebugging>
           <NativeDebugging>False</NativeDebugging>
           <SQLDebugging>False</SQLDebugging>
           <ExternalProgram>
@@ -21,7 +21,7 @@
           </StartCmdLineArguments>
           <StartWorkingDirectory>
           </StartWorkingDirectory>
-          <EnableENC>True</EnableENC>
+          <EnableENC>False</EnableENC>
           <AlwaysStartWebServerOnDebug>True</AlwaysStartWebServerOnDebug>
           <ProjectOutputReferences>
             <Ref Project="{B59FD3CD-D0D5-43C9-99B2-5AA3D848A039}" Folder="ClientBin">USARoadTrip.xap</Ref>

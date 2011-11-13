@@ -1,0 +1,8 @@
+﻿<ResourceDictionary
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	<Color x:Key="LinkColorLight">#FFFFC700</Color>
+	<SolidColorBrush x:Key="LinkLightBrush" Color="#FFFFC700"/>
+	<SolidColorBrush x:Key="LabelLightBrush" Color="#FFFFF3BD"/>
+	<!-- Se deben establecer aquí las entradas del diccionario de recursos. -->
+</ResourceDictionary>

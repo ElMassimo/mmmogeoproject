@@ -1,0 +1,7 @@
+﻿<ResourceDictionary
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	<ImageBrush x:Key="HomeBackgroundBrush" ImageSource="../Images/Background/welcome.jpg"/>
+    <ImageBrush x:Key="TripsBackgroundBrush" ImageSource="../Images/Background/mytrips.jpg"/>
+	<!-- Se deben establecer aquí las entradas del diccionario de recursos. -->
+</ResourceDictionary>

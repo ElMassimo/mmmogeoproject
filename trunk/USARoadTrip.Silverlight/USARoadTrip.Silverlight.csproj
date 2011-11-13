@@ -31,6 +31,8 @@
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
     <LinkedServerProject>
     </LinkedServerProject>
+    <Utf8Output>true</Utf8Output>
+    <ExpressionBlendVersion>4.0.20621.0</ExpressionBlendVersion>
   </PropertyGroup>
   <!-- This property group is only here to support building this project using the 
        MSBuild 3.5 toolset. In order to work correctly with this older toolset, it needs 
@@ -76,8 +78,13 @@
     <Reference Include="System.Net" />
     <Reference Include="System.Windows.Controls, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Windows.Controls.Data, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Windows.Controls.Data.DataForm.Toolkit, Version=4.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Windows.Controls.Data.Input, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Windows.Controls.Input.Toolkit, Version=4.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Windows.Controls.Navigation, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Windows.Controls.Theming.Toolkit, Version=4.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Windows.Controls.Theming.WhistlerBlue, Version=4.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Windows.Controls.Toolkit, Version=4.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Windows.Interactivity, Version=4.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Windows.Browser" />
@@ -92,6 +99,7 @@
     <Compile Include="Models\Car.cs" />
     <Compile Include="Models\Road.cs" />
     <Compile Include="Models\State.cs" />
+    <Compile Include="RoadTripGlobals.cs" />
     <Compile Include="Service References\WCFServices\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -99,8 +107,17 @@
     </Compile>
     <Compile Include="Services\ESRIServices.cs" />
     <Compile Include="Services\RoadTripServices.cs" />
+    <Compile Include="UserControls\LocationList.xaml.cs">
+      <DependentUpon>LocationList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\RegistrationWindow.xaml.cs">
+      <DependentUpon>RegistrationWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Utility\GuiUtils.cs" />
     <Compile Include="Utility\RoadUtils.cs" />
+    <Compile Include="Utility\SilverlightUtils.cs" />
     <Compile Include="ViewModels\AddressViewModel.cs" />
+    <Compile Include="ViewModels\UserViewModel.cs" />
     <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -118,6 +135,9 @@
     <Compile Include="UserControls\WindowPanel.xaml.cs">
       <DependentUpon>WindowPanel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\TripsPage.xaml.cs">
+      <DependentUpon>TripsPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\WelcomePage.xaml.cs">
       <DependentUpon>WelcomePage.xaml</DependentUpon>
     </Compile>
@@ -127,6 +147,22 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
+    <Page Include="UserControls\LocationList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\RegistrationWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Assets\Styles\BackgroundStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\Styles\ButtonStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\MainPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -155,6 +191,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\TripsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\WelcomePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -168,6 +208,15 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+    <Resource Include="Assets\Images\Icons\DeleteIcon.png" />
+    <Resource Include="Assets\Images\Icons\DownIcon.png" />
+    <Resource Include="Assets\Images\Icons\GoBackIcon.png" />
+    <Resource Include="Assets\Images\Icons\MapIcon.png" />
+    <Resource Include="Assets\Images\Icons\MyTripsIcon.png" />
+    <Resource Include="Assets\Images\Icons\SaveIcon.png" />
+    <Resource Include="Assets\Images\Icons\SelectLocationIcon.png" />
+    <Resource Include="Assets\Images\Icons\UpIcon.png" />
+    <Resource Include="Assets\Images\Background\mytrips.jpg" />
     <Content Include="ServiceReferences.ClientConfig" />
     <None Include="Service References\WCFServices\RoadTripServices1.wsdl" />
     <None Include="Service References\WCFServices\RoadTripServices3.xsd">
@@ -185,6 +234,11 @@
     <None Include="Service References\WCFServices\USARoadTrip.Silverlight.WCFServices.Trip.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <BlendEmbeddedFont Include="Fonts\VINERITC.TTF">
+      <IsSystemFont>True</IsSystemFont>
+      <All>True</All>
+      <AutoFill>True</AutoFill>
+    </BlendEmbeddedFont>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\Images\blue_globe.png" />
@@ -204,6 +258,7 @@
     <Resource Include="Assets\Images\i_zoomin.png" />
     <Resource Include="Assets\Images\i_zoomout.png" />
     <Resource Include="Assets\Images\logo.png" />
+    <Resource Include="Assets\Images\Background\welcome.jpg" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\OutOfBrowserSettings.xml" />
@@ -228,6 +283,7 @@
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\WCFServices\" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
@@ -243,4 +299,5 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Expression\Blend\Silverlight\v4.0\Microsoft.Expression.Blend.Silverlight.targets" />
 </Project>

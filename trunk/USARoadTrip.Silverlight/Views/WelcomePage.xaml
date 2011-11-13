@@ -4,28 +4,34 @@
            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
            xmlns:esri="http://schemas.esri.com/arcgis/client/2009" 
-           mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
+           mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="562"
            xmlns:navigation="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Navigation"
-           Title="Welcome to Road Trip Buddy">
-    <Grid x:Name="LayoutRoot">
-    	<Grid.RenderTransform>
-    		<CompositeTransform/>
-    	</Grid.RenderTransform>
-    	<Grid.Background>
-    		<RadialGradientBrush>
-    			<RadialGradientBrush.RelativeTransform>
-    				<CompositeTransform CenterY="0.5" CenterX="0.5" TranslateX="-0.388" TranslateY="-0.498" ScaleY="2.879" ScaleX="2.543"/>
-    			</RadialGradientBrush.RelativeTransform>
-    			<GradientStop Color="#FF00BE0D"/>
-    			<GradientStop Color="#FF001F03" Offset="1"/>
-    		</RadialGradientBrush>
-    	</Grid.Background>
-        <StackPanel Orientation="Horizontal" Height="42" HorizontalAlignment="Left" Margin="231,22,0,0" Name="LoginStackPanel" VerticalAlignment="Top">
-            <TextBlock Name="UsernameLabel" Text="Username" Height="23" Margin="15,5,5,5"/>
-            <TextBox Name="UsernameTextBox" Width="120" Height="23" Margin="5, 5, 15, 5" />
-            <TextBlock Name="PasswordLabel" Text="Password" Height="23" Margin="5"/>
-            <TextBox Name="PasswordTextBox" Width="120" Height="23" Margin="5, 5, 15, 5" />
-            <Button Content="log in" Height="23" Name="LoginButton" Width="75" Margin="5,5,15,5" Click="LoginButton_Click" />
+           xmlns:controlsToolkit="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Toolkit"
+           Title="Welcome - USA Road Trip">
+    <Grid x:Name="LayoutRoot" Background="{StaticResource HomeBackgroundBrush}">
+        <StackPanel x:Name="UserStateStackPanel" HorizontalAlignment="Right" VerticalAlignment="Top" Width="515" Margin="10,10,10,10">
+            <controlsToolkit:BusyIndicator x:Name="BusyIndicator" IsBusy="False" DisplayAfter="0" BusyContent="Please wait...">
+                <StackPanel x:Name="LoginStackPanel" Visibility="Collapsed">
+                    <StackPanel Orientation="Horizontal" Height="42" HorizontalAlignment="Left" VerticalAlignment="Top">
+                        <TextBlock x:Name="UsernameLabel" Text="Username" Height="23" Margin="15,5,5,5" Foreground="{StaticResource LabelLightBrush}"/>
+                        <TextBox x:Name="UsernameTextBox" Width="120" Height="23" Margin="5, 5, 15, 5" />
+                        <TextBlock x:Name="PasswordLabel" Text="Password" Height="23" Margin="5" Foreground="{StaticResource LabelLightBrush}"/>
+                        <TextBox x:Name="PasswordTextBox" Width="120" Height="23" Margin="5, 5, 15, 5" />
+                        <Button Content="log in" Height="23" x:Name="LoginButton" Width="75" Margin="5,5,15,5" Click="LoginButton_Click" />
+                    </StackPanel>
+                    <HyperlinkButton x:Name="RegistrationLink" Foreground="{StaticResource LinkLightBrush}" Content="Don't have an account? Register for free!" Click="RegistrationLink_Click" HorizontalAlignment="Right" HorizontalContentAlignment="Right" Height="17" Margin="0,0,15,0" Width="235"/>
+                </StackPanel>
+            </controlsToolkit:BusyIndicator>
+            <StackPanel x:Name="UserInfoStackPanel" HorizontalAlignment="Right">
+                <StackPanel Orientation="Horizontal" Height="42" HorizontalAlignment="Left" VerticalAlignment="Top">
+                    <TextBlock x:Name="WelcomeLabel" Text="Welcome Fulano!" FontSize="32" FontFamily="/USARoadTrip.Silverlight;component/Fonts/Fonts.zip#Viner Hand ITC" Foreground="{StaticResource LabelLightBrush}"/>
+                    <HyperlinkButton x:Name="LogoutLink" Foreground="{StaticResource LinkLightBrush}" Content="[log out]" Click="LogoutLink_Click" Margin="10,17,10,10"/>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+        <StackPanel x:Name="MenuStackPanel" Width="100" HorizontalAlignment="Right" Margin="0,214,86,223">
+            <Button x:Name="MapButton" Content="Map" Width="75" Margin="10,10,10,50" Click="MapButton_Click" />
+            <Button x:Name="TripsButton" Content="My trips" Width="75" Margin="10,10,10,50" Click="TripsButton_Click" />
         </StackPanel>
     </Grid>
 </navigation:Page>
