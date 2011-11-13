@@ -1,0 +1,42 @@
+﻿<basics:ChildWindow x:Class="USARoadTrip.Silverlight.UserControls.RegistrationWindow" 
+                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+                    xmlns:basics="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls" 
+                    xmlns:controlsToolkit="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Toolkit"
+                    xmlns:dataform="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Data.DataForm.Toolkit" 
+                    xmlns:dataInput="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Data.Input"                    
+                    Width="400" Height="300" Title="Registration"
+                    x:Name="MyRegistrationWindow">
+    <controlsToolkit:BusyIndicator x:Name="BusyIndicator" IsBusy="False" DisplayAfter="0" BusyContent="Please wait...">
+        <Grid Margin="2">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <StackPanel>
+                <dataInput:ValidationSummary x:Name="RegistrationValidationSummary" Margin="4"/>
+                <dataform:DataForm x:Name="RegistrationForm" Width="370" MaxWidth="500"
+                           ItemsSource="{Binding}" HorizontalAlignment="Stretch" Margin="4" CommandButtonsVisibility="None">
+                    <dataform:DataForm.EditTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <dataform:DataField>
+                                    <TextBox Text="{Binding Nick, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=true}"/>
+                                </dataform:DataField>
+                                <dataform:DataField>
+                                    <PasswordBox Password="{Binding Password, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=true}"/>
+                                </dataform:DataField>
+                                <dataform:DataField>
+                                    <PasswordBox Password="{Binding PasswordConfirmation, Mode=TwoWay, ValidatesOnExceptions=true, NotifyOnValidationError=true}"/>
+                                </dataform:DataField>
+                            </StackPanel>
+                        </DataTemplate>
+                    </dataform:DataForm.EditTemplate>
+                </dataform:DataForm>
+            </StackPanel>
+            <Button Content="Cancel" Click="CancelButton_Click" Width="75" Height="23" HorizontalAlignment="Right" Margin="0,12,0,0" Grid.Row="2"/>
+            <Button Content="OK" Click="OKButton_Click" Width="75" Height="23" HorizontalAlignment="Right" Margin="0,12,79,0" Grid.Row="2"/>
+        </Grid>
+    </controlsToolkit:BusyIndicator>
+</basics:ChildWindow>

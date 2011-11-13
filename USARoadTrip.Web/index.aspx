@@ -62,7 +62,7 @@
         <object data="data:application/x-silverlight-2," type="application/x-silverlight-2" width="100%" height="100%">
 		  <param name="source" value="ClientBin/USARoadTrip.xap"/>
 		  <param name="onError" value="onSilverlightError" />
-		  <param name="background" value="white" />
+		  <param name="background" value="#FF4D8CC1" />
 		  <param name="minRuntimeVersion" value="4.0.60310.0" />
 		  <param name="autoUpgrade" value="true" />
 		  <a href="http://go.microsoft.com/fwlink/?LinkID=149156&v=4.0.60310.0" style="text-decoration:none">

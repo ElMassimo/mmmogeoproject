@@ -13,7 +13,7 @@
     <RootNamespace>USARoadTrip.Web</RootNamespace>
     <AssemblyName>USARoadTrip.Web</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <SilverlightApplicationList>{B59FD3CD-D0D5-43C9-99B2-5AA3D848A039}|..\SIGTest\SIGTest.csproj|ClientBin|False</SilverlightApplicationList>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -91,9 +91,9 @@
           <AutoAssignPort>False</AutoAssignPort>
           <DevelopmentServerPort>1601</DevelopmentServerPort>
           <DevelopmentServerVPath>/RoadTrip</DevelopmentServerVPath>
-          <IISUrl>http://localhost/RoadTrip</IISUrl>
+          <IISUrl>http://localhost:1601/RoadTrip</IISUrl>
           <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
-          <IISAppRootUrl>http://localhost/RoadTrip</IISAppRootUrl>
+          <IISAppRootUrl>http://localhost:1601/RoadTrip</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

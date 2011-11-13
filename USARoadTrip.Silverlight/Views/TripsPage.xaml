@@ -1,0 +1,17 @@
+﻿<navigation:Page x:Class="USARoadTrip.Silverlight.Views.TripsPage" 
+           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+           xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+           mc:Ignorable="d"
+           xmlns:navigation="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Navigation"
+           d:DesignWidth="900" d:DesignHeight="562"
+           Title="My Trips - USA Road Trip">
+    <Grid x:Name="LayoutRoot" Background="{StaticResource TripsBackgroundBrush}">
+        <TextBlock x:Name="MainLabel" Text="My trips" FontSize="96" FontFamily="/USARoadTrip.Silverlight;component/Fonts/Fonts.zip#Viner Hand ITC" Height="160" VerticalAlignment="Top" Margin="388,0,138,0" Foreground="#FFFEFA96" >
+        	<TextBlock.Effect>
+        		<DropShadowEffect BlurRadius="2" ShadowDepth="0"/>
+        	</TextBlock.Effect>
+        </TextBlock>
+    </Grid>
+</navigation:Page>
