@@ -20,15 +20,14 @@ using Polyline = ESRI.ArcGIS.Client.Geometry.Polyline;
 using System.Threading;
 using System.ComponentModel;
 using System.Windows.Threading;
-using USARoadTrip.SilverlightUtility;
+using USARoadTrip.Silverlight.Utility;
 using USARoadTrip.Silverlight.ViewModels;
 
 namespace USARoadTrip.Silverlight.Views
 {
     public partial class MapPage : Page
     {
-        private const double MAP_TO_KM_RATIO = 5000;
-        private const double SHORTEST_SIMULATION_TIME_IN_HOURS = 0.5;
+        private const double SHORTEST_SIMULATION_TIME_IN_HOURS = 0.25;
         private const int SLIDER_WEIGHT = 2;
         private const int TIMER_MILLISECONDS = 3000;
         private DispatcherTimer _travelTimer;
@@ -61,10 +60,6 @@ namespace USARoadTrip.Silverlight.Views
             _travelTimer.Tick += new EventHandler(DrivingLoop);
         }
 
-        private GraphicsLayer BufferLayer
-        {
-            get { return GetLayer("Buffer"); } 
-        }
         private GraphicsLayer CarLayer
         {
             get { return GetLayer("Car"); }
@@ -80,6 +75,10 @@ namespace USARoadTrip.Silverlight.Views
         private GraphicsLayer TravelLayer
         {
             get { return GetLayer("Travel"); }
+        }
+        private GraphicsLayer GPSLayer
+        {
+            get { return GetLayer("GPS"); }
         }
         private GraphicsLayer CountiesLayer
         {
@@ -119,10 +118,19 @@ namespace USARoadTrip.Silverlight.Views
 
             Graphic road = new Graphic();
             road.Attributes["SPEED"] = sectionSpeed;
+            road.Attributes["SPEED_READABLE"] = String.Format("{0} km/h", Math.Round(sectionSpeed, 1));
+            road.Attributes["DISTANCE"] = roadSection.GetTotalDistance().ToString("#0.0 km");
             road.Geometry = lastRouteSection;
             road.Geometry.SpatialReference = MyMap.SpatialReference;
 
             TravelLayer.Graphics.Add(road);
+
+            Graphic gpsMarker = new Graphic();
+            gpsMarker.Symbol = GetSymbol("GPSMarkerSymbol");
+            gpsMarker.Geometry = roadSection.Last();
+            gpsMarker.Geometry.SpatialReference = MyMap.SpatialReference;
+            gpsMarker.SetZIndex(2);
+            GPSLayer.Graphics.Add(gpsMarker);
         }
 
         private void ShowCounties()
@@ -130,10 +138,7 @@ namespace USARoadTrip.Silverlight.Views
             CountiesLayer.ClearGraphics();
             if(_currentState.Counties != null)
                 foreach (Graphic selectedGraphic in _currentState.Counties)
-                {
-                    selectedGraphic.Symbol = GetSymbol("ParcelSymbol");
                     CountiesLayer.Graphics.Add(selectedGraphic);
-                }
         }
         #endregion
 
@@ -155,12 +160,12 @@ namespace USARoadTrip.Silverlight.Views
            
             PointCollection routeSection = new PointCollection();
             MapPoint previousMapPoint = _lastPoint;
-            for (double distance = 0; distance < sectionSpeed * sectionTime * MAP_TO_KM_RATIO; )
+            for (double distance = 0; distance < sectionSpeed * sectionTime; )
             {
                 MapPoint tempPoint = _road.NextLocation();
                 if (tempPoint == null)
                     break;
-                distance += RoadUtils.CalculateDistance(_lastPoint, tempPoint);
+                distance += RoadUtils.GetDistanceInKilometers(_lastPoint, tempPoint);
                 _lastPoint = tempPoint;
                 routeSection.Add(_lastPoint);
             }
@@ -210,33 +215,6 @@ namespace USARoadTrip.Silverlight.Views
 
         private void MyMap_MouseClick(object sender, ESRI.ArcGIS.Client.Map.MouseEventArgs e)
         {
-            Graphic marker = new Graphic();
-            marker.Symbol = GetSymbol("DefaultMarkerSymbol");
-            marker.Geometry = e.MapPoint;
-            marker.Geometry.SpatialReference = MyMap.SpatialReference;
-            marker.SetZIndex(2);
-            BufferLayer.Graphics.Add(marker);
-
-            QueryTask _statesQueryTask2 = ESRIServices.GetStatesQueryTask(StatesQueryTask_ExecuteCompleted2, QueryTask_Failed);
-             Query query = new ESRI.ArcGIS.Client.Tasks.Query();
-            query.OutFields.Add("NAME_12");
-            query.OutSpatialReference = MyMap.SpatialReference;
-            query.Geometry = e.MapPoint;
-            _statesQueryTask2.ExecuteAsync(query);
-        }
-        private void StatesQueryTask_ExecuteCompleted2(object sender, QueryEventArgs args)
-        {
-            FeatureSet featureSet = args.FeatureSet;
-
-            if (featureSet != null && featureSet.Features.Count > 0)
-            {
-                string stateName = featureSet.Features[0].Attributes["NAME_12"] as String;
-                 MessageBox.Show(stateName);
-            }
-            else
-            {
-                MessageBox.Show("The selected location does not belong to USA");
-            }
         }
 
         #region States/Counties Queries
@@ -244,7 +222,6 @@ namespace USARoadTrip.Silverlight.Views
         {            
             _geometryService.CancelAsync();
             _countiesQueryTask.CancelAsync();
-            BufferLayer.ClearGraphics();
 
             Graphic marker = new Graphic();
             marker.Symbol = GetSymbol("DefaultMarkerSymbol");
@@ -265,17 +242,17 @@ namespace USARoadTrip.Silverlight.Views
 
         void GeometryService_BufferCompleted(object sender, GraphicsEventArgs args)
         {
-            Graphic bufferGraphic = new Graphic();
-            bufferGraphic.Geometry = args.Results[0].Geometry;
-            bufferGraphic.Symbol = GetSymbol("BufferSymbol");
-            bufferGraphic.SetZIndex(1);
+            //Graphic bufferGraphic = new Graphic();
+            //bufferGraphic.Geometry = args.Results[0].Geometry;
+            //bufferGraphic.Symbol = GetSymbol("BufferSymbol");
+            //bufferGraphic.SetZIndex(1);
 
-            BufferLayer.Graphics.Add(bufferGraphic);
+            //GPSLayer.Graphics.Add(bufferGraphic);
 
             ESRI.ArcGIS.Client.Tasks.Query query = new ESRI.ArcGIS.Client.Tasks.Query();
             query.ReturnGeometry = true;
             query.OutSpatialReference = MyMap.SpatialReference;
-            query.Geometry = bufferGraphic.Geometry;
+            query.Geometry = args.Results[0].Geometry;
             query.OutFields.Add("NAME");
             _countiesQueryTask.ExecuteAsync(query);
         }
@@ -415,15 +392,18 @@ namespace USARoadTrip.Silverlight.Views
 
             RouteResult routeResult = e.RouteResults[0];
             Graphic lastRoute = routeResult.Route;
-
-            decimal totalTime = (decimal)lastRoute.Attributes["Total_Time"];
-            string tip = string.Format("{0} minutes", totalTime.ToString("#0.000"));
-            lastRoute.Attributes.Add("TIP", tip);
-
-            RoadLayer.Graphics.Add(lastRoute);
-
+            
             PrepareTrip(lastRoute.Geometry as Polyline);
 
+            double totalDistance = _road.MapPoints.GetTotalDistance();
+            string distance = string.Format("{0} km", totalDistance.ToString("#0.0"));
+            lastRoute.Attributes.Add("DISTANCE", distance);
+
+            decimal minutes = (decimal)lastRoute.Attributes["Total_Time"];
+            var totalTime = TimeSpan.FromMinutes(Convert.ToDouble(minutes));
+            lastRoute.Attributes.Add("TIME", totalTime.ToFormattedString());
+
+            RoadLayer.Graphics.Add(lastRoute);
             MessageBox.Show("Routing completed: travel safely!");
             FindRouteButton.IsEnabled = true;
         }
