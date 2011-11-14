@@ -222,6 +222,8 @@
     <Resource Include="Assets\Images\Icons\UpIcon.png" />
     <Resource Include="Assets\Images\Background\mytrips.jpg" />
     <Resource Include="Assets\Images\star.png" />
+    <Resource Include="Assets\Images\transmission.png" />
+    <Resource Include="Assets\Images\gps.png" />
     <Content Include="ServiceReferences.ClientConfig" />
     <None Include="Service References\WCFServices\RoadTripServices1.wsdl" />
     <None Include="Service References\WCFServices\RoadTripServices3.xsd">
@@ -246,23 +248,23 @@
     </BlendEmbeddedFont>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Assets\Images\Icons\blue_globe.png" />
-    <Resource Include="Assets\Images\Icons\collapse.png" />
-    <Resource Include="Assets\Images\Icons\dismiss.png" />
-    <Resource Include="Assets\Images\Icons\expand.png" />
-    <Resource Include="Assets\Images\Icons\i_about.png" />
-    <Resource Include="Assets\Images\Icons\i_clickglobe.png" />
-    <Resource Include="Assets\Images\Icons\i_globe.png" />
-    <Resource Include="Assets\Images\Icons\i_legend.png" />
-    <Resource Include="Assets\Images\Icons\i_magnifyglass.png" />
-    <Resource Include="Assets\Images\Icons\i_nav.png" />
-    <Resource Include="Assets\Images\Icons\i_options.png" />
-    <Resource Include="Assets\Images\Icons\i_overview.png" />
-    <Resource Include="Assets\Images\Icons\i_tools.png" />
-    <Resource Include="Assets\Images\Icons\i_widget.png" />
-    <Resource Include="Assets\Images\Icons\i_zoomin.png" />
-    <Resource Include="Assets\Images\Icons\i_zoomout.png" />
-    <Resource Include="Assets\Images\Icons\logo.png" />
+    <Resource Include="Assets\Images\Esri\blue_globe.png" />
+    <Resource Include="Assets\Images\Esri\collapse.png" />
+    <Resource Include="Assets\Images\Esri\dismiss.png" />
+    <Resource Include="Assets\Images\Esri\expand.png" />
+    <Resource Include="Assets\Images\Esri\i_about.png" />
+    <Resource Include="Assets\Images\Esri\i_clickglobe.png" />
+    <Resource Include="Assets\Images\Esri\i_globe.png" />
+    <Resource Include="Assets\Images\Esri\i_legend.png" />
+    <Resource Include="Assets\Images\Esri\i_magnifyglass.png" />
+    <Resource Include="Assets\Images\Esri\i_nav.png" />
+    <Resource Include="Assets\Images\Esri\i_options.png" />
+    <Resource Include="Assets\Images\Esri\i_overview.png" />
+    <Resource Include="Assets\Images\Esri\i_tools.png" />
+    <Resource Include="Assets\Images\Esri\i_widget.png" />
+    <Resource Include="Assets\Images\Esri\i_zoomin.png" />
+    <Resource Include="Assets\Images\Esri\i_zoomout.png" />
+    <Resource Include="Assets\Images\Esri\logo.png" />
     <Resource Include="Assets\Images\Background\welcome.jpg" />
   </ItemGroup>
   <ItemGroup>
@@ -288,9 +290,7 @@
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\WCFServices\" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Assets\Images\Esri\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

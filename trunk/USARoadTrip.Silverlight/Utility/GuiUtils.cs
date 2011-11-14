@@ -31,5 +31,12 @@ namespace USARoadTrip.Silverlight.Utility
         {
             MessageBox.Show("The operation could not be completed, please try again later", "Connection error", MessageBoxButton.OK);
         }
+
+        public static string ToFormattedString(this TimeSpan time)
+        {
+            return String.Format("{0} hour{1} {2} minute{3}",
+                time.Hours, time.Hours == 1 ? "" : "s",
+                time.Minutes, time.Minutes == 1 ? "" : "s");
+        }
     }
 }

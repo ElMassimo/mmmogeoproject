@@ -1,7 +1,7 @@
 ﻿
 using ESRI.ArcGIS.Client.Geometry;
 using System.Windows.Controls;
-using USARoadTrip.SilverlightUtility;
+using USARoadTrip.Silverlight.Utility;
 using ESRI.ArcGIS.Client;
 using ESRI.ArcGIS.Client.Symbols;
 using System;

@@ -5,6 +5,7 @@ using ESRI.ArcGIS.Client.Toolkit;
 using ESRI.ArcGIS.Client.Utils;
 using System.Collections;
 using System.Collections.Generic;
+using USARoadTrip.Silverlight.Utility;
 
 namespace USARoadTrip.Silverlight.Models
 {
@@ -25,6 +26,15 @@ namespace USARoadTrip.Silverlight.Models
             get { return Polyline.Paths[0][0]; }
         }
 
+        public MapPoint LastLocation
+        {
+            get 
+            {
+                var lastPath = Polyline.Paths[Polyline.Paths.Count - 1];
+                return lastPath[lastPath.Count - 1];
+            }
+        }
+
         public void GoToStart()
         {
             _points.Dispose();
@@ -38,8 +48,8 @@ namespace USARoadTrip.Silverlight.Models
             else
                 return null;
         }
-        
-        private IEnumerable<MapPoint> MapPoints
+
+        public IEnumerable<MapPoint> MapPoints
         {
             get
             {                

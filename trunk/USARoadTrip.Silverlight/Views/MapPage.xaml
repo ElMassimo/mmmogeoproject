@@ -13,9 +13,8 @@
     <Grid x:Name="LayoutRoot">
         <Grid.Resources>
             <esri:PictureMarkerSymbol x:Key="DefaultMarkerSymbol" OffsetX="11" OffsetY="39" Source="../Assets/Images/pushpin.png" />
-            <esri:PictureMarkerSymbol x:Key="StarMarkerSymbol" Source="../Assets/Images/star.png" />
+            <esri:PictureMarkerSymbol x:Key="GPSMarkerSymbol" OffsetX="13" OffsetY="11" Width="27" Height="22" Source="../Assets/Images/gps.png" />
             <esri:SimpleFillSymbol x:Key="BufferSymbol" Fill="#66BB0000" BorderBrush="#88CC0000" BorderThickness="2"  />
-            <esri:SimpleFillSymbol x:Key="ParcelSymbol" Fill="#440000FF" BorderBrush="Blue" BorderThickness="2" />
             <esri:SimpleMarkerSymbol x:Key="StopSymbol" Size="20" Style="Circle" Color="White" >
                 <esri:SimpleMarkerSymbol.ControlTemplate>
                     <ControlTemplate>
@@ -29,24 +28,33 @@
                     </ControlTemplate>
                 </esri:SimpleMarkerSymbol.ControlTemplate>
             </esri:SimpleMarkerSymbol>
-            <esri:SimpleLineSymbol x:Key="SlowSectionSymbol" Color="Green" Width="4" />
-            <esri:SimpleLineSymbol x:Key="NormalSectionSymbol" Color="Yellow" Width="4" />
-            <esri:SimpleLineSymbol x:Key="FastSectionSymbol" Color="Red" Width="4" />
-            <esri:SimpleRenderer x:Key="RoadRenderer">
-                <esri:SimpleRenderer.Symbol>
-                    <esri:SimpleLineSymbol Color="#990000FF" Width="6"/>
-                </esri:SimpleRenderer.Symbol>
-            </esri:SimpleRenderer>
+            <esri:SimpleLineSymbol x:Key="SlowSectionSymbol" Color="#A9FFA2" Width="4" />
+            <esri:SimpleLineSymbol x:Key="NormalSectionSymbol" Color="#57DC4C" Width="4" />
+            <esri:SimpleLineSymbol x:Key="FastSectionSymbol" Color="#28B11D" Width="4" />
+            <esri:SimpleLineSymbol x:Key="VeryFastSectionSymbol" Color="#14640E" Width="4" />
+            <esri:SimpleLineSymbol x:Key="TooFastSectionSymbol" Color="#B1371C" Width="4" />
             <esri:ClassBreaksRenderer x:Key="TravelRenderer" Attribute="SPEED" >
                 <esri:ClassBreaksRenderer.Classes>
-                    <esri:ClassBreakInfo MinimumValue="60" MaximumValue="100" Symbol="{StaticResource SlowSectionSymbol}" />
-                    <esri:ClassBreakInfo MinimumValue="100" MaximumValue="120" Symbol="{StaticResource NormalSectionSymbol}" />
-                    <esri:ClassBreakInfo MinimumValue="120" MaximumValue="180" Symbol="{StaticResource FastSectionSymbol}" />
+                    <esri:ClassBreakInfo MinimumValue="50" MaximumValue="70" Symbol="{StaticResource SlowSectionSymbol}" />
+                    <esri:ClassBreakInfo MinimumValue="70" MaximumValue="90" Symbol="{StaticResource NormalSectionSymbol}" />
+                    <esri:ClassBreakInfo MinimumValue="90" MaximumValue="110" Symbol="{StaticResource FastSectionSymbol}" />
+                    <esri:ClassBreakInfo MinimumValue="110" MaximumValue="130" Symbol="{StaticResource VeryFastSectionSymbol}" />
+                    <esri:ClassBreakInfo Label="You are driving too fast!" MinimumValue="130" MaximumValue="250" Symbol="{StaticResource TooFastSectionSymbol}" />
                 </esri:ClassBreaksRenderer.Classes>
             </esri:ClassBreaksRenderer>
+            <esri:SimpleRenderer x:Key="RoadRenderer">
+                <esri:SimpleRenderer.Symbol>
+                    <esri:SimpleLineSymbol Color="#C0005AFF" Width="4" />
+                </esri:SimpleRenderer.Symbol>
+            </esri:SimpleRenderer>
+            <esri:SimpleRenderer x:Key="CountyRenderer">
+                <esri:SimpleRenderer.Symbol>
+                    <esri:FillSymbol Fill="#88F1A700" BorderBrush="#ED7800" BorderThickness="2"/>
+                </esri:SimpleRenderer.Symbol>
+            </esri:SimpleRenderer>
             <esri:SimpleRenderer x:Key="StateRenderer">
                 <esri:SimpleRenderer.Symbol>
-                    <esri:FillSymbol Fill="#0600FF00" BorderBrush="#948462" />
+                    <esri:FillSymbol BorderBrush="#948462" />
                 </esri:SimpleRenderer.Symbol>
             </esri:SimpleRenderer>
         </Grid.Resources>
@@ -64,7 +72,7 @@
                 Url="http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer" />
             <esri:FeatureLayer ID="StatesLayer" Renderer="{StaticResource StateRenderer}"
                 Url="http://server.arcgisonline.com/ArcGIS/rest/services/Demographics/USA_1990-2000_Population_Change/MapServer/4" />
-            <esri:GraphicsLayer ID="CountiesLayer">
+            <esri:GraphicsLayer ID="CountiesLayer" Renderer="{StaticResource CountyRenderer}">
                 <esri:GraphicsLayer.MapTip>
                     <Border BorderBrush="DarkGray" Background="Azure" CornerRadius="3" BorderThickness="1" Padding="3">
                         <StackPanel Orientation="Vertical">
@@ -74,18 +82,31 @@
                     </Border>
                 </esri:GraphicsLayer.MapTip>
             </esri:GraphicsLayer>
-            <esri:GraphicsLayer ID="BufferLayer" />
-            <esri:GraphicsLayer ID="RoadLayer" Renderer="{StaticResource RoadRenderer}"/>
-            <esri:GraphicsLayer ID="TravelLayer" Renderer="{StaticResource TravelRenderer}">
+            <esri:GraphicsLayer ID="RoadLayer" Renderer="{StaticResource RoadRenderer}">
                 <esri:GraphicsLayer.MapTip>
                     <Border BorderBrush="DarkGray" Background="Azure" CornerRadius="3" BorderThickness="1" Padding="3">
                         <StackPanel Orientation="Vertical">
-                            <TextBlock Text="Avg Speed:" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                            <TextBlock Text="{Binding [SPEED]}" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                            <TextBlock Text="Total distance:" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                            <TextBlock Text="{Binding [DISTANCE]}" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                            <TextBlock Text="Estimated time:" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                            <TextBlock Text="{Binding [TIME]}" HorizontalAlignment="Left" VerticalAlignment="Center" />
                         </StackPanel>
                     </Border>
                 </esri:GraphicsLayer.MapTip>
             </esri:GraphicsLayer>
+            <esri:GraphicsLayer ID="TravelLayer" Renderer="{StaticResource TravelRenderer}">
+                <esri:GraphicsLayer.MapTip>
+                    <Border BorderBrush="DarkGray" Background="Azure" CornerRadius="3" BorderThickness="1" Padding="3">
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="Section Distance:" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                            <TextBlock Text="{Binding [DISTANCE]}" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                            <TextBlock Text="Avg Speed:" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                            <TextBlock Text="{Binding [SPEED_READABLE]}" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Border>
+                </esri:GraphicsLayer.MapTip>
+            </esri:GraphicsLayer>
+            <esri:GraphicsLayer ID="GPSLayer" MaximumResolution="170" />
             <esri:GraphicsLayer ID="StopsLayer" />
             <esri:GraphicsLayer ID="CarLayer" />
         </esri:Map>
