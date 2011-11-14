@@ -7,74 +7,61 @@
     mc:Ignorable="d"
     d:DesignHeight="300" d:DesignWidth="400">
 
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="2*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <TextBlock Grid.Column="0" Grid.Row="0" Text="Inbox" FontWeight="Bold" FontSize="12"/>
-        <Grid Grid.Column="1" Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="0" Text="Subject: " FontWeight="Bold"/>
-            <TextBlock x:Name="EmailSubject" Grid.Column="1" Text="{Binding SelectedItem.Subject, ElementName=EmailList}"/>
-        </Grid>
+    <StackPanel>
+        <TextBlock x:Name="LocationZip" Text="{Binding SelectedItem.Zip, ElementName=LocationListBox}" Height="27" />
 
         <!-- This ContextMenu uses Click handlers and gets its icons from Brush resources -->
-        <ListBox x:Name="EmailList" Grid.Column="0" Grid.Row="1" Grid.RowSpan="2">
-            <ListBox.Resources>
-                <ImageBrush x:Key="MoveUpBrush" ImageSource="/System.Windows.Controls.Samples;component/ContextMenu/MoveUp.png"/>
-                <ImageBrush x:Key="MoveDownBrush" ImageSource="/System.Windows.Controls.Samples;component/ContextMenu/MoveDown.png"/>
-                <ImageBrush x:Key="DeleteBrush" ImageSource="/System.Windows.Controls.Samples;component/ContextMenu/Delete.png"/>
-            </ListBox.Resources>
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Subject}">
-
-                                <input:ContextMenuService.ContextMenu>
-                                    <input:ContextMenu>
-                                        <input:MenuItem Header="Move Up" Click="MoveUp_Click">
-                                            <input:MenuItem.Icon>
-                                                <Rectangle Width="16" Height="16" Fill="{StaticResource MoveUpBrush}"/>
-                                            </input:MenuItem.Icon>
-                                        </input:MenuItem>
-                                        <input:MenuItem Header="Move Down" Click="MoveDown_Click">
-                                            <input:MenuItem.Icon>
-                                                <Rectangle Width="16" Height="16" Fill="{StaticResource MoveDownBrush}"/>
-                                            </input:MenuItem.Icon>
-                                        </input:MenuItem>
-                                        <input:Separator/>
-                                        <input:MenuItem Header="Delete" Click="Delete_Click">
-                                            <input:MenuItem.Icon>
-                                                <Rectangle Width="16" Height="16" Fill="{StaticResource DeleteBrush}"/>
-                                            </input:MenuItem.Icon>
-                                        </input:MenuItem>
-                                    </input:ContextMenu>
-                                </input:ContextMenuService.ContextMenu>
-
-                    </TextBlock>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-            <ListBox.ItemContainerStyle>
-                <Style TargetType="ListBoxItem">
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                </Style>
-            </ListBox.ItemContainerStyle>
-        </ListBox>
-
-        <!-- This ContextMenu uses ICommand implementations and gets its icons from UI
-                     elements (top two MenuItems) and Images (bottom two MenuItems)
-                     Note: The bottom two MenuItems will disable when the font is as small/large
-                     as it can get -->
-        <TextBox x:Name="EmailBody" Grid.Column="1" Grid.Row="2" Text="{Binding SelectedItem.Body, ElementName=EmailList}" TextWrapping="Wrap" IsReadOnly="True" FontFamily="Lucida Grande,Arial" VerticalScrollBarVisibility="Auto" FontSize="12">
-
-        </TextBox>
-    </Grid>
+        <Grid x:Name="LocationGrid">
+            <Rectangle Stroke="Gray"  RadiusX="10" RadiusY="10" Fill="#77919191" Margin="0,0,0,5" >
+                <Rectangle.Effect>
+                    <DropShadowEffect/>
+                </Rectangle.Effect>
+            </Rectangle>
+            <Rectangle Fill="#FFFFFFFF" Stroke="DarkGray" RadiusX="5" RadiusY="5" Margin="10,17,10,15" />
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="10,2,15,15">
+                <TextBlock HorizontalAlignment="Left" Text="My trip" Margin="2,0,0,5" />
+                <ScrollViewer x:Name="LocationScrollViewer" Width="300" MaxHeight="150" BorderThickness="0"
+                              HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" >
+                    <ListBox x:Name="LocationListBox">
+                <ListBox.Resources>
+                    <ImageBrush x:Key="MoveUpBrush" ImageSource="/System.Windows.Controls.Samples;component/ContextMenu/MoveUp.png"/>
+                    <ImageBrush x:Key="MoveDownBrush" ImageSource="/System.Windows.Controls.Samples;component/ContextMenu/MoveDown.png"/>
+                    <ImageBrush x:Key="DeleteBrush" ImageSource="/System.Windows.Controls.Samples;component/ContextMenu/Delete.png"/>
+                </ListBox.Resources>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding ShortLocationString}">
+                        <input:ContextMenuService.ContextMenu>
+                            <input:ContextMenu>
+                                <input:MenuItem Header="Move Up" Click="MoveUp_Click">
+                                    <input:MenuItem.Icon>
+                                        <Rectangle Width="16" Height="16" Fill="{StaticResource MoveUpBrush}"/>
+                                    </input:MenuItem.Icon>
+                                </input:MenuItem>
+                                <input:MenuItem Header="Move Down" Click="MoveDown_Click">
+                                    <input:MenuItem.Icon>
+                                        <Rectangle Width="16" Height="16" Fill="{StaticResource MoveDownBrush}"/>
+                                    </input:MenuItem.Icon>
+                                </input:MenuItem>
+                                <input:Separator/>
+                                <input:MenuItem Header="Delete" Click="Delete_Click">
+                                    <input:MenuItem.Icon>
+                                        <Rectangle Width="16" Height="16" Fill="{StaticResource DeleteBrush}"/>
+                                    </input:MenuItem.Icon>
+                                </input:MenuItem>
+                            </input:ContextMenu>
+                        </input:ContextMenuService.ContextMenu>
+                        </TextBlock>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+                    </ListBox>
+                </ScrollViewer>
+            </StackPanel>
+        </Grid>
+    </StackPanel>
 </UserControl>

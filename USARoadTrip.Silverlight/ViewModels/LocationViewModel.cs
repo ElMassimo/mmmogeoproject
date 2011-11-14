@@ -12,12 +12,20 @@ using System.Collections.Generic;
 
 namespace USARoadTrip.Silverlight.ViewModels
 {
-    public class AddressViewModel
+    public class LocationViewModel
     {
         public string Address { get; set; }
         public string City { get; set; }
         public string State { get; set; }
         public string Zip { get; set; }
+
+        public string ShortLocationString
+        {
+            get
+            {
+                return String.Format("{0}, {1}, {2}", State, City, Address);
+            }
+        }
 
         public Dictionary<string, string> ToKeyValue(Dictionary<string, string> address)
         {
@@ -33,11 +41,6 @@ namespace USARoadTrip.Silverlight.ViewModels
                 address.Add("ZIP", Zip);
 
             return address;
-        }
-
-        public void Clear()
-        {
-            // Zip = State = City = Address = null;
         }
     }
 }

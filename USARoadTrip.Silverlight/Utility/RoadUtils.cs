@@ -28,5 +28,11 @@ namespace USARoadTrip.SilverlightUtility
         {
             return CAR_MINIMUM_SPEED + (CAR_MAXIMUM_SPEED - CAR_MINIMUM_SPEED) * _numberGenerator.NextDouble();
         }
+
+        public static Envelope GetCenteredEnvelope(MapPoint point, double displaySize)
+        {
+            double offset = displaySize / 2;
+            return new Envelope(point.X - offset, point.Y - offset, point.X + offset, point.Y + offset);
+        }
     }
 }

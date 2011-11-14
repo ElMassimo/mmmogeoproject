@@ -22,6 +22,11 @@ namespace USARoadTrip.Silverlight.Utility
             return userInfoWindow;
         }
 
+        public static Visibility BooleanToVisibility(bool visible)
+        {
+            return visible ? Visibility.Visible : Visibility.Collapsed;
+        }
+
         public static void ShowConnectionErrorMessage()
         {
             MessageBox.Show("The operation could not be completed, please try again later", "Connection error", MessageBoxButton.OK);

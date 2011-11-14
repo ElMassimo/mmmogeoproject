@@ -54,7 +54,7 @@
                                 <Button x:Name="myMenu" Style="{StaticResource MenuButton}" 
                                         ToolTipService.ToolTip="Menu">
                                     <Button.Content>
-                                        <Image Source="Assets/Images/i_globe.png" Stretch="Fill" />
+                                        <Image Source="../Assets/Images/i_globe.png" Stretch="Fill" />
                                     </Button.Content>
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="MouseEnter">
@@ -71,7 +71,7 @@
                                         Width="40" Height="35" IsChecked="False"
                                         ToolTipService.ToolTip="About ESRI ArcGIS Mapping Application">
                                     <ToggleButton.Content>
-                                        <Image Source="Assets/Images/i_about.png" Stretch="Fill" />
+                                        <Image Source="../Assets/Images/i_about.png" Stretch="Fill" />
                                     </ToggleButton.Content>
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="MouseEnter">
@@ -88,7 +88,7 @@
                     </StackPanel>
                 </Border>
             </userControls:CollapsiblePanel>
-            <Image Source="Assets/Imageslogo.png" HorizontalAlignment="Left" VerticalAlignment="Top" 
+            <Image Source="../Assets/Imageslogo.png" HorizontalAlignment="Left" VerticalAlignment="Top" 
                    Stretch="Fill" Height="40" Width="40" Margin="-10" 
                    ToolTipService.ToolTip="Expand/Collapse Menu Bar">
                 <i:Interaction.Triggers>
@@ -193,7 +193,7 @@
                                 <Button x:Name="btnToggleBaseMapSwitcher" Style="{StaticResource ToolbarButton}" 
                                         ToolTipService.ToolTip="Toggle visibility of the base map switcher">
                                     <Button.Content>
-                                        <Image Source="Assets/Images/i_clickglobe.png" Stretch="Fill" />
+                                        <Image Source="../Assets/Images/i_clickglobe.png" Stretch="Fill" />
                                     </Button.Content>
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="Click">
@@ -205,7 +205,7 @@
                                 <ToggleButton x:Name="btnToggleMapLegend" Style="{StaticResource ToolbarToggleButton}" IsChecked="False"
                                               ToolTipService.ToolTip="Toggle visibility of the map legend">
                                     <ToggleButton.Content>
-                                        <Image Source="Assets/Images/i_legend.png" Stretch="Fill" />
+                                        <Image Source="../Assets/Images/i_legend.png" Stretch="Fill" />
                                     </ToggleButton.Content>
                                     
                                 </ToggleButton>
@@ -213,14 +213,14 @@
                             <ToggleButton x:Name="btnToggleOverviewMap" Style="{StaticResource ToolbarToggleButton}"  IsChecked="False"
                                           ToolTipService.ToolTip="Toggle visibility of the overview map">
                                     <ToggleButton.Content>
-                                        <Image Source="Assets/Images/i_overview.png" Stretch="Fill" />
+                                        <Image Source="../Assets/Images/i_overview.png" Stretch="Fill" />
                                     </ToggleButton.Content>
                                 </ToggleButton>
 
                                 <Button x:Name="btnToggleMagnifyingGlass" Style="{StaticResource ToolbarButton}" 
                                         ToolTipService.ToolTip="Toggle visibility of the magnifying glass">
                                     <Button.Content>
-                                        <Image Source="Assets/Images/i_magnifyglass.png" Stretch="Fill" />
+                                        <Image Source="../Assets/Images/i_magnifyglass.png" Stretch="Fill" />
                                     </Button.Content>
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="Click">
@@ -231,7 +231,7 @@
                             </StackPanel>
                         </Grid>
                 </userControls:CollapsiblePanel>
-                <Image Source="Assets/Images/i_tools.png" HorizontalAlignment="Right" 
+                <Image Source="../Assets/Images/i_tools.png" HorizontalAlignment="Right" 
                    VerticalAlignment="Top" Stretch="Fill" Height="30" Width="30" Margin="-5" 
                    ToolTipService.ToolTip="Expand/Collapse Toolbar">
                     <i:Interaction.Triggers>
@@ -263,7 +263,7 @@
             </esri:OverviewMap>
             <userControls:WindowPanel.ContentTitle>
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="Assets/Images/i_overview.png" 
+                    <Image Source="../Assets/Images/i_overview.png" 
                            HorizontalAlignment="Left" VerticalAlignment="Top" Stretch="Fill" 
                            Width="20" Height="20" Margin="5,2,0,0" />
                     <TextBlock Foreground="White" FontSize="12" 
@@ -289,7 +289,7 @@
             <esri:Legend x:Name="Legend" Map="{Binding ElementName=Map}" />
             <userControls:WindowPanel.ContentTitle>
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="Assets/Images/i_legend.png" 
+                    <Image Source="../Assets/Images/i_legend.png" 
                            HorizontalAlignment="Left" VerticalAlignment="Top" Stretch="Fill" 
                            Width="20" Height="20" Margin="5,2,0,0" />
                     <TextBlock Foreground="White" FontSize="12" 
@@ -315,7 +315,7 @@
             </StackPanel>
             <userControls:WindowPanel.ContentTitle>
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="Assets/Images/logo.png" 
+                    <Image Source="../Assets/Images/logo.png" 
                            HorizontalAlignment="Left" VerticalAlignment="Top" Stretch="Fill" 
                            Width="20" Height="20" Margin="5,2,0,0" />
                     <TextBlock Foreground="White" FontSize="12" 

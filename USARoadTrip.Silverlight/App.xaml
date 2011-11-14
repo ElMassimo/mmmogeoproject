@@ -210,6 +210,7 @@
                 <ResourceDictionary Source="Assets/Styles/NavigationStyle.xaml" />
                 <ResourceDictionary Source="Assets/Styles/BackgroundStyles.xaml"/>
                 <ResourceDictionary Source="Assets/Styles/ButtonStyles.xaml"/>
+                <ResourceDictionary Source="Assets/Styles/MapStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
