@@ -5,23 +5,26 @@
            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
            xmlns:esri="http://schemas.esri.com/arcgis/client/2009" 
            xmlns:navigation="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Navigation"
-           xmlns:ViewModels="clr-namespace:USARoadTrip.Silverlight.ViewModels"
+           xmlns:ViewModels="clr-namespace:USARoadTrip.Silverlight.ViewModels"   
+           xmlns:MyControls="clr-namespace:USARoadTrip.Silverlight.UserControls"
            x:Class="USARoadTrip.Silverlight.Views.MapPage"
            mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
            Title="Road Map">
     <Grid x:Name="LayoutRoot">
         <Grid.Resources>
             <esri:PictureMarkerSymbol x:Key="DefaultMarkerSymbol" OffsetX="11" OffsetY="39" Source="../Assets/Images/pushpin.png" />
+            <esri:PictureMarkerSymbol x:Key="StarMarkerSymbol" Source="../Assets/Images/star.png" />
             <esri:SimpleFillSymbol x:Key="BufferSymbol" Fill="#66BB0000" BorderBrush="#88CC0000" BorderThickness="2"  />
             <esri:SimpleFillSymbol x:Key="ParcelSymbol" Fill="#440000FF" BorderBrush="Blue" BorderThickness="2" />
-            <esri:SimpleMarkerSymbol x:Key="StopSymbol" Size="20" Style="Circle" Color="Salmon" >
+            <esri:SimpleMarkerSymbol x:Key="StopSymbol" Size="20" Style="Circle" Color="White" >
                 <esri:SimpleMarkerSymbol.ControlTemplate>
                     <ControlTemplate>
                         <Grid>
-                            <Ellipse Fill="{Binding Symbol.Color}" Width="{Binding Symbol.Size}" Height="{Binding Symbol.Size}" Stroke="Black" StrokeThickness="1" />
+                            <Image Source="../Assets/Images/star.png" Width="{Binding Symbol.Size}" Height="{Binding Symbol.Size}"/>
+                            <Ellipse Fill="{Binding Symbol.Color}" Width="12" Height="12" Stroke="Black" StrokeThickness="0" />
                             <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
                                 Text="{Binding Path=Attributes[StopNumber]}"
-                                FontSize="9" Margin="0" FontWeight="Bold" Foreground="Black" />
+                                FontSize="8" Margin="0" FontWeight="Bold" Foreground="#7B150F"/>
                         </Grid>
                     </ControlTemplate>
                 </esri:SimpleMarkerSymbol.ControlTemplate>
@@ -41,13 +44,25 @@
                     <esri:ClassBreakInfo MinimumValue="120" MaximumValue="180" Symbol="{StaticResource FastSectionSymbol}" />
                 </esri:ClassBreaksRenderer.Classes>
             </esri:ClassBreaksRenderer>
+            <esri:SimpleRenderer x:Key="StateRenderer">
+                <esri:SimpleRenderer.Symbol>
+                    <esri:FillSymbol Fill="#0600FF00" BorderBrush="#948462" />
+                </esri:SimpleRenderer.Symbol>
+            </esri:SimpleRenderer>
         </Grid.Resources>
-        
+
         <!-- Mapa -->
         <esri:Map x:Name="MyMap" MouseClick="MyMap_MouseClick">
+            <esri:Map.Extent>
+                <esri:Envelope XMin="-15000000" YMin="2000000" XMax="-7000000" YMax="8000000">
+                    <esri:Envelope.SpatialReference>
+                        <esri:SpatialReference WKID="102100"/>
+                    </esri:Envelope.SpatialReference>
+                </esri:Envelope>
+            </esri:Map.Extent>
             <esri:ArcGISTiledMapServiceLayer ID="BaseLayer" 
                 Url="http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer" />
-            <esri:ArcGISTiledMapServiceLayer ID="StatesLayer" 
+            <esri:FeatureLayer ID="StatesLayer" Renderer="{StaticResource StateRenderer}"
                 Url="http://server.arcgisonline.com/ArcGIS/rest/services/Demographics/USA_1990-2000_Population_Change/MapServer/4" />
             <esri:GraphicsLayer ID="CountiesLayer">
                 <esri:GraphicsLayer.MapTip>
@@ -63,12 +78,12 @@
             <esri:GraphicsLayer ID="RoadLayer" Renderer="{StaticResource RoadRenderer}"/>
             <esri:GraphicsLayer ID="TravelLayer" Renderer="{StaticResource TravelRenderer}">
                 <esri:GraphicsLayer.MapTip>
-                <Border BorderBrush="DarkGray" Background="Azure" CornerRadius="3" BorderThickness="1" Padding="3">
-                    <StackPanel Orientation="Vertical">
-                        <TextBlock Text="Avg Speed:" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                        <TextBlock Text="{Binding [SPEED]}" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                    </StackPanel>
-                </Border>
+                    <Border BorderBrush="DarkGray" Background="Azure" CornerRadius="3" BorderThickness="1" Padding="3">
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="Avg Speed:" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                            <TextBlock Text="{Binding [SPEED]}" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Border>
                 </esri:GraphicsLayer.MapTip>
             </esri:GraphicsLayer>
             <esri:GraphicsLayer ID="StopsLayer" />
@@ -107,9 +122,9 @@
         <Grid HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,210,20,0">
             <Rectangle Fill="#DDFFFFFF" Stroke="DarkGray" RadiusX="5" RadiusY="5" Margin="10,10,10,15" />
             <StackPanel Name="AddressPanel" Orientation="Vertical" HorizontalAlignment="Center" Margin="30,20,30,30">
-            	<StackPanel.DataContext>
-            		<ViewModels:AddressViewModel/>
-            	</StackPanel.DataContext>
+                <StackPanel.DataContext>
+                    <ViewModels:LocationViewModel/>
+                </StackPanel.DataContext>
                 <TextBlock Text="Enter Address Information" FontWeight="Bold" HorizontalAlignment="Center" />
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" >
                     <TextBlock Text="Address: " Width="80" TextAlignment="Right" />
@@ -145,5 +160,6 @@
                 </Rectangle>
             </StackPanel>
         </Grid>
+        <MyControls:LocationList x:Name="MyTripList" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,15,15"/>
     </Grid>
 </navigation:Page>

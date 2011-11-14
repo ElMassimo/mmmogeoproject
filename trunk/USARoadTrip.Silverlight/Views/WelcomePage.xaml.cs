@@ -40,25 +40,35 @@ namespace USARoadTrip.Silverlight.Views
             {
                 RoadTripGlobals.IsUserLogged = true;
                 RoadTripGlobals.UserId = UsernameTextBox.Text;
-
-                WelcomeLabel.Text = String.Format("Welcome {0}!", RoadTripGlobals.UserId);
-                LoginStackPanel.Visibility = Visibility.Collapsed;
-                UserInfoStackPanel.Visibility = Visibility.Visible;
-
-                TripsButton.IsEnabled = true;
+                SetLoggedState(true);
             }
         }
 
         private void LogoutLink_Click(object sender, RoutedEventArgs e)
         {
-            TripsButton.IsEnabled = false;
-
-            UserInfoStackPanel.Visibility = Visibility.Collapsed;
-            LoginStackPanel.Visibility = Visibility.Visible;
-            WelcomeLabel.Text = null;
-
             RoadTripGlobals.IsUserLogged = false;
             RoadTripGlobals.UserId = null;
+            SetLoggedState(false);
+        }
+
+        private void SetLoggedState(bool logged)
+        {
+            TripsButton.IsEnabled = logged;
+
+            if (logged)
+            {
+                WelcomeLabel.Text = String.Format("Welcome {0}!", RoadTripGlobals.UserId);
+                LoginStackPanel.Visibility = Visibility.Collapsed;
+                UserInfoStackPanel.Visibility = Visibility.Visible;
+                UsernameTextBox.Text = String.Empty;
+                PasswordTextBox.Text = String.Empty;
+            }
+            else
+            {
+                WelcomeLabel.Text = null;
+                UserInfoStackPanel.Visibility = Visibility.Collapsed;
+                LoginStackPanel.Visibility = Visibility.Visible;
+            }
         }
 
         private void RegistrationLink_Click(object sender, RoutedEventArgs e)
@@ -82,6 +92,12 @@ namespace USARoadTrip.Silverlight.Views
         private void TripsButton_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.Navigate(new Uri("/Views/TripsPage.xaml", UriKind.Relative));
+        }
+
+        protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
+        {
+            SetLoggedState(RoadTripGlobals.IsUserLogged);
+            base.OnNavigatedTo(e);
         }
     }
 }

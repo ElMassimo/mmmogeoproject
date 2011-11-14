@@ -27,14 +27,6 @@ namespace USARoadTrip.Silverlight.Views
 {
     public partial class MapPage : Page
     {
-        #region Services
-        private Locator _usaStreetsLocatorTask;
-        private GeometryService _geometryService;
-        private QueryTask _countiesQueryTask;
-        private QueryTask _statesQueryTask;
-        private RouteTask _routingTask;
-        #endregion
-        
         private const double MAP_TO_KM_RATIO = 5000;
         private const double SHORTEST_SIMULATION_TIME_IN_HOURS = 0.5;
         private const int SLIDER_WEIGHT = 2;
@@ -44,8 +36,16 @@ namespace USARoadTrip.Silverlight.Views
         private Car _car;
         private Road _road;
         private State _currentState = new State();
-        List<Graphic> _stops = new List<Graphic>();
+        private List<Graphic> _stops = new List<Graphic>();
 
+        #region Services
+        private Locator _usaStreetsLocatorTask;
+        private GeometryService _geometryService;
+        private QueryTask _countiesQueryTask;
+        private QueryTask _statesQueryTask;
+        private RouteTask _routingTask;
+        #endregion
+        
         #region Constructor / Properties
         public MapPage()
         {
@@ -98,7 +98,8 @@ namespace USARoadTrip.Silverlight.Views
             return LayoutRoot.Resources[symbolName] as Symbol;
         }
         #endregion
-        
+
+        #region Graphics
         private void ShowCar()
         {
             CarLayer.ClearGraphics();
@@ -134,7 +135,9 @@ namespace USARoadTrip.Silverlight.Views
                     CountiesLayer.Graphics.Add(selectedGraphic);
                 }
         }
+        #endregion
 
+        #region Simulation
         private void PrepareTrip(Polyline route)
         {
             _road = new Road(route);
@@ -149,12 +152,13 @@ namespace USARoadTrip.Silverlight.Views
 
             double sectionSpeed = RoadUtils.GetRandomSectionSpeed();
             double sectionTime =  (SpeedSlider.Value + 1) * SHORTEST_SIMULATION_TIME_IN_HOURS;  
-
+           
             PointCollection routeSection = new PointCollection();
+            MapPoint previousMapPoint = _lastPoint;
             for (double distance = 0; distance < sectionSpeed * sectionTime * MAP_TO_KM_RATIO; )
             {
                 MapPoint tempPoint = _road.NextLocation();
-                if(tempPoint == null)
+                if (tempPoint == null)
                     break;
                 distance += RoadUtils.CalculateDistance(_lastPoint, tempPoint);
                 _lastPoint = tempPoint;
@@ -167,7 +171,7 @@ namespace USARoadTrip.Silverlight.Views
             ShowRoadSection(routeSection, sectionSpeed);
             ShowCounties();
 
-            if (_lastPoint == null)
+            if (previousMapPoint == _lastPoint)
                 _travelTimer.Stop();
             else
             {
@@ -189,6 +193,19 @@ namespace USARoadTrip.Silverlight.Views
         private void StopTravel_Click(object sender, RoutedEventArgs e)
         {
             _travelTimer.Stop();
+        }
+        #endregion
+        
+        private void LocationList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            int index = (sender as ListBox).SelectedIndex;
+            if (index >= 0)
+            {
+                MapPoint location = StopsLayer.Graphics[index].Geometry as MapPoint;
+                double displaySize = MyMap.MinimumResolution * 30;
+                Envelope displayExtent = RoadUtils.GetCenteredEnvelope(location, displaySize);
+                MyMap.ZoomTo(displayExtent);
+            }
         }
 
         private void MyMap_MouseClick(object sender, ESRI.ArcGIS.Client.Map.MouseEventArgs e)
@@ -221,6 +238,8 @@ namespace USARoadTrip.Silverlight.Views
                 MessageBox.Show("The selected location does not belong to USA");
             }
         }
+
+        #region States/Counties Queries
         private void ExecuteCountiesQuery(MapPoint mapPoint)
         {            
             _geometryService.CancelAsync();
@@ -303,10 +322,10 @@ namespace USARoadTrip.Silverlight.Views
         {
             MessageBox.Show("Query failed: " + args.Error);
         }
-
+        #endregion
 
         #region Geocoding
-        private void AddStop(MapPoint mapPoint)
+        private void AddLocation(MapPoint mapPoint)
         {
             Graphic stop = new Graphic() { Geometry = mapPoint, Symbol = GetSymbol("StopSymbol") };
             stop.Attributes.Add("StopNumber", _stops.Count + 1);
@@ -325,7 +344,9 @@ namespace USARoadTrip.Silverlight.Views
             AddressToLocationsParameters addressParams = new AddressToLocationsParameters();
             addressParams.OutSpatialReference = MyMap.SpatialReference;
 
-            AddressViewModel address = AddressPanel.DataContext as AddressViewModel;
+            LocationViewModel address = AddressPanel.DataContext as LocationViewModel;
+
+            MyTripList.Locations.Add(address);
 
             if (address.ToKeyValue(addressParams.Address).Count > 0)
             {
@@ -367,7 +388,7 @@ namespace USARoadTrip.Silverlight.Views
             }
 
             if (bestCandidate != null)
-                AddStop(bestCandidate.Location);
+                AddLocation(bestCandidate.Location);
             else
                 MessageBox.Show("There are no locations that match the specified address.");
 

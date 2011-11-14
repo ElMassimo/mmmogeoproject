@@ -12,7 +12,7 @@ namespace USARoadTrip.Silverlight.Models
 {
     public class Car
     {
-        private int _imageIndex = 0;
+        private int _imageIndex = -1;
         private const int CAR_IMAGES_COUNT = 5;
         private MapPoint _currentLocation = null;
         private MapPoint _nextLocation = null;
@@ -58,6 +58,10 @@ namespace USARoadTrip.Silverlight.Models
         {
             PictureMarkerSymbol carSymbol = new PictureMarkerSymbol();
             carSymbol.Source = RoadUtils.GetCarImage(_imageIndex);
+            carSymbol.OffsetX = 20;
+            carSymbol.OffsetY = 15;
+            carSymbol.Width = 40;
+            carSymbol.Height = 30;
             return carSymbol;
         }
     }
