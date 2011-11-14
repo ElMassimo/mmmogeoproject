@@ -7,6 +7,7 @@
            mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="562"
            xmlns:navigation="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Navigation"
            xmlns:controlsToolkit="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Toolkit"
+           xmlns:my="clr-namespace:USARoadTrip.Silverlight.UserControls"
            Title="Welcome - USA Road Trip">
     <Grid x:Name="LayoutRoot" Background="{StaticResource HomeBackgroundBrush}">
         <StackPanel x:Name="UserStateStackPanel" HorizontalAlignment="Right" VerticalAlignment="Top" Width="515" Margin="10,10,10,10">

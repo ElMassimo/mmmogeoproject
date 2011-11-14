@@ -113,6 +113,9 @@
     <Compile Include="UserControls\RegistrationWindow.xaml.cs">
       <DependentUpon>RegistrationWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\RoadTripButton.xaml.cs">
+      <DependentUpon>RoadTripButton.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Utility\GuiUtils.cs" />
     <Compile Include="Utility\RoadUtils.cs" />
     <Compile Include="Utility\SilverlightUtils.cs" />
@@ -162,6 +165,10 @@
     <Page Include="Assets\Styles\ButtonStyles.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControls\RoadTripButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainPage.xaml">
       <SubType>Designer</SubType>
