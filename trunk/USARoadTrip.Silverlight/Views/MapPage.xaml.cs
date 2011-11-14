@@ -22,20 +22,19 @@ using System.ComponentModel;
 using System.Windows.Threading;
 using USARoadTrip.Silverlight.Utility;
 using USARoadTrip.Silverlight.ViewModels;
+using System.Collections.ObjectModel;
 
 namespace USARoadTrip.Silverlight.Views
 {
     public partial class MapPage : Page
     {
-        private const double SHORTEST_SIMULATION_TIME_IN_HOURS = 0.25;
-        private const int SLIDER_WEIGHT = 2;
         private const int TIMER_MILLISECONDS = 3000;
         private DispatcherTimer _travelTimer;
         private MapPoint _lastPoint;
         private Car _car;
         private Road _road;
         private State _currentState = new State();
-        private List<Graphic> _stops = new List<Graphic>();
+        private GraphicCollection _stops = new GraphicCollection();
 
         #region Services
         private Locator _usaStreetsLocatorTask;
@@ -58,6 +57,8 @@ namespace USARoadTrip.Silverlight.Views
             
             _travelTimer = new DispatcherTimer();
             _travelTimer.Tick += new EventHandler(DrivingLoop);
+
+            StopsLayer.Graphics = _stops;
         }
 
         private GraphicsLayer CarLayer
@@ -156,10 +157,10 @@ namespace USARoadTrip.Silverlight.Views
                 return;
 
             double sectionSpeed = RoadUtils.GetRandomSectionSpeed();
-            double sectionTime =  (SpeedSlider.Value + 1) * SHORTEST_SIMULATION_TIME_IN_HOURS;  
+            double sectionTime = RoadUtils.GetTimeBetweenGpsEmissions(SpeedSlider.Value / 10);  
            
             PointCollection routeSection = new PointCollection();
-            MapPoint previousMapPoint = _lastPoint;
+            routeSection.Add(_lastPoint);
             for (double distance = 0; distance < sectionSpeed * sectionTime; )
             {
                 MapPoint tempPoint = _road.NextLocation();
@@ -176,7 +177,7 @@ namespace USARoadTrip.Silverlight.Views
             ShowRoadSection(routeSection, sectionSpeed);
             ShowCounties();
 
-            if (previousMapPoint == _lastPoint)
+            if (routeSection[0] == _lastPoint)
                 _travelTimer.Stop();
             else
             {
@@ -306,7 +307,7 @@ namespace USARoadTrip.Silverlight.Views
         {
             Graphic stop = new Graphic() { Geometry = mapPoint, Symbol = GetSymbol("StopSymbol") };
             stop.Attributes.Add("StopNumber", _stops.Count + 1);
-            StopsLayer.Graphics.Add(stop);
+
             _stops.Add(stop);
 
             if (_stops.Count == 1)

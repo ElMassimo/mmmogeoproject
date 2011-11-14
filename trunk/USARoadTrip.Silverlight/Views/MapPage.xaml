@@ -10,7 +10,7 @@
            x:Class="USARoadTrip.Silverlight.Views.MapPage"
            mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
            Title="Road Map">
-    <Grid x:Name="LayoutRoot">
+    <Grid x:Name="LayoutRoot" Background="White">
         <Grid.Resources>
             <esri:PictureMarkerSymbol x:Key="DefaultMarkerSymbol" OffsetX="11" OffsetY="39" Source="../Assets/Images/pushpin.png" />
             <esri:PictureMarkerSymbol x:Key="GPSMarkerSymbol" OffsetX="13" OffsetY="11" Width="27" Height="22" Source="../Assets/Images/gps.png" />
