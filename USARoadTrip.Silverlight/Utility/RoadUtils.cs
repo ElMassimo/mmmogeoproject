@@ -11,6 +11,10 @@ namespace USARoadTrip.Silverlight.Utility
     {
         public const int CAR_MINIMUM_SPEED = 50;
         public const int CAR_MAXIMUM_SPEED = 140;
+
+        private const double SHORTEST_SIMULATION_TIME_IN_HOURS = 0.25;
+        private const double LONGEST_SIMULATION_TIME_IN_HOURS = 10;
+
         private const string CAR_IMAGES_PATH = "../Assets/Images/Cars/car_{0}.png";
         private static Random _numberGenerator = new Random();
 
@@ -55,6 +59,11 @@ namespace USARoadTrip.Silverlight.Utility
         public static double GetRandomSectionSpeed()
         {
             return CAR_MINIMUM_SPEED + (CAR_MAXIMUM_SPEED - CAR_MINIMUM_SPEED) * _numberGenerator.NextDouble();
+        }
+
+        public static double GetTimeBetweenGpsEmissions(double ratio)
+        {
+            return SHORTEST_SIMULATION_TIME_IN_HOURS + (LONGEST_SIMULATION_TIME_IN_HOURS - SHORTEST_SIMULATION_TIME_IN_HOURS) * ratio;
         }
 
         public static Envelope GetCenteredEnvelope(MapPoint point, double displaySize)
