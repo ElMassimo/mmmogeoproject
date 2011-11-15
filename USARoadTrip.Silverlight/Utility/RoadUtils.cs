@@ -1,9 +1,8 @@
-﻿using System.Windows.Controls;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows.Media.Imaging;
-using System;
 using ESRI.ArcGIS.Client.Geometry;
 using ESRI.ArcGIS.Client.Projection;
-using System.Collections.Generic;
 
 namespace USARoadTrip.Silverlight.Utility
 {

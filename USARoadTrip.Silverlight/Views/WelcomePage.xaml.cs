@@ -2,11 +2,9 @@
 using System.Windows;
 using System.Windows.Controls;
 using USARoadTrip.Silverlight.Services;
-using USARoadTrip.Silverlight.WCFServices;
 using USARoadTrip.Silverlight.UserControls;
-using USARoadTrip.Silverlight.ViewModels;
-using System.ComponentModel;
 using USARoadTrip.Silverlight.Utility;
+using USARoadTrip.Silverlight.WCFServices;
 
 namespace USARoadTrip.Silverlight.Views
 {

@@ -1,6 +1,6 @@
 ﻿
-using USARoadTrip.Silverlight.ViewModels;
 using System.Collections.Generic;
+using USARoadTrip.Silverlight.ViewModels;
 
 namespace USARoadTrip.Silverlight.Mock
 {

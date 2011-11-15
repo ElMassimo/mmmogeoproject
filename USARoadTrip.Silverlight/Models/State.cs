@@ -1,5 +1,4 @@
 ﻿
-using ESRI.ArcGIS.Client.Geometry;
 using System.Collections.Generic;
 using ESRI.ArcGIS.Client;
 namespace USARoadTrip.Silverlight.Models
