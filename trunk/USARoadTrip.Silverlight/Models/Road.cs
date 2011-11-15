@@ -1,11 +1,5 @@
-﻿using ESRI.ArcGIS.Client.Geometry;
-using ESRI.ArcGIS.Client.Services;
-using ESRI.ArcGIS.Client.Projection;
-using ESRI.ArcGIS.Client.Toolkit;
-using ESRI.ArcGIS.Client.Utils;
-using System.Collections;
-using System.Collections.Generic;
-using USARoadTrip.Silverlight.Utility;
+﻿using System.Collections.Generic;
+using ESRI.ArcGIS.Client.Geometry;
 
 namespace USARoadTrip.Silverlight.Models
 {

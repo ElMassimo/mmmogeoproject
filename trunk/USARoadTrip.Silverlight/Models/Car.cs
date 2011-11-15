@@ -1,12 +1,7 @@
 ﻿
 using ESRI.ArcGIS.Client.Geometry;
-using System.Windows.Controls;
-using USARoadTrip.Silverlight.Utility;
-using ESRI.ArcGIS.Client;
 using ESRI.ArcGIS.Client.Symbols;
-using System;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
+using USARoadTrip.Silverlight.Utility;
 
 namespace USARoadTrip.Silverlight.Models
 {
