@@ -19,7 +19,7 @@ namespace USARoadTrip.Web
         bool UpdateTrip(Trip tripModel);
 
         [OperationContract]
-        IList<Location> GetTripDestinations(int tripId);
+        IList<Location> GetTripDestinations(string userNick, string tripName);
 
         // UserServices
         [OperationContract]

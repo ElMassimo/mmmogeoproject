@@ -27,8 +27,8 @@ namespace USARoadTrip.Silverlight.UserControls
             set 
             { 
                 _trip = value;
-                if(_trip != null)
-                    TripNameLabel.Text = _trip.Name;
+                if (_trip != null)
+                    LoadTrip();
             }
         }
 
@@ -211,6 +211,15 @@ namespace USARoadTrip.Silverlight.UserControls
             var location = ((MenuItem)sender).DataContext as LocationViewModel;
             if (location != null)
                 ListItemSelected(LocationListBox, new ListItemSelectedEventArgs(_locations.IndexOf(location), location));
+        }
+
+        private void LoadTrip()
+        {
+            ClearLocations();
+            TripNameLabel.Text = _trip.Name;
+            if(_trip.Destinations != null)
+            foreach (var location in _trip.Destinations)
+                AddLocation(LocationViewModel.FromDataContract(location));
         }
     }
 

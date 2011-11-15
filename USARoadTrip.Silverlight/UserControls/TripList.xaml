@@ -4,78 +4,71 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:input="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
+    xmlns:controlsToolkit="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Toolkit"
     mc:Ignorable="d"
-    d:DesignHeight="300" d:DesignWidth="400">
+    d:DesignHeight="562" d:DesignWidth="900">
 
-    <StackPanel>
-        <Grid x:Name="LocationGrid">
-            <Rectangle Stroke="Gray"  RadiusX="10" RadiusY="10" Fill="#77919191" Margin="0,0,0,5" >
-                <Rectangle.Effect>
-                    <DropShadowEffect/>
-                </Rectangle.Effect>
-            </Rectangle>
-            <Rectangle Fill="#FFFFFFFF" Stroke="DarkGray" RadiusX="5" RadiusY="5" Margin="10,17,10,15" />
-            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="10,2,15,15">
-                <TextBlock x:Name="TripNameLabel" HorizontalAlignment="Left" Text="My trip" Margin="2,0,0,5" />
-                <ScrollViewer x:Name="LocationScrollViewer" Width="300" MaxHeight="150" BorderThickness="0"
-                              HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" >
-                    <ListBox x:Name="LocationListBox" MinHeight="50">
-                        <ListBox.Resources>
-                            <ImageBrush x:Key="ZoomInBrush" ImageSource="../Assets/Images/Icons/ZoomInIcon.png"/>
-                            <ImageBrush x:Key="MoveUpBrush" ImageSource="../Assets/Images/Icons/UpIcon.png"/>
-                            <ImageBrush x:Key="MoveDownBrush" ImageSource="../Assets/Images/Icons/DownIcon.png"/>
-                            <ImageBrush x:Key="DeleteBrush" ImageSource="../Assets/Images/Icons/DeleteIcon.png"/>
-                        </ListBox.Resources>
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding ShortLocationString}">
-                                    <input:ContextMenuService.ContextMenu>
+    <controlsToolkit:BusyIndicator x:Name="BusyIndicator" IsBusy="False" DisplayAfter="0" BusyContent="Please wait...">
+        <StackPanel Height="359" Width="339">
+            <Grid x:Name="LocationGrid">
+                <Rectangle Stroke="Gray"  RadiusX="10" RadiusY="10" Fill="#77919191" Margin="0,0,0,5" >
+                    <Rectangle.Effect>
+                        <DropShadowEffect/>
+                    </Rectangle.Effect>
+                </Rectangle>
+                <Rectangle Fill="#FFFFFFFF" Stroke="DarkGray" RadiusX="5" RadiusY="5" Margin="10,17,10,15" />
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="10,2,15,15">
+                    <ScrollViewer x:Name="TripScrollViewer" MaxHeight="260" Width="313" BorderThickness="0"
+                              HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Margin="0,17,0,0" >
+                        <ListBox x:Name="TripListBox" MinHeight="240" SelectionChanged="TripListBox_SelectionChanged">
+                            <ListBox.Resources>
+                                <ImageBrush x:Key="ViewMapBrush" ImageSource="../Assets/Images/Icons/ZoomInIcon.png"/>
+                                <ImageBrush x:Key="EditBrush" ImageSource="../Assets/Images/Icons/EditIcon.png"/>
+                                <ImageBrush x:Key="DeleteBrush" ImageSource="../Assets/Images/Icons/DeleteIcon.png"/>
+                            </ListBox.Resources>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding Name}" FontWeight="Bold" Margin="5,5,5,5"/>
+                                        <TextBlock Text="{Binding Description}" TextWrapping="Wrap" Margin="0,0,0,5"/>
+                                        <input:ContextMenuService.ContextMenu>
                                         <input:ContextMenu>
-                                            <input:MenuItem Header="Zoom In" Click="ZoomIn_Click">
+                                            <input:MenuItem Header="View map" Click="ViewMap_Click">
                                                 <input:MenuItem.Icon>
-                                                    <Rectangle Width="16" Height="16" Fill="{StaticResource ZoomInBrush}"/>
+                                                    <Rectangle Width="16" Height="16" Fill="{StaticResource ViewMapBrush}"/>
                                                 </input:MenuItem.Icon>
                                             </input:MenuItem>
                                             <input:Separator/>
-                                            <input:MenuItem Header="Move Up" Click="MoveUp_Click">
+                                            <input:MenuItem Header="Edit" Click="Edit_Click">
                                                 <input:MenuItem.Icon>
-                                                    <Rectangle Width="16" Height="16" Fill="{StaticResource MoveUpBrush}"/>
+                                                    <Rectangle Width="16" Height="16" Fill="{StaticResource EditBrush}"/>
                                                 </input:MenuItem.Icon>
                                             </input:MenuItem>
-                                            <input:MenuItem Header="Move Down" Click="MoveDown_Click">
-                                                <input:MenuItem.Icon>
-                                                    <Rectangle Width="16" Height="16" Fill="{StaticResource MoveDownBrush}"/>
-                                                </input:MenuItem.Icon>
-                                            </input:MenuItem>
-                                            <input:Separator/>
                                             <input:MenuItem Header="Delete" Click="Delete_Click">
                                                 <input:MenuItem.Icon>
                                                     <Rectangle Width="16" Height="16" Fill="{StaticResource DeleteBrush}"/>
                                                 </input:MenuItem.Icon>
                                             </input:MenuItem>
                                         </input:ContextMenu>
-                                    </input:ContextMenuService.ContextMenu>
-                                </TextBlock>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                        <ListBox.ItemContainerStyle>
-                            <Style TargetType="ListBoxItem">
-                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                            </Style>
-                        </ListBox.ItemContainerStyle>
-                    </ListBox>
-                </ScrollViewer>
+                                        </input:ContextMenuService.ContextMenu>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                        </ListBox>
+                    </ScrollViewer>
+                </StackPanel>
+            </Grid>
+            <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" Margin="0,10,0,0">
+                <Button x:Name="DeleteTripButton" Content="Delete trip" Style="{StaticResource DeleteButtonStyle}" Width="40" Click="DeleteButton_Click"  Margin="10,0,0,0"/>
+                <Button x:Name="EditTripButton" Content="Edit trip" Style="{StaticResource EditButtonStyle}"  Width="40" Click="EditTripButton_Click"  Margin="10,0,0,0"/>
+                <Button x:Name="AddTripButton" Content="Add trip" Style="{StaticResource AddButtonStyle}" Width="40" Click="AddTripButton_Click" Margin="10,0,0,0" />
+                <Button Content="View map" Name="ViewMapButton" Style="{StaticResource ZoomInButtonStyle}" Width="40" Click="ViewMapButton_Click" Margin="50,0,0,0"/>
             </StackPanel>
-        </Grid>
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Button Content="Move up" Style="{StaticResource UpButtonStyle}" Grid.Column="1" />
-            <Button Content="Move down" Style="{StaticResource DownButtonStyle}" Grid.Column="2" />
-            <Button Content="Delete trip" Style="{StaticResource DeleteButtonStyle}" Grid.Column="0" />
-        </Grid>
-    </StackPanel>
+        </StackPanel>
+    </controlsToolkit:BusyIndicator>
 </UserControl>

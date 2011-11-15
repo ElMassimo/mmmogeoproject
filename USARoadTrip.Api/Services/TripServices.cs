@@ -37,17 +37,18 @@ namespace USARoadTrip.Api.Services
         private void UpdateExistingLocations(TripEntity trip, IEnumerable<Location> newLocations)
         {
             var locations = newLocations.ToDictionary(l => l.TripOrder);
+            var toRemove = new List<LocationEntity>();
 
             foreach (var location in trip.Destinations)
             {
                 if (locations.ContainsKey(location.TripOrder))
                     locations[location.TripOrder].ToEntity(location);
                 else
-                {
-                    trip.Destinations.Remove(location);
-                    LocationRepo.Delete(location);
-                }
+                    toRemove.Add(location);
             }
+
+            foreach (var location in toRemove)
+                LocationRepo.Delete(location);
         }
 
         public bool Add(Trip tripModel)
@@ -77,11 +78,9 @@ namespace USARoadTrip.Api.Services
             if (user != null)
                 user.Trips.Remove(trip);
 
-            foreach (var location in trip.Destinations)
-            {
-                trip.Destinations.Remove(location);
+            var toRemove = new List<LocationEntity>(trip.Destinations);
+            foreach (var location in toRemove)
                 LocationRepo.Delete(location);
-            }
 
             TripRepo.Delete(trip);
             TripRepo.Save();
@@ -95,16 +94,19 @@ namespace USARoadTrip.Api.Services
 
             tripModel.ToEntity<Trip, TripEntity>(trip);
 
-            AddNewLocations(trip, tripModel.Destinations);
-            UpdateExistingLocations(trip, tripModel.Destinations);
+            if (tripModel.Destinations != null)
+            {
+                AddNewLocations(trip, tripModel.Destinations);
+                UpdateExistingLocations(trip, tripModel.Destinations);
+            }
 
             TripRepo.Save();
             return true;
         }
 
-        public IList<Location> GetTripDestinations(int tripId)
+        public IList<Location> GetTripDestinations(string userNick, string tripName)
         {
-            TripEntity trip = TripRepo.GetSingle(t => t.Id == tripId);
+            TripEntity trip = TripRepo.GetSingle(t => t.UserNick == userNick && t.Name == tripName);
             if (trip == null)
                 return null;
             else
