@@ -24,8 +24,6 @@ namespace USARoadTrip.Silverlight.WCFServices {
         
         private System.Collections.Generic.List<USARoadTrip.Silverlight.WCFServices.Location> DestinationsField;
         
-        private int IdField;
-        
         private string NameField;
         
         private string UserNickField;
@@ -52,19 +50,6 @@ namespace USARoadTrip.Silverlight.WCFServices {
                 if ((object.ReferenceEquals(this.DestinationsField, value) != true)) {
                     this.DestinationsField = value;
                     this.RaisePropertyChanged("Destinations");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int Id {
-            get {
-                return this.IdField;
-            }
-            set {
-                if ((this.IdField.Equals(value) != true)) {
-                    this.IdField = value;
-                    this.RaisePropertyChanged("Id");
                 }
             }
         }
@@ -280,7 +265,7 @@ namespace USARoadTrip.Silverlight.WCFServices {
         bool EndCreateTrip(System.IAsyncResult result);
         
         [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/IRoadTripServices/DeleteTrip", ReplyAction="http://tempuri.org/IRoadTripServices/DeleteTripResponse")]
-        System.IAsyncResult BeginDeleteTrip(int tripId, System.AsyncCallback callback, object asyncState);
+        System.IAsyncResult BeginDeleteTrip(string userNick, string tripName, System.AsyncCallback callback, object asyncState);
         
         void EndDeleteTrip(System.IAsyncResult result);
         
@@ -592,8 +577,8 @@ namespace USARoadTrip.Silverlight.WCFServices {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult USARoadTrip.Silverlight.WCFServices.IRoadTripServices.BeginDeleteTrip(int tripId, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginDeleteTrip(tripId, callback, asyncState);
+        System.IAsyncResult USARoadTrip.Silverlight.WCFServices.IRoadTripServices.BeginDeleteTrip(string userNick, string tripName, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginDeleteTrip(userNick, tripName, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
@@ -602,8 +587,9 @@ namespace USARoadTrip.Silverlight.WCFServices {
         }
         
         private System.IAsyncResult OnBeginDeleteTrip(object[] inValues, System.AsyncCallback callback, object asyncState) {
-            int tripId = ((int)(inValues[0]));
-            return ((USARoadTrip.Silverlight.WCFServices.IRoadTripServices)(this)).BeginDeleteTrip(tripId, callback, asyncState);
+            string userNick = ((string)(inValues[0]));
+            string tripName = ((string)(inValues[1]));
+            return ((USARoadTrip.Silverlight.WCFServices.IRoadTripServices)(this)).BeginDeleteTrip(userNick, tripName, callback, asyncState);
         }
         
         private object[] OnEndDeleteTrip(System.IAsyncResult result) {
@@ -618,11 +604,11 @@ namespace USARoadTrip.Silverlight.WCFServices {
             }
         }
         
-        public void DeleteTripAsync(int tripId) {
-            this.DeleteTripAsync(tripId, null);
+        public void DeleteTripAsync(string userNick, string tripName) {
+            this.DeleteTripAsync(userNick, tripName, null);
         }
         
-        public void DeleteTripAsync(int tripId, object userState) {
+        public void DeleteTripAsync(string userNick, string tripName, object userState) {
             if ((this.onBeginDeleteTripDelegate == null)) {
                 this.onBeginDeleteTripDelegate = new BeginOperationDelegate(this.OnBeginDeleteTrip);
             }
@@ -633,7 +619,8 @@ namespace USARoadTrip.Silverlight.WCFServices {
                 this.onDeleteTripCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnDeleteTripCompleted);
             }
             base.InvokeAsync(this.onBeginDeleteTripDelegate, new object[] {
-                        tripId}, this.onEndDeleteTripDelegate, this.onDeleteTripCompletedDelegate, userState);
+                        userNick,
+                        tripName}, this.onEndDeleteTripDelegate, this.onDeleteTripCompletedDelegate, userState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
@@ -957,9 +944,10 @@ namespace USARoadTrip.Silverlight.WCFServices {
                 return _result;
             }
             
-            public System.IAsyncResult BeginDeleteTrip(int tripId, System.AsyncCallback callback, object asyncState) {
-                object[] _args = new object[1];
-                _args[0] = tripId;
+            public System.IAsyncResult BeginDeleteTrip(string userNick, string tripName, System.AsyncCallback callback, object asyncState) {
+                object[] _args = new object[2];
+                _args[0] = userNick;
+                _args[1] = tripName;
                 System.IAsyncResult _result = base.BeginInvoke("DeleteTrip", _args, callback, asyncState);
                 return _result;
             }
