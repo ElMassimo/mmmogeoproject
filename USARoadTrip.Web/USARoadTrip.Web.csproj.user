@@ -9,7 +9,7 @@
         <WebProjectProperties>
           <StartPageUrl>index.aspx</StartPageUrl>
           <StartAction>SpecificPage</StartAction>
-          <AspNetDebugging>False</AspNetDebugging>
+          <AspNetDebugging>True</AspNetDebugging>
           <SilverlightDebugging>True</SilverlightDebugging>
           <NativeDebugging>False</NativeDebugging>
           <SQLDebugging>False</SQLDebugging>
