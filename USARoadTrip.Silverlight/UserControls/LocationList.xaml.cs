@@ -15,12 +15,22 @@ namespace USARoadTrip.Silverlight.UserControls
 {
     public partial class LocationList : UserControl
     {
-        public Trip MyTrip { get; set; }
-
+        private Trip _trip;        
         private ObservableCollection<LocationViewModel> _locations = new ObservableCollection<LocationViewModel>();
         private GraphicCollection _stops = new GraphicCollection();
 
         private BusyIndicator _busyIndicator { get; set; }
+
+        public Trip MyTrip
+        {
+            get { return _trip; }
+            set 
+            { 
+                _trip = value;
+                if(_trip != null)
+                    TripNameLabel.Text = _trip.Name;
+            }
+        }
 
         public ObservableCollection<LocationViewModel> Locations
         {
@@ -64,8 +74,8 @@ namespace USARoadTrip.Silverlight.UserControls
             if (MyTrip == null)
             {
                 var tripWindow = GuiUtils.GetTripWindow(TripWindow_Closed);
-                MyTrip = new Trip();
-                tripWindow.MyTrip = MyTrip;
+                _trip = new Trip();
+                tripWindow.MyTrip = _trip;
                 tripWindow.Show();
             }
             else
@@ -87,7 +97,10 @@ namespace USARoadTrip.Silverlight.UserControls
         {
             TripWindow window = sender as TripWindow;
             if (window.DialogResult ?? false)
+            {
+                TripNameLabel.Text = _trip.Name;
                 UploadTripLocations();
+            }
         }
 
         private void UploadTripLocations()

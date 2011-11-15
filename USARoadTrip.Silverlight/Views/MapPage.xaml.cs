@@ -457,6 +457,7 @@ namespace USARoadTrip.Silverlight.Views
         {
             StopSimulation();
             ClearRoadGraphics();
+            BeginTravelButton.Content = "Begin travel";
             BeginTravelButton.IsEnabled = false;
         }
     
