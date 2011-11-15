@@ -23,10 +23,11 @@
     <MetadataSource Address="http://localhost:1601/RoadTrip/RoadTripServices.svc?wsdl" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="RoadTripServices3.xsd" MetadataType="Schema" ID="3bd58d4c-d658-4730-8409-551ed1daa658" SourceId="1" SourceUrl="http://localhost:1601/RoadTrip/RoadTripServices.svc?xsd=xsd0" />
     <MetadataFile FileName="RoadTripServices31.xsd" MetadataType="Schema" ID="eb4fdabd-1e46-4f89-856c-8d10f1273ac4" SourceId="1" SourceUrl="http://localhost:1601/RoadTrip/RoadTripServices.svc?xsd=xsd2" />
-    <MetadataFile FileName="RoadTripServices1.wsdl" MetadataType="Wsdl" ID="9037d97d-19ff-4d37-a563-84f20f68d3f7" SourceId="1" SourceUrl="http://localhost:1601/RoadTrip/RoadTripServices.svc?wsdl" />
+    <MetadataFile FileName="RoadTripServices3.xsd" MetadataType="Schema" ID="3bd58d4c-d658-4730-8409-551ed1daa658" SourceId="1" SourceUrl="http://localhost:1601/RoadTrip/RoadTripServices.svc?xsd=xsd0" />
+    <MetadataFile FileName="RoadTripServices.wsdl" MetadataType="Wsdl" ID="1b6f165b-0b24-41f8-bddf-03e318e16710" SourceId="1" SourceUrl="http://localhost:1601/RoadTrip/RoadTripServices.svc?wsdl=wsdl0" />
     <MetadataFile FileName="RoadTripServices32.xsd" MetadataType="Schema" ID="acd3d143-eb7d-4986-b311-bd5526c202d5" SourceId="1" SourceUrl="http://localhost:1601/RoadTrip/RoadTripServices.svc?xsd=xsd1" />
+    <MetadataFile FileName="RoadTripServices1.wsdl" MetadataType="Wsdl" ID="9037d97d-19ff-4d37-a563-84f20f68d3f7" SourceId="1" SourceUrl="http://localhost:1601/RoadTrip/RoadTripServices.svc?wsdl" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

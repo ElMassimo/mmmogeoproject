@@ -8,6 +8,8 @@ namespace USARoadTrip.Silverlight.Utility
 {
     public static class RoadUtils
     {
+        public const int SPATIAL_REFERENCE_WKID = 102100;
+
         public const int CAR_MINIMUM_SPEED = 50;
         public const int CAR_MAXIMUM_SPEED = 140;
 
@@ -37,9 +39,9 @@ namespace USARoadTrip.Silverlight.Utility
 
         public static double GetDistanceInKilometers(this MapPoint firstPoint, MapPoint lastPoint)
         {
-            firstPoint = _geographicHelper.ToGeographic(firstPoint) as MapPoint;
-            lastPoint = _geographicHelper.ToGeographic(lastPoint) as MapPoint;
-            return firstPoint.GetSphericalDistance(lastPoint);
+            MapPoint point1 = _geographicHelper.ToGeographic(firstPoint) as MapPoint;
+            MapPoint point2 = _geographicHelper.ToGeographic(lastPoint) as MapPoint;
+            return point1.GetSphericalDistance(point2);
         }
 
         public static double GetTotalDistance(this IEnumerable<MapPoint> locations)

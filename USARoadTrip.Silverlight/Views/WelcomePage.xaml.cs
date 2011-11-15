@@ -17,12 +17,12 @@ namespace USARoadTrip.Silverlight.Views
 
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
-            if (String.IsNullOrWhiteSpace(UsernameTextBox.Text) || String.IsNullOrWhiteSpace(PasswordTextBox.Text))
+            if (String.IsNullOrWhiteSpace(UsernameTextBox.Text) || String.IsNullOrWhiteSpace(PasswordTextBox.Password))
                 MessageBox.Show("Please enter your username and password", "Login", MessageBoxButton.OK);
             else
             {
                 BusyIndicator.IsBusy = true;
-                RoadTripServices.GetLoginService(LoginService_Completed).LoginAsync(UsernameTextBox.Text, PasswordTextBox.Text);
+                RoadTripServices.GetLoginService(LoginService_Completed).LoginAsync(UsernameTextBox.Text, PasswordTextBox.Password);
             }
         }
 
@@ -59,7 +59,7 @@ namespace USARoadTrip.Silverlight.Views
                 LoginStackPanel.Visibility = Visibility.Collapsed;
                 UserInfoStackPanel.Visibility = Visibility.Visible;
                 UsernameTextBox.Text = String.Empty;
-                PasswordTextBox.Text = String.Empty;
+                PasswordTextBox.Password = String.Empty;
             }
             else
             {

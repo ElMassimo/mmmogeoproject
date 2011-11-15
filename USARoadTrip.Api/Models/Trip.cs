@@ -10,9 +10,6 @@ namespace USARoadTrip.Api.Models
     public class Trip
     {
         [DataMember]
-        public int Id { get; set; }
-
-        [DataMember]
         public string Name { get; set; }
 
         [DataMember]

@@ -9,7 +9,7 @@
             </basicHttpBinding>
         </bindings>
         <client>
-            <endpoint address="http://localhost:1601/RoadTrip/RoadTripServices.svc"
+            <endpoint address="http://localhost:1601/RoadTrip/RoadTripServices.svc/RoadTripServices"
                 binding="basicHttpBinding" bindingConfiguration="BasicHttpBinding_IRoadTripServices"
                 contract="WCFServices.IRoadTripServices" name="BasicHttpBinding_IRoadTripServices" />
         </client>

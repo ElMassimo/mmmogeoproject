@@ -10,9 +10,6 @@ namespace USARoadTrip.Api.Models
     public class Location
     {
         [DataMember]
-        public int Id { get; set; }
-
-        [DataMember]
         public string Address { get; set; }
 
         [DataMember]
@@ -26,5 +23,11 @@ namespace USARoadTrip.Api.Models
 
         [DataMember]
         public int TripOrder { get; set; }
+
+        [DataMember]
+        public double X { get; set; }
+
+        [DataMember]
+        public double Y { get; set; }
     }
 }

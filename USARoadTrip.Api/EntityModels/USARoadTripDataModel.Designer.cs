@@ -168,18 +168,16 @@ namespace USARoadTrip.Api.EntityModels
         /// Create a new LocationEntity object.
         /// </summary>
         /// <param name="id">Initial value of the Id property.</param>
-        /// <param name="address">Initial value of the Address property.</param>
-        /// <param name="city">Initial value of the City property.</param>
-        /// <param name="state">Initial value of the State property.</param>
-        /// <param name="zip">Initial value of the Zip property.</param>
-        public static LocationEntity CreateLocationEntity(global::System.Int32 id, global::System.String address, global::System.String city, global::System.String state, global::System.String zip)
+        /// <param name="tripOrder">Initial value of the TripOrder property.</param>
+        /// <param name="x">Initial value of the X property.</param>
+        /// <param name="y">Initial value of the Y property.</param>
+        public static LocationEntity CreateLocationEntity(global::System.Int32 id, global::System.Int32 tripOrder, global::System.Double x, global::System.Double y)
         {
             LocationEntity locationEntity = new LocationEntity();
             locationEntity.Id = id;
-            locationEntity.Address = address;
-            locationEntity.City = city;
-            locationEntity.State = state;
-            locationEntity.Zip = zip;
+            locationEntity.TripOrder = tripOrder;
+            locationEntity.X = x;
+            locationEntity.Y = y;
             return locationEntity;
         }
 
@@ -216,7 +214,7 @@ namespace USARoadTrip.Api.EntityModels
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String Address
         {
@@ -228,7 +226,7 @@ namespace USARoadTrip.Api.EntityModels
             {
                 OnAddressChanging(value);
                 ReportPropertyChanging("Address");
-                _Address = StructuralObject.SetValidValue(value, false);
+                _Address = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("Address");
                 OnAddressChanged();
             }
@@ -240,7 +238,7 @@ namespace USARoadTrip.Api.EntityModels
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String City
         {
@@ -252,7 +250,7 @@ namespace USARoadTrip.Api.EntityModels
             {
                 OnCityChanging(value);
                 ReportPropertyChanging("City");
-                _City = StructuralObject.SetValidValue(value, false);
+                _City = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("City");
                 OnCityChanged();
             }
@@ -264,7 +262,7 @@ namespace USARoadTrip.Api.EntityModels
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String State
         {
@@ -276,7 +274,7 @@ namespace USARoadTrip.Api.EntityModels
             {
                 OnStateChanging(value);
                 ReportPropertyChanging("State");
-                _State = StructuralObject.SetValidValue(value, false);
+                _State = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("State");
                 OnStateChanged();
             }
@@ -288,7 +286,7 @@ namespace USARoadTrip.Api.EntityModels
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String Zip
         {
@@ -300,7 +298,7 @@ namespace USARoadTrip.Api.EntityModels
             {
                 OnZipChanging(value);
                 ReportPropertyChanging("Zip");
-                _Zip = StructuralObject.SetValidValue(value, false);
+                _Zip = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("Zip");
                 OnZipChanged();
             }
@@ -312,9 +310,9 @@ namespace USARoadTrip.Api.EntityModels
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public Nullable<global::System.Int32> TripOrder
+        public global::System.Int32 TripOrder
         {
             get
             {
@@ -329,9 +327,57 @@ namespace USARoadTrip.Api.EntityModels
                 OnTripOrderChanged();
             }
         }
-        private Nullable<global::System.Int32> _TripOrder;
-        partial void OnTripOrderChanging(Nullable<global::System.Int32> value);
+        private global::System.Int32 _TripOrder;
+        partial void OnTripOrderChanging(global::System.Int32 value);
         partial void OnTripOrderChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Double X
+        {
+            get
+            {
+                return _X;
+            }
+            set
+            {
+                OnXChanging(value);
+                ReportPropertyChanging("X");
+                _X = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("X");
+                OnXChanged();
+            }
+        }
+        private global::System.Double _X;
+        partial void OnXChanging(global::System.Double value);
+        partial void OnXChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Double Y
+        {
+            get
+            {
+                return _Y;
+            }
+            set
+            {
+                OnYChanging(value);
+                ReportPropertyChanging("Y");
+                _Y = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Y");
+                OnYChanged();
+            }
+        }
+        private global::System.Double _Y;
+        partial void OnYChanging(global::System.Double value);
+        partial void OnYChanged();
 
         #endregion
     

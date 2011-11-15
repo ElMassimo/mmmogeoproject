@@ -11,27 +11,14 @@
            Title="Welcome - USA Road Trip">
     <controlsToolkit:BusyIndicator x:Name="BusyIndicator" IsBusy="False" DisplayAfter="0" BusyContent="Please wait...">
         <Grid x:Name="LayoutRoot" Background="{StaticResource HomeBackgroundBrush}">
-            <Grid.Resources>
-                <Style x:Key="customButtonStyle" TargetType="Button">
-                    <Setter Property="Padding" Value="0"/>
-                    <Setter Property="BorderThickness" Value="0"/>
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="Button">
-                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Width="Auto" />
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </Grid.Resources>
-
+            <Image Source="../Assets/Images/logo.png" Margin="0,165,460,156" Opacity="0.8" />
             <StackPanel x:Name="UserStateStackPanel" HorizontalAlignment="Right" VerticalAlignment="Top" Width="515" Margin="10,10,10,10">
                 <StackPanel x:Name="LoginStackPanel" >
                     <StackPanel Orientation="Horizontal" Height="42" HorizontalAlignment="Left" VerticalAlignment="Top">
                         <TextBlock x:Name="UsernameLabel" Text="Username" Height="23" Margin="15,5,5,5" Foreground="{StaticResource LabelLightBrush}"/>
                         <TextBox x:Name="UsernameTextBox" Width="120" Height="23" Margin="5, 5, 15, 5" />
                         <TextBlock x:Name="PasswordLabel" Text="Password" Height="23" Margin="5" Foreground="{StaticResource LabelLightBrush}"/>
-                        <TextBox x:Name="PasswordTextBox" Width="120" Height="23" Margin="5, 5, 15, 5" />
+                        <PasswordBox x:Name="PasswordTextBox" Width="120" Height="23" Margin="5, 5, 15, 5" />
                         <Button Content="log in" Height="23" x:Name="LoginButton" Width="75" Margin="5,5,15,5" Click="LoginButton_Click" />
                     </StackPanel>
                     <HyperlinkButton x:Name="RegistrationLink" Foreground="{StaticResource LinkLightBrush}" Content="Don't have an account? Register for free!" Click="RegistrationLink_Click" HorizontalAlignment="Right" HorizontalContentAlignment="Right" Height="17" Margin="0,0,15,0" Width="235"/>
@@ -43,14 +30,23 @@
                     </StackPanel>
                 </StackPanel>
             </StackPanel>
-            <StackPanel x:Name="MenuStackPanel" Width="200" HorizontalAlignment="Right" Margin="0,214,86,6">
-                <Button x:Name="MapButton" Width="150" Margin="10,10,10,50" Click="MapButton_Click">
+            <Grid x:Name="MenuGrid" Width="392" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="508,165,0,156" Height="241">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="204*" />
+                    <ColumnDefinition Width="188*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Button x:Name="MapButton" Click="MapButton_Click" Grid.Row="0" Grid.Column="0">
                     <Image Source="../Assets/Images/Icons/MapIcon.png" Stretch="None"/>
                 </Button>
-                <Button x:Name="TripsButton" Width="150" Margin="10,10,10,50" IsEnabled="False" Click="TripsButton_Click" Style="{StaticResource customButtonStyle}">
-                    <Image Source="../Assets/Images/Icons/MyTripsIcon.png" Stretch="None"/>
-                </Button>
-            </StackPanel>
+                <TextBlock Text="Map" Grid.Row="0" Grid.Column="1" FontFamily="/USARoadTrip.Silverlight;component/Fonts/Fonts.zip#Viner Hand ITC" FontSize="40" Foreground="{StaticResource LabelLightBrush}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,0,0,0"/>
+
+                <Button x:Name="TripsButton" Click="TripsButton_Click" Grid.Row="1" Style="{StaticResource RoadTripButtonStyle}" HorizontalAlignment="Center"  VerticalAlignment="Center" Height="120" Margin="70,0,0,0" Width="134" />
+                <TextBlock Text="My trips" Grid.Row="1" Grid.Column="1" FontFamily="/USARoadTrip.Silverlight;component/Fonts/Fonts.zip#Viner Hand ITC" FontSize="40" Foreground="{StaticResource LabelLightBrush}"  HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,0,0,0"/>
+            </Grid>
         </Grid>
     </controlsToolkit:BusyIndicator>
 </navigation:Page>

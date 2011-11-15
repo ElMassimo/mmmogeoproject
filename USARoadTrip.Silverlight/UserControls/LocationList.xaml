@@ -8,9 +8,6 @@
     d:DesignHeight="300" d:DesignWidth="400">
 
     <StackPanel>
-        <TextBlock x:Name="LocationZip" Text="{Binding SelectedItem.Zip, ElementName=LocationListBox}" Height="27" />
-
-        <!-- This ContextMenu uses Click handlers and gets its icons from Brush resources -->
         <Grid x:Name="LocationGrid">
             <Rectangle Stroke="Gray"  RadiusX="10" RadiusY="10" Fill="#77919191" Margin="0,0,0,5" >
                 <Rectangle.Effect>
@@ -22,43 +19,50 @@
                 <TextBlock HorizontalAlignment="Left" Text="My trip" Margin="2,0,0,5" />
                 <ScrollViewer x:Name="LocationScrollViewer" Width="300" MaxHeight="150" BorderThickness="0"
                               HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" >
-                    <ListBox x:Name="LocationListBox">
-                <ListBox.Resources>
-                    <ImageBrush x:Key="MoveUpBrush" ImageSource="/System.Windows.Controls.Samples;component/ContextMenu/MoveUp.png"/>
-                    <ImageBrush x:Key="MoveDownBrush" ImageSource="/System.Windows.Controls.Samples;component/ContextMenu/MoveDown.png"/>
-                    <ImageBrush x:Key="DeleteBrush" ImageSource="/System.Windows.Controls.Samples;component/ContextMenu/Delete.png"/>
-                </ListBox.Resources>
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding ShortLocationString}">
-                        <input:ContextMenuService.ContextMenu>
-                            <input:ContextMenu>
-                                <input:MenuItem Header="Move Up" Click="MoveUp_Click">
-                                    <input:MenuItem.Icon>
-                                        <Rectangle Width="16" Height="16" Fill="{StaticResource MoveUpBrush}"/>
-                                    </input:MenuItem.Icon>
-                                </input:MenuItem>
-                                <input:MenuItem Header="Move Down" Click="MoveDown_Click">
-                                    <input:MenuItem.Icon>
-                                        <Rectangle Width="16" Height="16" Fill="{StaticResource MoveDownBrush}"/>
-                                    </input:MenuItem.Icon>
-                                </input:MenuItem>
-                                <input:Separator/>
-                                <input:MenuItem Header="Delete" Click="Delete_Click">
-                                    <input:MenuItem.Icon>
-                                        <Rectangle Width="16" Height="16" Fill="{StaticResource DeleteBrush}"/>
-                                    </input:MenuItem.Icon>
-                                </input:MenuItem>
-                            </input:ContextMenu>
-                        </input:ContextMenuService.ContextMenu>
-                        </TextBlock>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-                <ListBox.ItemContainerStyle>
-                    <Style TargetType="ListBoxItem">
-                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                    </Style>
-                </ListBox.ItemContainerStyle>
+                    <ListBox x:Name="LocationListBox" MinHeight="50">
+                        <ListBox.Resources>
+                            <ImageBrush x:Key="ZoomInBrush" ImageSource="../Assets/Images/Icons/ZoomInIcon.png"/>
+                            <ImageBrush x:Key="MoveUpBrush" ImageSource="../Assets/Images/Icons/UpIcon.png"/>
+                            <ImageBrush x:Key="MoveDownBrush" ImageSource="../Assets/Images/Icons/DownIcon.png"/>
+                            <ImageBrush x:Key="DeleteBrush" ImageSource="../Assets/Images/Icons/DeleteIcon.png"/>
+                        </ListBox.Resources>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding ShortLocationString}">
+                                    <input:ContextMenuService.ContextMenu>
+                                        <input:ContextMenu>
+                                            <input:MenuItem Header="Zoom In" Click="ZoomIn_Click">
+                                                <input:MenuItem.Icon>
+                                                    <Rectangle Width="16" Height="16" Fill="{StaticResource ZoomInBrush}"/>
+                                                </input:MenuItem.Icon>
+                                            </input:MenuItem>
+                                            <input:Separator/>
+                                            <input:MenuItem Header="Move Up" Click="MoveUp_Click">
+                                                <input:MenuItem.Icon>
+                                                    <Rectangle Width="16" Height="16" Fill="{StaticResource MoveUpBrush}"/>
+                                                </input:MenuItem.Icon>
+                                            </input:MenuItem>
+                                            <input:MenuItem Header="Move Down" Click="MoveDown_Click">
+                                                <input:MenuItem.Icon>
+                                                    <Rectangle Width="16" Height="16" Fill="{StaticResource MoveDownBrush}"/>
+                                                </input:MenuItem.Icon>
+                                            </input:MenuItem>
+                                            <input:Separator/>
+                                            <input:MenuItem Header="Delete" Click="Delete_Click">
+                                                <input:MenuItem.Icon>
+                                                    <Rectangle Width="16" Height="16" Fill="{StaticResource DeleteBrush}"/>
+                                                </input:MenuItem.Icon>
+                                            </input:MenuItem>
+                                        </input:ContextMenu>
+                                    </input:ContextMenuService.ContextMenu>
+                                </TextBlock>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
                     </ListBox>
                 </ScrollViewer>
             </StackPanel>
