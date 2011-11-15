@@ -39,12 +39,10 @@
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <Button x:Name="MapButton" Click="MapButton_Click" Grid.Row="0" Grid.Column="0">
-                    <Image Source="../Assets/Images/Icons/MapIcon.png" Stretch="None"/>
-                </Button>
+                <Button x:Name="MapButton" Style="{StaticResource MapButtonStyle}" Click="MapButton_Click" HorizontalAlignment="Right"  VerticalAlignment="Center" Height="105" Margin="0,6,0,10" Width="134" />
                 <TextBlock Text="Map" Grid.Row="0" Grid.Column="1" FontFamily="/USARoadTrip.Silverlight;component/Fonts/Fonts.zip#Viner Hand ITC" FontSize="40" Foreground="{StaticResource LabelLightBrush}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,0,0,0"/>
 
-                <Button x:Name="TripsButton" Click="TripsButton_Click" Grid.Row="1" Style="{StaticResource RoadTripButtonStyle}" HorizontalAlignment="Center"  VerticalAlignment="Center" Height="120" Margin="70,0,0,0" Width="134" />
+                <Button x:Name="TripsButton" Click="TripsButton_Click" Grid.Row="1" Style="{StaticResource MyTripsButtonStyle}" HorizontalAlignment="Right"  VerticalAlignment="Center" Height="109" Margin="0,5,0,6" Width="134" />
                 <TextBlock Text="My trips" Grid.Row="1" Grid.Column="1" FontFamily="/USARoadTrip.Silverlight;component/Fonts/Fonts.zip#Viner Hand ITC" FontSize="40" Foreground="{StaticResource LabelLightBrush}"  HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,0,0,0"/>
             </Grid>
         </Grid>
