@@ -107,6 +107,9 @@
     </Compile>
     <Compile Include="Services\ESRIServices.cs" />
     <Compile Include="Services\RoadTripServices.cs" />
+    <Compile Include="UserControls\TripList.xaml.cs">
+      <DependentUpon>TripList.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\TripWindow.xaml.cs">
       <DependentUpon>TripWindow.xaml</DependentUpon>
     </Compile>
@@ -159,6 +162,10 @@
     <Page Include="Assets\Styles\MapStyles.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControls\TripList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\TripWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -247,6 +254,8 @@
     <Resource Include="Assets\Images\gps.png" />
     <Resource Include="Assets\Images\logo.png" />
     <Resource Include="Assets\Images\Icons\ZoomInIcon.png" />
+    <Resource Include="Assets\Images\Icons\AddIcon.png" />
+    <Resource Include="Assets\Images\Icons\EditIcon.png" />
     <Content Include="ServiceReferences.ClientConfig" />
     <None Include="Service References\WCFServices\RoadTripServices.wsdl" />
     <None Include="Service References\WCFServices\RoadTripServices1.wsdl" />

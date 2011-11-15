@@ -48,12 +48,9 @@ namespace USARoadTrip.Silverlight.Views
             _countiesQueryTask = ESRIServices.GetCountiesQueryTask(CountiesQueryTask_ExecuteCompleted, QueryTask_Failed);
             _statesQueryTask = ESRIServices.GetStatesQueryTask(StatesQueryTask_ExecuteCompleted, QueryTask_Failed);
             _routingTask = ESRIServices.GetRoutingTask(RoutingTask_SolveCompleted, RoutingTask_Failed);
-            
+
             _travelTimer = new DispatcherTimer();
             _travelTimer.Tick += new EventHandler(DrivingLoop);
-
-            StopsLayer.Graphics = MyTripList.Stops;
-            UpdateLoggedState();
         }
 
         private GraphicsLayer CarLayer
@@ -517,6 +514,17 @@ namespace USARoadTrip.Silverlight.Views
                 LoginButton.Visibility = Visibility.Visible;
                 SaveTripButton.Visibility = Visibility.Collapsed;
             }
+        }
+
+        protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
+        {
+            if (e.Uri.ToString().Contains("TripLoaded") && RoadTripGlobals.LoadedTrip != null)
+            {
+                MyTripList.MyTrip = RoadTripGlobals.LoadedTrip;
+            }
+            UpdateLoggedState();
+            StopsLayer.Graphics = MyTripList.Stops;
+            base.OnNavigatedTo(e);
         }
     }
 }

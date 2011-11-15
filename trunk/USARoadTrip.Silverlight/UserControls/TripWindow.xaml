@@ -24,7 +24,7 @@
             <TextBlock Grid.Row="1" Grid.Column="0" x:Name="DescriptionLabel" HorizontalAlignment="Right" Text="Description" Height="23" Margin="5" FontWeight="Bold"/>
             <TextBox Grid.Row="1" Grid.Column="1" x:Name="DescriptionTextBox"  Text="{Binding Mode=TwoWay, Path=Description}" AcceptsReturn="True" TextWrapping="Wrap" Margin="5,5,12,48" Grid.RowSpan="2" />
 
-            <Button Grid.Row="2" Grid.ColumnSpan="2" Content="Create trip" Height="23" x:Name="CreateTripButton" Width="75" Margin="5,5,15,5" Click="CreateTripButton_Click" Grid.Column="1" />
+            <Button Grid.Row="2" Grid.ColumnSpan="2" Height="23" x:Name="SaveTripButton" Width="75" Margin="5,5,15,5" Grid.Column="1" />
         </Grid>
     </controlsToolkit:BusyIndicator>
 </basics:ChildWindow>

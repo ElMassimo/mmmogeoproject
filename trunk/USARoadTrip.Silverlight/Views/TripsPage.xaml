@@ -2,16 +2,22 @@
            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"                 
+           xmlns:MyControls="clr-namespace:USARoadTrip.Silverlight.UserControls"
            mc:Ignorable="d"
            xmlns:navigation="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Navigation"
+           xmlns:controlsToolkit="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Toolkit"
            d:DesignWidth="900" d:DesignHeight="562"
            Title="My Trips - USA Road Trip">
-    <Grid x:Name="LayoutRoot" Background="{StaticResource TripsBackgroundBrush}">
-        <TextBlock x:Name="MainLabel" Text="My trips" FontSize="96" FontFamily="/USARoadTrip.Silverlight;component/Fonts/Fonts.zip#Viner Hand ITC" Height="160" VerticalAlignment="Top" Margin="388,0,138,0" Foreground="#FFFEFA96" >
+    <controlsToolkit:BusyIndicator x:Name="LoadingTripBusyIndicator" IsBusy="False" DisplayAfter="0" BusyContent="Loading trip...">
+        <Grid x:Name="LayoutRoot" Background="{StaticResource TripsBackgroundBrush}">
+            <Image Source="../Assets/Images/logo.png" Opacity="0.8" Margin="12,12,621,402" />
+            <TextBlock x:Name="MainLabel" Text="My trips" FontSize="96" FontFamily="/USARoadTrip.Silverlight;component/Fonts/Fonts.zip#Viner Hand ITC" Height="160" VerticalAlignment="Top" Margin="388,0,138,0" Foreground="#FFFEFA96" >
         	<TextBlock.Effect>
         		<DropShadowEffect BlurRadius="2" ShadowDepth="0"/>
         	</TextBlock.Effect>
-        </TextBlock>
-    </Grid>
+            </TextBlock>
+            <MyControls:TripList x:Name="MyTripsList" Margin="373,116,86,0" TripSelected="MyTripsList_TripSelected" />
+        </Grid>
+    </controlsToolkit:BusyIndicator>
 </navigation:Page>

@@ -1,5 +1,6 @@
 ﻿using System;
 using USARoadTrip.Silverlight.WCFServices;
+using System.ComponentModel;
 
 namespace USARoadTrip.Silverlight.Services
 {
@@ -37,6 +38,20 @@ namespace USARoadTrip.Silverlight.Services
         {
             RoadTripServicesClient client = new RoadTripServicesClient();
             client.UpdateTripCompleted += completedHandler;
+            return client;
+        }
+
+        public static RoadTripServicesClient DeleteTripService(EventHandler<AsyncCompletedEventArgs> completedHandler)
+        {
+            RoadTripServicesClient client = new RoadTripServicesClient();
+            client.DeleteTripCompleted += completedHandler;
+            return client;
+        }
+
+        public static RoadTripServicesClient GetTripDestinations(EventHandler<GetTripDestinationsCompletedEventArgs> completedHandler)
+        {
+            RoadTripServicesClient client = new RoadTripServicesClient();
+            client.GetTripDestinationsCompleted += completedHandler;
             return client;
         }
     }

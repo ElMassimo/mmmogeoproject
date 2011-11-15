@@ -142,6 +142,38 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <Style x:Key="AddButtonStyle" TargetType="Button">
+        <Setter Property="Width" Value="40" />
+        <Setter Property="Height" Value="40" />
+        <Setter Property="Margin" Value="0,0,0,10" />
+        <Setter Property="ContentTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/USARoadTrip.Silverlight;component/Assets/Images/Icons/AddIcon.png"
+							Width="30"
+							Height="30" />
+                    </StackPanel>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="EditButtonStyle" TargetType="Button">
+        <Setter Property="Width" Value="40" />
+        <Setter Property="Height" Value="40" />
+        <Setter Property="Margin" Value="0,0,0,10" />
+        <Setter Property="ContentTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/USARoadTrip.Silverlight;component/Assets/Images/Icons/EditIcon.png"
+							Width="30"
+							Height="30" />
+                    </StackPanel>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
     <Style x:Key="DeleteButtonStyle" TargetType="Button">
         <Setter Property="Width" Value="40" />
         <Setter Property="Height" Value="40" />
@@ -183,6 +215,22 @@
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/USARoadTrip.Silverlight;component/Assets/Images/Icons/UpIcon.png"
+							Width="30"
+							Height="30" />
+                    </StackPanel>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="ZoomInButtonStyle" TargetType="Button">
+        <Setter Property="Width" Value="40" />
+        <Setter Property="Height" Value="40" />
+        <Setter Property="Margin" Value="0,0,0,10" />
+        <Setter Property="ContentTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/USARoadTrip.Silverlight;component/Assets/Images/Icons/ZoomInIcon.png"
 							Width="30"
 							Height="30" />
                     </StackPanel>

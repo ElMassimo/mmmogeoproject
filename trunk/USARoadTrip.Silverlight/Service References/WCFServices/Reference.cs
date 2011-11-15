@@ -275,7 +275,7 @@ namespace USARoadTrip.Silverlight.WCFServices {
         bool EndUpdateTrip(System.IAsyncResult result);
         
         [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/IRoadTripServices/GetTripDestinations", ReplyAction="http://tempuri.org/IRoadTripServices/GetTripDestinationsResponse")]
-        System.IAsyncResult BeginGetTripDestinations(int tripId, System.AsyncCallback callback, object asyncState);
+        System.IAsyncResult BeginGetTripDestinations(string userNick, string tripName, System.AsyncCallback callback, object asyncState);
         
         System.Collections.Generic.List<USARoadTrip.Silverlight.WCFServices.Location> EndGetTripDestinations(System.IAsyncResult result);
         
@@ -670,8 +670,8 @@ namespace USARoadTrip.Silverlight.WCFServices {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult USARoadTrip.Silverlight.WCFServices.IRoadTripServices.BeginGetTripDestinations(int tripId, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginGetTripDestinations(tripId, callback, asyncState);
+        System.IAsyncResult USARoadTrip.Silverlight.WCFServices.IRoadTripServices.BeginGetTripDestinations(string userNick, string tripName, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginGetTripDestinations(userNick, tripName, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
@@ -680,8 +680,9 @@ namespace USARoadTrip.Silverlight.WCFServices {
         }
         
         private System.IAsyncResult OnBeginGetTripDestinations(object[] inValues, System.AsyncCallback callback, object asyncState) {
-            int tripId = ((int)(inValues[0]));
-            return ((USARoadTrip.Silverlight.WCFServices.IRoadTripServices)(this)).BeginGetTripDestinations(tripId, callback, asyncState);
+            string userNick = ((string)(inValues[0]));
+            string tripName = ((string)(inValues[1]));
+            return ((USARoadTrip.Silverlight.WCFServices.IRoadTripServices)(this)).BeginGetTripDestinations(userNick, tripName, callback, asyncState);
         }
         
         private object[] OnEndGetTripDestinations(System.IAsyncResult result) {
@@ -697,11 +698,11 @@ namespace USARoadTrip.Silverlight.WCFServices {
             }
         }
         
-        public void GetTripDestinationsAsync(int tripId) {
-            this.GetTripDestinationsAsync(tripId, null);
+        public void GetTripDestinationsAsync(string userNick, string tripName) {
+            this.GetTripDestinationsAsync(userNick, tripName, null);
         }
         
-        public void GetTripDestinationsAsync(int tripId, object userState) {
+        public void GetTripDestinationsAsync(string userNick, string tripName, object userState) {
             if ((this.onBeginGetTripDestinationsDelegate == null)) {
                 this.onBeginGetTripDestinationsDelegate = new BeginOperationDelegate(this.OnBeginGetTripDestinations);
             }
@@ -712,7 +713,8 @@ namespace USARoadTrip.Silverlight.WCFServices {
                 this.onGetTripDestinationsCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGetTripDestinationsCompleted);
             }
             base.InvokeAsync(this.onBeginGetTripDestinationsDelegate, new object[] {
-                        tripId}, this.onEndGetTripDestinationsDelegate, this.onGetTripDestinationsCompletedDelegate, userState);
+                        userNick,
+                        tripName}, this.onEndGetTripDestinationsDelegate, this.onGetTripDestinationsCompletedDelegate, userState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
@@ -970,9 +972,10 @@ namespace USARoadTrip.Silverlight.WCFServices {
                 return _result;
             }
             
-            public System.IAsyncResult BeginGetTripDestinations(int tripId, System.AsyncCallback callback, object asyncState) {
-                object[] _args = new object[1];
-                _args[0] = tripId;
+            public System.IAsyncResult BeginGetTripDestinations(string userNick, string tripName, System.AsyncCallback callback, object asyncState) {
+                object[] _args = new object[2];
+                _args[0] = userNick;
+                _args[1] = tripName;
                 System.IAsyncResult _result = base.BeginInvoke("GetTripDestinations", _args, callback, asyncState);
                 return _result;
             }

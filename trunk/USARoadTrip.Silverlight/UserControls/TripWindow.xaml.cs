@@ -34,6 +34,17 @@ namespace USARoadTrip.Silverlight.UserControls
         {
             InitializeComponent();
             LayoutRoot.DataContext = MyTrip;
+            SaveTripButton.Content = "Create trip";
+            SaveTripButton.Click += CreateTripButton_Click;
+        }
+
+        public TripWindow(Trip trip)
+        {
+            InitializeComponent();
+            MyTrip = trip;
+            SaveTripButton.Content = "Edit trip";
+            SaveTripButton.Click += EditTripButton_Click;
+            NameTextBox.IsEnabled = false;
         }
 
         private void CreateTripButton_Click(object sender, RoutedEventArgs e)
@@ -59,6 +70,33 @@ namespace USARoadTrip.Silverlight.UserControls
             else
             {
                 MessageBox.Show("Trip created succesfully!", "Create trip", MessageBoxButton.OK);            
+                this.DialogResult = true;
+            }
+        }
+
+        private void EditTripButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (String.IsNullOrWhiteSpace(_trip.Name) || String.IsNullOrWhiteSpace(_trip.Description))
+                MessageBox.Show("Please enter the trip description", "Edit trip", MessageBoxButton.OK);
+            else
+            {
+                BusyIndicator.IsBusy = true;
+                _trip.UserNick = RoadTripGlobals.UserId;
+                RoadTripServices.UpdateTripService(EditTrip_Completed).UpdateTripAsync(_trip);
+            }
+        }
+
+        private void EditTrip_Completed(object sender, UpdateTripCompletedEventArgs e)
+        {
+            BusyIndicator.IsBusy = false;
+
+            if (e.Error != null)
+                GuiUtils.ShowConnectionErrorMessage();
+            else if (!e.Result)
+                MessageBox.Show("There was an error while updating the trips's description.", "Edit trip", MessageBoxButton.OK);
+            else
+            {
+                MessageBox.Show("Trip updated succesfully!", "Edit trip", MessageBoxButton.OK);
                 this.DialogResult = true;
             }
         }

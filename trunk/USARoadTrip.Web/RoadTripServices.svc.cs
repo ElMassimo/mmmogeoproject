@@ -30,9 +30,9 @@ namespace USARoadTrip.Web
             return _tripServices.Update(tripModel);
         }
         
-        public IList<Location> GetTripDestinations(int tripId)
+        public IList<Location> GetTripDestinations(string userNick, string tripName)
         {
-            return _tripServices.GetTripDestinations(tripId);
+            return _tripServices.GetTripDestinations(userNick, tripName);
         }
         #endregion
 
