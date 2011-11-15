@@ -196,6 +196,7 @@ namespace USARoadTrip.Silverlight.Views
             {
                 _travelTimer.Stop();
                 BeginTravelButton.Content = "Begin travel";
+                FindRouteButton.IsEnabled = true;
             }
             else
             {
@@ -207,6 +208,7 @@ namespace USARoadTrip.Silverlight.Views
                 _travelTimer.Interval = TimeSpan.FromMilliseconds(TIMER_MILLISECONDS);
                 _travelTimer.Start();
                 BeginTravelButton.Content = "Stop travel";
+                FindRouteButton.IsEnabled = false;
             }
         }
         #endregion
@@ -456,6 +458,7 @@ namespace USARoadTrip.Silverlight.Views
             ClearRoadGraphics();
             BeginTravelButton.Content = "Begin travel";
             BeginTravelButton.IsEnabled = false;
+            FindRouteButton.IsEnabled = true;
         }
     
 
@@ -525,6 +528,11 @@ namespace USARoadTrip.Silverlight.Views
             UpdateLoggedState();
             StopsLayer.Graphics = MyTripList.Stops;
             base.OnNavigatedTo(e);
+        }
+        
+        private void GoBackButton_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.GoBack();
         }
     }
 }

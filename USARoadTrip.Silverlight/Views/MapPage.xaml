@@ -181,5 +181,6 @@
             </StackPanel>
         </controlsToolkit:BusyIndicator>
         <Button x:Name="ShowTripButton" Visibility="Collapsed" Content="Show My Trip" Click="ShowTripButton_Click" Margin="788,515,0,0" />
+        <Button Content="Go back" Name="GoBackButton" Style="{StaticResource GoBackButtonStyle}" Click="GoBackButton_Click" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10"/>
     </Grid>
 </navigation:Page>

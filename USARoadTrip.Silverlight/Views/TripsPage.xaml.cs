@@ -44,5 +44,10 @@ namespace USARoadTrip.Silverlight.Views
                 NavigationService.Navigate(new Uri("/Views/MapPage.xaml?TripLoaded", UriKind.Relative));
             }
         }
+
+        private void GoBackButton_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.GoBack();
+        }
     }
 }

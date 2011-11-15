@@ -18,6 +18,8 @@
         	</TextBlock.Effect>
             </TextBlock>
             <MyControls:TripList x:Name="MyTripsList" Margin="373,116,86,0" TripSelected="MyTripsList_TripSelected" />
+            <Button Content="Go back" Name="GoBackButton" Style="{StaticResource GoBackButtonStyle}" Click="GoBackButton_Click" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10"/>
         </Grid>
+
     </controlsToolkit:BusyIndicator>
 </navigation:Page>
