@@ -13,6 +13,20 @@ namespace USARoadTrip.Silverlight.Utility
             return userInfoWindow;
         }
 
+        public static LoginWindow GetLoginWindow(EventHandler closedHandler)
+        {
+            LoginWindow userInfoWindow = new LoginWindow();
+            userInfoWindow.Closed += closedHandler;
+            return userInfoWindow;
+        }
+
+        public static TripWindow GetTripWindow(EventHandler closedHandler)
+        {
+            TripWindow tripWindow = new TripWindow();
+            tripWindow.Closed += closedHandler;
+            return tripWindow;
+        }
+
         public static Visibility BooleanToVisibility(bool visible)
         {
             return visible ? Visibility.Visible : Visibility.Collapsed;

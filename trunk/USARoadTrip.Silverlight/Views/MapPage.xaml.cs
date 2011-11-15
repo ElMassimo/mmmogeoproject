@@ -1,40 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Shapes;
-using System.Windows.Navigation;
+using System.Windows.Threading;
 using ESRI.ArcGIS.Client;
-using ESRI.ArcGIS.Client.Tasks;
 using ESRI.ArcGIS.Client.Geometry;
-using USARoadTrip.Silverlight.Services;
 using ESRI.ArcGIS.Client.Symbols;
+using ESRI.ArcGIS.Client.Tasks;
 using USARoadTrip.Silverlight.Mock;
 using USARoadTrip.Silverlight.Models;
-using Polygon = ESRI.ArcGIS.Client.Geometry.Polygon;
-using Polyline = ESRI.ArcGIS.Client.Geometry.Polyline;
-using System.Threading;
-using System.ComponentModel;
-using System.Windows.Threading;
+using USARoadTrip.Silverlight.Services;
 using USARoadTrip.Silverlight.Utility;
 using USARoadTrip.Silverlight.ViewModels;
-using System.Collections.ObjectModel;
+using Polyline = ESRI.ArcGIS.Client.Geometry.Polyline;
+using USARoadTrip.Silverlight.UserControls;
 
 namespace USARoadTrip.Silverlight.Views
 {
     public partial class MapPage : Page
     {
+        private const int BUFFER_DISTANCE = 20;
         private const int TIMER_MILLISECONDS = 3000;
         private DispatcherTimer _travelTimer;
         private MapPoint _lastPoint;
         private Car _car;
         private Road _road;
+        private PointCollection _lastRoadSection;
+        private double _lastSectionSpeed;
+        private LocationViewModel _lastLocation;
         private State _currentState = new State();
-        private GraphicCollection _stops = new GraphicCollection();
 
         #region Services
         private Locator _usaStreetsLocatorTask;
@@ -58,7 +52,8 @@ namespace USARoadTrip.Silverlight.Views
             _travelTimer = new DispatcherTimer();
             _travelTimer.Tick += new EventHandler(DrivingLoop);
 
-            StopsLayer.Graphics = _stops;
+            StopsLayer.Graphics = MyTripList.Stops;
+            UpdateLoggedState();
         }
 
         private GraphicsLayer CarLayer
@@ -81,9 +76,9 @@ namespace USARoadTrip.Silverlight.Views
         {
             get { return GetLayer("GPS"); }
         }
-        private GraphicsLayer CountiesLayer
+        private FeatureLayer CountiesLayer
         {
-            get { return GetLayer("Counties"); }
+            get { return GetLayer("Counties") as FeatureLayer; }
         }
         #endregion
 
@@ -112,8 +107,14 @@ namespace USARoadTrip.Silverlight.Views
             CarLayer.Graphics.Add(carMarker);
         }
 
-        private void ShowRoadSection(PointCollection roadSection, double sectionSpeed)
+        private void ShowRoadSection()
         {
+            if (_lastRoadSection == null)
+                return;
+
+            PointCollection roadSection = _lastRoadSection;
+            double sectionSpeed = _lastSectionSpeed;
+
             Polyline lastRouteSection = new Polyline();
             lastRouteSection.Paths.Add(roadSection);
 
@@ -123,7 +124,6 @@ namespace USARoadTrip.Silverlight.Views
             road.Attributes["DISTANCE"] = roadSection.GetTotalDistance().ToString("#0.0 km");
             road.Geometry = lastRouteSection;
             road.Geometry.SpatialReference = MyMap.SpatialReference;
-
             TravelLayer.Graphics.Add(road);
 
             Graphic gpsMarker = new Graphic();
@@ -137,7 +137,7 @@ namespace USARoadTrip.Silverlight.Views
         private void ShowCounties()
         {
             CountiesLayer.ClearGraphics();
-            if(_currentState.Counties != null)
+            if (_currentState.Counties != null)
                 foreach (Graphic selectedGraphic in _currentState.Counties)
                     CountiesLayer.Graphics.Add(selectedGraphic);
         }
@@ -149,6 +149,7 @@ namespace USARoadTrip.Silverlight.Views
             _road = new Road(route);
             _car = new Car(_currentState.Name, _road.StartLocation);
             ShowCar();
+            BeginTravelButton.IsEnabled = true;
         }
 
         private void DrivingLoop(object sender, EventArgs e)
@@ -174,11 +175,17 @@ namespace USARoadTrip.Silverlight.Views
             _car.NextLocation = _lastPoint;
 
             ShowCar();
-            ShowRoadSection(routeSection, sectionSpeed);
+            ShowRoadSection();
             ShowCounties();
 
+            _lastRoadSection = routeSection;
+            _lastSectionSpeed = sectionSpeed;
+
             if (routeSection[0] == _lastPoint)
+            {
                 _travelTimer.Stop();
+                BeginTravelButton.Content = "Begin travel";
+            }
             else
             {
                 ExecuteStateQuery(_car.NextLocation);
@@ -188,33 +195,34 @@ namespace USARoadTrip.Silverlight.Views
 
         private void BeginTravel_Click(object sender, RoutedEventArgs e)
         {
-            TravelLayer.ClearGraphics();
-            _road.GoToStart();            
-            _lastPoint = _road.StartLocation;
-            _car.CurrentLocation = _road.StartLocation;
-            _travelTimer.Interval = TimeSpan.FromMilliseconds(TIMER_MILLISECONDS);
-            _travelTimer.Start();
-        }
-
-        private void StopTravel_Click(object sender, RoutedEventArgs e)
-        {
-            _travelTimer.Stop();
-        }
-        #endregion
-        
-        private void LocationList_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            int index = (sender as ListBox).SelectedIndex;
-            if (index >= 0)
+            if (_travelTimer.IsEnabled)
             {
-                MapPoint location = StopsLayer.Graphics[index].Geometry as MapPoint;
-                double displaySize = MyMap.MinimumResolution * 30;
-                Envelope displayExtent = RoadUtils.GetCenteredEnvelope(location, displaySize);
-                MyMap.ZoomTo(displayExtent);
+                _travelTimer.Stop();
+                BeginTravelButton.Content = "Begin travel";
+            }
+            else
+            {
+                StopSimulation();
+                TravelLayer.ClearGraphics();
+
+                ExecuteStateQuery(_road.StartLocation);
+                ExecuteCountiesQuery(_road.StartLocation);
+                _travelTimer.Interval = TimeSpan.FromMilliseconds(TIMER_MILLISECONDS);
+                _travelTimer.Start();
+                BeginTravelButton.Content = "Stop travel";
             }
         }
+        #endregion
 
-        private void MyMap_MouseClick(object sender, ESRI.ArcGIS.Client.Map.MouseEventArgs e)
+        private void LocationList_ListItemSelected(object sender, ListItemSelectedEventArgs e)
+        {
+            MapPoint location = e.SelectedItem.Point;
+            double displaySize = MyMap.MinimumResolution * 300000;
+            Envelope displayExtent = RoadUtils.GetCenteredEnvelope(location, displaySize);
+            MyMap.ZoomTo(displayExtent);
+        }
+
+        private void MyMap_MouseClick(object sender, Map.MouseEventArgs e)
         {
         }
 
@@ -225,14 +233,13 @@ namespace USARoadTrip.Silverlight.Views
             _countiesQueryTask.CancelAsync();
 
             Graphic marker = new Graphic();
-            marker.Symbol = GetSymbol("DefaultMarkerSymbol");
             marker.Geometry = mapPoint;
             marker.Geometry.SpatialReference = MyMap.SpatialReference;
 
             BufferParameters bufferParams = new BufferParameters()
             {
                 Unit = LinearUnit.Kilometer,
-                Distances = { 20 },
+                Distances = { BUFFER_DISTANCE },
                 BufferSpatialReference = new SpatialReference(4326),
                 OutSpatialReference = MyMap.SpatialReference,
                 Features = { marker }
@@ -247,10 +254,9 @@ namespace USARoadTrip.Silverlight.Views
             //bufferGraphic.Geometry = args.Results[0].Geometry;
             //bufferGraphic.Symbol = GetSymbol("BufferSymbol");
             //bufferGraphic.SetZIndex(1);
-
             //GPSLayer.Graphics.Add(bufferGraphic);
 
-            ESRI.ArcGIS.Client.Tasks.Query query = new ESRI.ArcGIS.Client.Tasks.Query();
+            Query query = new Query();
             query.ReturnGeometry = true;
             query.OutSpatialReference = MyMap.SpatialReference;
             query.Geometry = args.Results[0].Geometry;
@@ -305,16 +311,16 @@ namespace USARoadTrip.Silverlight.Views
         #region Geocoding
         private void AddLocation(MapPoint mapPoint)
         {
-            Graphic stop = new Graphic() { Geometry = mapPoint, Symbol = GetSymbol("StopSymbol") };
-            stop.Attributes.Add("StopNumber", _stops.Count + 1);
+            if (_lastLocation == null)
+                return;
 
-            _stops.Add(stop);
+            _lastLocation.Point = mapPoint;
+            MyTripList.AddLocation(_lastLocation);
+        }
 
-            if (_stops.Count == 1)
-            {
-                ExecuteStateQuery(mapPoint);
-                ExecuteCountiesQuery(mapPoint);
-            }
+        private void AddMockAddresses_Click(object sender, RoutedEventArgs e)
+        {
+            AddressPanel.DataContext = MockGenerator.GetMockAddress();
         }
 
         private void AddAddressButton_Click(object sender, RoutedEventArgs e)
@@ -324,26 +330,15 @@ namespace USARoadTrip.Silverlight.Views
 
             LocationViewModel address = AddressPanel.DataContext as LocationViewModel;
 
-            MyTripList.Locations.Add(address);
-
-            if (address.ToKeyValue(addressParams.Address).Count > 0)
+            if (address.IsValid)
             {
-                AddAddressButton.IsEnabled = false;
+                address.ToKeyValue(addressParams.Address);
+                AddingLocationBusyIndicator.IsBusy = true;
+                _lastLocation = address;
                 _usaStreetsLocatorTask.AddressToLocationsAsync(addressParams);
             }
             else
-                MessageBox.Show("Please enter a valid address");            
-        }
-
-        private void AddMockAddresses_Click(object sender, RoutedEventArgs e)
-        {
-            AddressPanel.DataContext = MockGenerator.GetMockAddress();
-        }
-
-        private void ClearAddresses_Click(object sender, RoutedEventArgs e)
-        {
-            StopsLayer.ClearGraphics();
-            _stops.Clear();
+                MessageBox.Show("Please fill the address, city, and state");   
         }
 
         private void UsaStreetsLocatorTask_AddressToLocationsCompleted(object sender, ESRI.ArcGIS.Client.Tasks.AddressToLocationsEventArgs args)
@@ -370,12 +365,12 @@ namespace USARoadTrip.Silverlight.Views
             else
                 MessageBox.Show("There are no locations that match the specified address.");
 
-            AddAddressButton.IsEnabled = true;
+            AddingLocationBusyIndicator.IsBusy = false;
         }
 
         private void LocatorTask_Failed(object sender, TaskFailedEventArgs e)
         {
-            AddAddressButton.IsEnabled = true;
+            AddingLocationBusyIndicator.IsBusy = false;
             MessageBox.Show("Locator service failed: " + e.Error);
         }
         #endregion
@@ -383,8 +378,13 @@ namespace USARoadTrip.Silverlight.Views
         #region Routing
         private void FindRouteButton_Click(object sender, RoutedEventArgs e)
         {
-            FindRouteButton.IsEnabled = false;
-            _routingTask.SolveAsync(new RouteParameters() { Stops = StopsLayer, UseTimeWindows = false, OutSpatialReference = MyMap.SpatialReference });
+            if (StopsLayer.Graphics.Count > 1)
+            {
+                MenuBusyIndicator.IsBusy = true;
+                _routingTask.SolveAsync(new RouteParameters() { Stops = StopsLayer, UseTimeWindows = false, OutSpatialReference = MyMap.SpatialReference });
+            }
+            else
+                MessageBox.Show("You must select at least two locations to find a route");
         }
 
         private void RoutingTask_SolveCompleted(object sender, RouteEventArgs e)
@@ -406,14 +406,116 @@ namespace USARoadTrip.Silverlight.Views
 
             RoadLayer.Graphics.Add(lastRoute);
             MessageBox.Show("Routing completed: travel safely!");
-            FindRouteButton.IsEnabled = true;
+            MenuBusyIndicator.IsBusy = false;
         }
 
         private void RoutingTask_Failed(object sender, TaskFailedEventArgs e)
         {
-            FindRouteButton.IsEnabled = true;
+            MenuBusyIndicator.IsBusy = false;
             MessageBox.Show("Routing task failed: " + e.Error);
         }
         #endregion
+
+        private void OpenAddressDialogButton_Click(object sender, RoutedEventArgs e)
+        {
+            AddressPanel.DataContext = new LocationViewModel();
+            NewLocationDialog.Visibility = Visibility.Visible;
+        }
+
+        private void CloseAddressDialogButton_Click(object sender, RoutedEventArgs e)
+        {
+            NewLocationDialog.Visibility = Visibility.Collapsed;
+        }
+
+        private void StopSimulation()
+        {
+            _travelTimer.Stop();
+            _routingTask.CancelAsync();
+            _countiesQueryTask.CancelAsync();
+            _geometryService.CancelAsync();
+            _statesQueryTask.CancelAsync();
+
+            if (_road != null)
+            {
+                _road.GoToStart();
+                _lastPoint = _road.StartLocation;
+                _car.CurrentLocation = _road.StartLocation;
+                _lastRoadSection = null;
+            }
+        }
+
+        private void ClearRoadGraphics()
+        {
+            RoadLayer.ClearGraphics();
+            TravelLayer.ClearGraphics();
+            CarLayer.ClearGraphics();
+            CountiesLayer.ClearGraphics();
+            GPSLayer.ClearGraphics();
+        }
+
+        private void Reset()
+        {
+            StopSimulation();
+            ClearRoadGraphics();
+            BeginTravelButton.IsEnabled = false;
+        }
+    
+
+        private void StopTravel_Click(object sender, RoutedEventArgs e)
+        {
+            StopSimulation();
+        }
+
+        private void ResetButton_Click(object sender, RoutedEventArgs e)
+        {
+            Reset();
+        }
+
+        private void ShowTripButton_Click(object sender, RoutedEventArgs e)
+        {
+            TripStackPanel.Visibility = Visibility.Visible;
+            ShowTripButton.Visibility = Visibility.Collapsed;
+        }
+
+        private void HideTripLink_Click(object sender, RoutedEventArgs e)
+        {
+            TripStackPanel.Visibility = Visibility.Collapsed;
+            ShowTripButton.Visibility = Visibility.Visible;
+        }
+
+        private void SaveTripButton_Click(object sender, RoutedEventArgs e)
+        {
+            MyTripList.SaveLocations(TripBusyIndicator);
+        }
+
+        private void LoginButton_Click(object sender, RoutedEventArgs e)
+        {
+            GuiUtils.GetLoginWindow(LoginWindow_Closed).Show();
+        }
+
+        private void LoginWindow_Closed(object sender, EventArgs e)
+        {
+            LoginWindow window = sender as LoginWindow;
+
+            if (window.DialogResult ?? false)
+            {
+                MessageBox.Show("Login succesful!", "Login", MessageBoxButton.OK);
+                UpdateLoggedState();
+            }
+        }
+
+        private void UpdateLoggedState()
+        {
+            if (RoadTripGlobals.IsUserLogged)
+            {
+                LoginButton.Visibility = Visibility.Collapsed;
+                SaveTripButton.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                LoginButton.Visibility = Visibility.Visible;
+                SaveTripButton.Visibility = Visibility.Collapsed;
+            }
+        }
     }
 }

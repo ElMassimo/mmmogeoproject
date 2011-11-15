@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, and Azure
 -- --------------------------------------------------
--- Date Created: 11/09/2011 06:52:44
+-- Date Created: 11/15/2011 07:25:38
 -- Generated from EDMX file: D:\SIG\Obligatorio2\SIGTest\USARoadTrip.Api\EntityModels\USARoadTripDataModel.edmx
 -- --------------------------------------------------
 
@@ -64,11 +64,13 @@ GO
 -- Creating table 'Addresses'
 CREATE TABLE [dbo].[Addresses] (
     [Id] int IDENTITY(1,1) NOT NULL,
-    [Address] nvarchar(75)  NOT NULL,
-    [City] nvarchar(50)  NOT NULL,
-    [State] nchar(2)  NOT NULL,
-    [Zip] nvarchar(10)  NOT NULL,
-    [TripOrder] int  NULL,
+    [Address] nvarchar(75)  NULL,
+    [City] nvarchar(50)  NULL,
+    [State] nchar(2)  NULL,
+    [Zip] nvarchar(10)  NULL,
+    [TripOrder] int  NOT NULL,
+    [X] float  NOT NULL,
+    [Y] float  NOT NULL,
     [TripDestinations_Location_Id] int  NOT NULL
 );
 GO

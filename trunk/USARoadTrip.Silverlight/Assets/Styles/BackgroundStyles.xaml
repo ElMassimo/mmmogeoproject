@@ -3,5 +3,11 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 	<ImageBrush x:Key="HomeBackgroundBrush" ImageSource="../Images/Background/welcome.jpg"/>
     <ImageBrush x:Key="TripsBackgroundBrush" ImageSource="../Images/Background/mytrips.jpg"/>
+    <ImageBrush x:Key="IconUpBrush" ImageSource="../Images/Icons/UpIcon.png"/>
+    <ImageBrush x:Key="IconDownBrush" ImageSource="../Images/Icons/DownIcon.png"/>
+    <ImageBrush x:Key="IconDeleteBrush" ImageSource="../Images/Icons/DeleteIcon.png"/>
+    <ImageBrush x:Key="IconSaveBrush" ImageSource="../Images/Icons/SaveIcon.png"/>
+    <ImageBrush x:Key="IconMapBrush" ImageSource="../Images/Icons/MapIcon.png"/>
+    <ImageBrush x:Key="IconMyTripsBrush" ImageSource="../Images/Icons/MyTripsIcon.png"/>
 	<!-- Se deben establecer aquí las entradas del diccionario de recursos. -->
 </ResourceDictionary>

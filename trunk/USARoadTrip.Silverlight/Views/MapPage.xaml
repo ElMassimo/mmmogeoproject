@@ -5,10 +5,11 @@
            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
            xmlns:esri="http://schemas.esri.com/arcgis/client/2009" 
            xmlns:navigation="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Navigation"
+           xmlns:controlsToolkit="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Toolkit"
            xmlns:ViewModels="clr-namespace:USARoadTrip.Silverlight.ViewModels"   
            xmlns:MyControls="clr-namespace:USARoadTrip.Silverlight.UserControls"
            x:Class="USARoadTrip.Silverlight.Views.MapPage"
-           mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
+           mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="562"
            Title="Road Map">
     <Grid x:Name="LayoutRoot" Background="White">
         <Grid.Resources>
@@ -42,6 +43,7 @@
                     <esri:ClassBreakInfo Label="You are driving too fast!" MinimumValue="130" MaximumValue="250" Symbol="{StaticResource TooFastSectionSymbol}" />
                 </esri:ClassBreaksRenderer.Classes>
             </esri:ClassBreaksRenderer>
+            <esri:SimpleRenderer x:Key="StopRenderer" Symbol="{StaticResource StopSymbol}"/>
             <esri:SimpleRenderer x:Key="RoadRenderer">
                 <esri:SimpleRenderer.Symbol>
                     <esri:SimpleLineSymbol Color="#C0005AFF" Width="4" />
@@ -72,16 +74,18 @@
                 Url="http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer" />
             <esri:FeatureLayer ID="StatesLayer" Renderer="{StaticResource StateRenderer}"
                 Url="http://server.arcgisonline.com/ArcGIS/rest/services/Demographics/USA_1990-2000_Population_Change/MapServer/4" />
-            <esri:GraphicsLayer ID="CountiesLayer" Renderer="{StaticResource CountyRenderer}">
-                <esri:GraphicsLayer.MapTip>
+            <esri:FeatureLayer ID="CountiesLayer" Renderer="{StaticResource CountyRenderer}" Mode="SelectionOnly"
+                Url="http://server.arcgisonline.com/ArcGIS/rest/services/Demographics/USA_1990-2000_Population_Change/MapServer/3"
+                OutFields="NAME">
+                <esri:FeatureLayer.MapTip>
                     <Border BorderBrush="DarkGray" Background="Azure" CornerRadius="3" BorderThickness="1" Padding="3">
                         <StackPanel Orientation="Vertical">
                             <TextBlock Text="Name:" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Center" />
                             <TextBlock Text="{Binding [NAME]}" HorizontalAlignment="Left" VerticalAlignment="Center" />
                         </StackPanel>
                     </Border>
-                </esri:GraphicsLayer.MapTip>
-            </esri:GraphicsLayer>
+                </esri:FeatureLayer.MapTip>
+            </esri:FeatureLayer>
             <esri:GraphicsLayer ID="RoadLayer" Renderer="{StaticResource RoadRenderer}">
                 <esri:GraphicsLayer.MapTip>
                     <Border BorderBrush="DarkGray" Background="Azure" CornerRadius="3" BorderThickness="1" Padding="3">
@@ -107,80 +111,75 @@
                 </esri:GraphicsLayer.MapTip>
             </esri:GraphicsLayer>
             <esri:GraphicsLayer ID="GPSLayer" MaximumResolution="170" />
-            <esri:GraphicsLayer ID="StopsLayer" />
+            <esri:GraphicsLayer ID="StopsLayer" Renderer="{StaticResource StopRenderer}"/>
             <esri:GraphicsLayer ID="CarLayer" />
         </esri:Map>
 
-        <!--Panel con lista de capas-->
-        <Border Background="#77919191" BorderThickness="1" CornerRadius="5"
-            HorizontalAlignment="Right"  VerticalAlignment="Top"
-            Margin="20" Padding="5" BorderBrush="Black" >
-            <ListBox x:Name="MyList" ItemsSource="{Binding Layers, ElementName=MyMap}">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <!--Layer visibility checkbox-->
-                            <CheckBox IsChecked="{Binding Visible, Mode=TwoWay}" />
-                            <!--Opacity slider-->
-                            <Slider Margin="-5,0,0,0" Minimum="0" Maximum="1" Width="30" 
-                                Value="{Binding Opacity, Mode=TwoWay}" Height="18" />
-                            <!--Layer name-->
-                            <TextBlock Text="{Binding ID, Mode=OneWay}" Margin="5,0,0,0" > 
-                            <!-- Tooltip on hover-->
-                                <ToolTipService.ToolTip>
-                                    <StackPanel MaxWidth="400">
-                                        <TextBlock FontWeight="Bold" Text="{Binding CopyrightText}" TextWrapping="Wrap" />
-                                        <TextBlock Text="{Binding Description}" TextWrapping="Wrap" />
-                                    </StackPanel>
-                                </ToolTipService.ToolTip>
-                            </TextBlock>
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-        </Border>
+        <Image Source="../Assets/Images/logo.png" Opacity="0.5" Margin="12,12,728,467" />
 
-        <Grid HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,210,20,0">
-            <Rectangle Fill="#DDFFFFFF" Stroke="DarkGray" RadiusX="5" RadiusY="5" Margin="10,10,10,15" />
-            <StackPanel Name="AddressPanel" Orientation="Vertical" HorizontalAlignment="Center" Margin="30,20,30,30">
-                <StackPanel.DataContext>
-                    <ViewModels:LocationViewModel/>
-                </StackPanel.DataContext>
-                <TextBlock Text="Enter Address Information" FontWeight="Bold" HorizontalAlignment="Center" />
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" >
-                    <TextBlock Text="Address: " Width="80" TextAlignment="Right" />
-                    <TextBox x:Name="InputAddress" Text="{Binding Mode=TwoWay, Path=Address}" Width="125" />
+        <controlsToolkit:BusyIndicator x:Name="AddingLocationBusyIndicator" IsBusy="False" DisplayAfter="0" BusyContent="Please wait...">
+            <Grid x:Name="NewLocationDialog" Visibility="Collapsed" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,143,275,0">
+                <Rectangle Fill="#DDFFFFFF" Stroke="DarkGray" RadiusX="5" RadiusY="5" Margin="10,10,10,15" />
+                <StackPanel Name="AddressPanel" Orientation="Vertical" HorizontalAlignment="Center" Margin="30,20,30,30">
+                    <StackPanel.DataContext>
+                        <ViewModels:LocationViewModel/>
+                    </StackPanel.DataContext>
+                    <TextBlock Text="Enter Address Information" FontWeight="Bold" HorizontalAlignment="Center" Margin="5,10,5,10"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="5,5,5,5">
+                        <TextBlock Text="Address: " Width="80" TextAlignment="Right" Margin="0,0,5,0"/>
+                        <TextBox x:Name="InputAddress" Text="{Binding Mode=TwoWay, Path=Address}" Width="183" Margin="5,0,0,0"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="5,5,5,5">
+                        <TextBlock Text="City: " Width="80" TextAlignment="Right" Margin="0,0,5,0"/>
+                        <TextBox x:Name="City" Text="{Binding Mode=TwoWay, Path=City}" Width="183" Margin="5,0,0,0"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="5,5,5,5">
+                        <TextBlock Text="State: " Width="80" TextAlignment="Right" Margin="0,0,5,0"/>
+                        <TextBox x:Name="State" Text="{Binding Mode=TwoWay, Path=State}" Width="73" Margin="5,0,0,0" MaxLength="2"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="5,5,5,5">
+                        <TextBlock Text="Zip: " Width="80" TextAlignment="Right" Margin="0,0,5,0"/>
+                        <TextBox x:Name="Zip" Text="{Binding Mode=TwoWay, Path=Zip}" Width="73" Margin="5,0,0,0"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="10,10,10,10">
+                        <Button x:Name="AddAddressButton" Content="Add" Width="81"  Margin="5,5,5,5" Click="AddAddressButton_Click" />
+                        <Button x:Name="AddMockAddressesButton" Content="Mock" Width="81" Margin="5,5,5,5" Click="AddMockAddresses_Click" />
+                        <Button x:Name="CloseAddressDialogButton" Content="Close" Width="81" Margin="5,5,5,5" Click="CloseAddressDialogButton_Click" />
+                    </StackPanel>
+                    <Rectangle Stroke="Gray" RadiusX="10" RadiusY="10" Fill="#77919191">
+                        <Rectangle.Effect>
+                            <DropShadowEffect />
+                        </Rectangle.Effect>
+                    </Rectangle>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" >
-                    <TextBlock Text="City: " Width="80" TextAlignment="Right" />
-                    <TextBox x:Name="City" Text="{Binding Mode=TwoWay, Path=City}" Width="125"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" >
-                    <TextBlock Text="State: " Width="80" TextAlignment="Right"/>
-                    <TextBox x:Name="State" Text="{Binding Mode=TwoWay, Path=State}" Width="125"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" >
-                    <TextBlock Text="Zip: " Width="80" TextAlignment="Right"/>
-                    <TextBox x:Name="Zip" Text="{Binding Mode=TwoWay, Path=Zip}" Width="125"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Button x:Name="AddAddressButton" Content="Add" Width="81" HorizontalAlignment="Center" Margin="5,5,5,5" Click="AddAddressButton_Click" />
-                    <Button x:Name="AddMockAddressesButton" Content="Mock" Width="81" HorizontalAlignment="Center" Margin="5,5,5,5" Click="AddMockAddresses_Click" />
-                    <Button x:Name="ClearAddressesButton" Content="Clear" Width="81" HorizontalAlignment="Center" Margin="5,5,5,5" Click="ClearAddresses_Click" />
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Button x:Name="FindRouteButton" Content="Find route" Width="81" HorizontalAlignment="Center" Margin="5,5,5,5" Click="FindRouteButton_Click" />
-                    <Button x:Name="BeginTravelButton" Content="Begin travel" Width="81" HorizontalAlignment="Center" Margin="5,5,5,5" Click="BeginTravel_Click" />
-                    <Button x:Name="StopTravelButton" Content="Stop travel" Width="81" HorizontalAlignment="Center" Margin="5,5,5,5" Click="StopTravel_Click" />
-                </StackPanel>
-                <Slider x:Name="SpeedSlider" Height="23" Width="261" />
-                <Rectangle Stroke="Gray" RadiusX="10" RadiusY="10" Fill="#77919191">
-                    <Rectangle.Effect>
-                        <DropShadowEffect />
-                    </Rectangle.Effect>
-                </Rectangle>
+            </Grid>
+        </controlsToolkit:BusyIndicator>
+        <controlsToolkit:BusyIndicator x:Name="MenuBusyIndicator" IsBusy="False" DisplayAfter="0" BusyContent="Please wait...">
+            <StackPanel Orientation="Horizontal" Margin="303,0,0,484" >
+                <Button Content="Add new location" Name="OpenAddressDialogButton" Click="OpenAddressDialogButton_Click" Height="25" Margin="5,5,5,5" Width="113" />
+                <Button x:Name="FindRouteButton" Content="Find route" Click="FindRouteButton_Click" Height="25" Margin="5,5,5,5" Width="92" />
+                <Button x:Name="BeginTravelButton" IsEnabled="False" Content="Begin travel" Click="BeginTravel_Click" Height="25" Margin="5,5,5,5" Width="91" />
+                <Grid Height="65" Width="200">
+                    <Rectangle Fill="#DDFFFFFF" Stroke="DarkGray" RadiusX="5" RadiusY="5" />
+                    <TextBlock Text="Simulation time interval" FontWeight="Bold" Margin="14,-1,0,32" />
+
+                    <Slider x:Name="SpeedSlider" Height="23" Margin="5,20,5,22" />
+                    <TextBlock Text="15 minutes" Margin="0,48,0,2" HorizontalAlignment="Left" Width="68" />
+                    <TextBlock Text="10 hours" Margin="0,48,0,1" HorizontalAlignment="Right" Width="53" />
+                </Grid>
+                <Button x:Name="ResetButton" Content="Reset" Click="ResetButton_Click" Height="25" Margin="5,5,5,5" Width="60" />
             </StackPanel>
-        </Grid>
-        <MyControls:LocationList x:Name="MyTripList" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,15,15"/>
+        </controlsToolkit:BusyIndicator>
+        <controlsToolkit:BusyIndicator x:Name="TripBusyIndicator" IsBusy="False" DisplayAfter="0" BusyContent="Please wait...">
+            <StackPanel x:Name="TripStackPanel" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,15,15" >
+                <HyperlinkButton x:Name="HideTripLink" HorizontalAlignment="Right" FontWeight="Bold"  Content="[hide]" Click="HideTripLink_Click"/>
+                <MyControls:LocationList x:Name="MyTripList" ListItemSelected="LocationList_ListItemSelected"/>
+                <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,5,5,0" >
+                    <Button x:Name="LoginButton" Visibility="Visible" Content="Login to save your trip" Click="LoginButton_Click"/>
+                    <Button x:Name="SaveTripButton" Visibility="Visible" Content="Save My Trip" Click="SaveTripButton_Click"/>
+                </StackPanel>
+            </StackPanel>
+        </controlsToolkit:BusyIndicator>
+        <Button x:Name="ShowTripButton" Visibility="Collapsed" Content="Show My Trip" Click="ShowTripButton_Click" Margin="788,515,0,0" />
     </Grid>
 </navigation:Page>

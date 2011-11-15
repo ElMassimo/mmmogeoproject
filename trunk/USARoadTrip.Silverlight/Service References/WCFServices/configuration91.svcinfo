@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="CI2nf+tpaSgVULm8iu2BN8DnT8A=">
+<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="j+1zb9qsfGRtxaiV1BKtJo/Ed6o=">
   <bindingConfigurations>
     <bindingConfiguration bindingType="basicHttpBinding" name="BasicHttpBinding_IRoadTripServices">
       <properties>
@@ -112,10 +112,10 @@
     </bindingConfiguration>
   </bindingConfigurations>
   <endpoints>
-    <endpoint name="BasicHttpBinding_IRoadTripServices" contract="WCFServices.IRoadTripServices" bindingType="basicHttpBinding" address="http://localhost:1601/RoadTrip/RoadTripServices.svc" bindingConfiguration="BasicHttpBinding_IRoadTripServices">
+    <endpoint name="BasicHttpBinding_IRoadTripServices" contract="WCFServices.IRoadTripServices" bindingType="basicHttpBinding" address="http://localhost:1601/RoadTrip/RoadTripServices.svc/RoadTripServices" bindingConfiguration="BasicHttpBinding_IRoadTripServices">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>http://localhost:1601/RoadTrip/RoadTripServices.svc</serializedValue>
+          <serializedValue>http://localhost:1601/RoadTrip/RoadTripServices.svc/RoadTripServices</serializedValue>
         </property>
         <property path="/behaviorConfiguration" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />

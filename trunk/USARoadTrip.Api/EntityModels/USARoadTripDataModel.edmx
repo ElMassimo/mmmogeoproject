@@ -39,11 +39,13 @@
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Address" Type="nvarchar" Nullable="false" MaxLength="75" />
-    <Property Name="City" Type="nvarchar" Nullable="false" MaxLength="50" />
-    <Property Name="State" Type="nchar" Nullable="false" MaxLength="2" />
-    <Property Name="Zip" Type="nvarchar" Nullable="false" MaxLength="10" />
-    <Property Name="TripOrder" Type="int" Nullable="true" />
+    <Property Name="Address" Type="nvarchar" Nullable="true" MaxLength="75" />
+    <Property Name="City" Type="nvarchar" Nullable="true" MaxLength="50" />
+    <Property Name="State" Type="nchar" Nullable="true" MaxLength="2" />
+    <Property Name="Zip" Type="nvarchar" Nullable="true" MaxLength="10" />
+    <Property Name="TripOrder" Type="int" Nullable="false" />
+    <Property Name="X" Type="float" Nullable="false" />
+    <Property Name="Y" Type="float" Nullable="false" />
     <Property Name="TripDestinations_Location_Id" Type="int" Nullable="false" />
   </EntityType>
   <Association Name="UserTrips">
@@ -111,11 +113,13 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Type="String" Name="Address" Nullable="false" MaxLength="75" />
-          <Property Type="String" Name="City" Nullable="false" MaxLength="50" />
-          <Property Type="String" Name="State" Nullable="false" FixedLength="true" MaxLength="2" />
-          <Property Type="String" Name="Zip" Nullable="false" FixedLength="false" MaxLength="10" />
-          <Property Type="Int32" Name="TripOrder" Nullable="true" />
+          <Property Type="String" Name="Address" Nullable="true" MaxLength="75" />
+          <Property Type="String" Name="City" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="State" Nullable="true" FixedLength="true" MaxLength="2" />
+          <Property Type="String" Name="Zip" Nullable="true" FixedLength="false" MaxLength="10" />
+          <Property Type="Int32" Name="TripOrder" Nullable="false" />
+          <Property Type="Double" Name="X" Nullable="false" />
+          <Property Type="Double" Name="Y" Nullable="false" />
         </EntityType>
         <Association Name="UserTrips">
           <End Type="USARoadTrip.DataModel.UserEntity" Role="User" Multiplicity="1" />
@@ -166,6 +170,8 @@
           <ScalarProperty Name="State" ColumnName="State" />
           <ScalarProperty Name="Zip" ColumnName="Zip" />
           <ScalarProperty Name="TripOrder" ColumnName="TripOrder" />
+          <ScalarProperty Name="X" ColumnName="X" />
+          <ScalarProperty Name="Y" ColumnName="Y" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -200,14 +206,14 @@
       <Diagram Name="USARoadTripDataModel" >
         <EntityTypeShape EntityType="USARoadTrip.DataModel.TripEntity" Width="1.5" PointX="3.75" PointY="0.75" Height="2.172587890625" />
         <EntityTypeShape EntityType="USARoadTrip.DataModel.UserEntity" Width="1.5" PointX="0.625" PointY="0.875" Height="1.59568359375" />
-        <EntityTypeShape EntityType="USARoadTrip.DataModel.LocationEntity" Width="1.5" PointX="7" PointY="1" Height="2.172587890625" />
+        <EntityTypeShape EntityType="USARoadTrip.DataModel.LocationEntity" Width="1.5" PointX="7" PointY="1" Height="2.5571907552083331" />
         <AssociationConnector Association="USARoadTrip.DataModel.UserTrips">
           <ConnectorPoint PointX="2.125" PointY="1.6728417968750002" />
           <ConnectorPoint PointX="3.75" PointY="1.6728417968750002" />
         </AssociationConnector>
         <AssociationConnector Association="USARoadTrip.DataModel.TripDestinations">
-          <ConnectorPoint PointX="5.25" PointY="1.9612939453125" />
-          <ConnectorPoint PointX="7" PointY="1.9612939453125" />
+          <ConnectorPoint PointX="5.25" PointY="1.9612939453125002" />
+          <ConnectorPoint PointX="7" PointY="1.9612939453125002" />
         </AssociationConnector>
       </Diagram>
     </edmx:Diagrams>
