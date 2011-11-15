@@ -13,7 +13,7 @@ namespace USARoadTrip.Web
         bool CreateTrip(Trip tripModel);
 
         [OperationContract]
-        void DeleteTrip(int tripId);
+        void DeleteTrip(string userNick, string tripName);
 
         [OperationContract]
         bool UpdateTrip(Trip tripModel);

@@ -20,9 +20,9 @@ namespace USARoadTrip.Web
             return _tripServices.Add(tripModel);
         }
 
-        public void DeleteTrip(int tripId)
+        public void DeleteTrip(string userNick, string tripName)
         {
-            _tripServices.Delete(tripId);
+            _tripServices.Delete(userNick, tripName);
         }
 
         public bool UpdateTrip(Trip tripModel)
